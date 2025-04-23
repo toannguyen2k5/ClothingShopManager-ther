@@ -16,7 +16,7 @@ export const routes_admin = [
 ];
 //Transtion_Sector
 const Transtion_Sector_Blog = React.lazy(() =>
-  import("../../view/service_sector/sector_blog/TranstionRole")
+  import("../../view/service_sector/sector_shop/TranstionRole")
 );
 export const routes_sector = [
   {

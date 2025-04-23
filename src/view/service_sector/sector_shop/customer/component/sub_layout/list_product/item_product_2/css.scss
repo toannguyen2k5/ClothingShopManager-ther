@@ -1,0 +1,101 @@
+.product-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 1rem; // rounded-2xl
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+  
+    .image-wrapper {
+      position: relative;
+  
+      img {
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+  
+        .product-card:hover & {
+          transform: scale(1.05);
+        }
+      }
+  
+      .sale-badge {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        background-color: #ef4444; // red-500
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+      }
+      .new-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background-color: #FFB41D;
+        color: black;
+        font-weight: 600;
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+      }
+    }
+    .product-info {
+      padding: 1rem;
+  
+      h3 {
+        font-size: 12px;
+        font-weight: 600;
+        color: #1f2937; // text-gray-800
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+  
+      .price {
+        display: flex;
+        align-items: center;
+  
+        .current-price {
+            font-size: 12px;
+          font-weight: bold;
+          color: #dc2626; // red-600
+        }
+  
+        .old-price {
+            font-size: 10px;
+          color: #6b7280; // gray-500
+          text-decoration: line-through;
+          margin-left: 0.5rem;
+        }
+      }
+  
+      button {
+        margin-top: 1rem;
+        width: 100%;
+        background-color: #2563eb; // blue-600
+        color: white;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: #1e40af; // blue-700
+        }
+      }
+    }
+  }
+  
