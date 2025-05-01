@@ -1143,7 +1143,7 @@ export default class Topbar extends Component {
                         <div class="list-inline-item-text">
                           <a
                             class="group-icon-item group-icon-item-popup d-flex d-flex-center account-header"
-                            href="javascript:void(0)"
+                            href="/login"
                           >
                             <span class="box-icon">
                               <img

@@ -1,6 +1,7 @@
 import md5 from "md5";
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import "./style.css";
 import {
   alert_not_sent_otp_mail,
   alert_sent_otp_mail,

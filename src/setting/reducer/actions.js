@@ -1,14 +1,13 @@
 import * as types from "./actionTypes";
 
 export function login_success(user) {
+  console.log("user:",user);
   let user_info = {
+    id_user: user.idUser,
     email: user.email,
-    code: user.code,
     avatar: user.avatar,
-    full_name: user.full_name,
-    time: user.time,
-    ip_adress: user.ip_adress,
-    role: user.role,
+    full_name: user.fullName,
+    role: user.idRole,
   };
   return {
     type: types.login_success,
