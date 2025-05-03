@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
 import { routes_admin } from "../../../../../../../../../setting/router/routesPage";
+import { extractcode } from "../../../../../../../../../setting/reducer/reducer";
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -8,8 +9,8 @@ const loading = (
 );
 export default class PageContent extends Component {
   render() {
-    console.log(this.props);
-    if (this.props.state_data.user_info!=null && this.props.state_data.user_info.role === "admin")
+    const state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
+    if (state_data.user_info!=null && state_data.user_info.role == "Role0001")// "admin")
       return (
         <Suspense fallback={loading}>
           <Switch>

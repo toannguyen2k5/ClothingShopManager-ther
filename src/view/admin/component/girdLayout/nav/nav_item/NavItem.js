@@ -37,7 +37,7 @@ class NavItem extends Component {
               <>
                 <li
                   class={
-                    this.state.active === nav_sub_item.nav_name &&
+                    this.state.active === nav_sub_item.id_nav &&
                     nav_sub_item.nav_sub_arr.length > 0
                       ? "nav-item text-white"
                       : "nav-item"
@@ -46,8 +46,7 @@ class NavItem extends Component {
                   <div className="row">
                     <a
                       class={
-                        this.state.active === nav_sub_item.nav_name &&
-                        nav_sub_item.nav_sub_arr.length > 0
+                        this.state.active === nav_sub_item.id_nav
                           ? "nav-link text-white d-flex active bg-gradient-primary"
                           : "nav-link text-white d-flex"
                       }
@@ -56,17 +55,17 @@ class NavItem extends Component {
                         if (nav_sub_item.nav_sub_arr.length !== 0) {
                           e.preventDefault();
                           this.props.actions.current_nav({
-                            name_active: nav_sub_item.nav_name,
+                            name_active: nav_sub_item.id_nav,
                             name_sub_active: "",
                             old_page: this.props.state_data.current_page,
                           });
                           this.setState({
-                            active: nav_sub_item.nav_name,
+                            active: nav_sub_item.id_nav,
                             active_sub: null,
                           });
                         } else {
                           this.props.actions.current_nav({
-                            name_active: nav_sub_item.nav_name,
+                            name_active: nav_sub_item.id_nav,
                             path: nav_sub_item.nav_to,
                             name_sub_active: "",
                             old_page: this.props.state_data.current_page,
@@ -87,7 +86,7 @@ class NavItem extends Component {
                       <SubNav
                         {...this.props}
                         nav_sub={nav_sub_item.nav_sub_arr}
-                        name_active={nav_sub_item.nav_name}
+                        name_active={nav_sub_item.id_nav}
 
                       />
                     ) : null}

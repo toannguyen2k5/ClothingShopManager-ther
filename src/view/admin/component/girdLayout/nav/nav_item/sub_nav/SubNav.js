@@ -17,7 +17,7 @@ class SubNav extends Component {
             <li className="nav-item text-white " style={{ listStyleType: "none" }}>
               <a
                 class={
-                  item.nav_sub_name ===
+                  item.id_sub_nav ===
                   this.props.state_data.current_page.name_sub_active
                     ? "nav-link text-white d-flex active bg-gradient-primary"
                     : "nav-link text-white d-flex"
@@ -26,7 +26,7 @@ class SubNav extends Component {
                 onClick={(e) => {
                   this.props.actions.current_nav({
                     name_active: this.props.name_active,
-                    name_sub_active: item.nav_sub_name,
+                    name_sub_active: item.id_sub_nav,
                     old_page: this.props.state_data.current_page,
                   });
                 }}

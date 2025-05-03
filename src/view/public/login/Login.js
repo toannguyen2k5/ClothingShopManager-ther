@@ -91,23 +91,8 @@ export default class Login extends Component {
         else{
           actions.log_out();
         }
-        
-        
-
-        
       })
       .catch((error) => console.error(error));
-
-    // console.log(data);
-    // if (data.status) {
-    //   alert("Login thành công");
-    //   const { actions } = this.props;
-    //   actions.login_success(data.data);
-
-    //   this.setState({
-    //     requestHome: true,
-    //   });
-    // } else alert("Login thất bại");
   }
   async checkLogin(code) {
     const req = {

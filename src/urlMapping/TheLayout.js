@@ -15,17 +15,17 @@ const loading = <div></div>;
 
 export default class TheLayout extends Component {
   async componentDidMount() {
-    // try {
-    //   const req = {
-    //     method: "GET",
-    //     headers: { "Content-Type": "application/json" },
-    //   };
-    //   const response = await fetch(`${urlapi}/getAddress`, req);
-    //   const { mac } = await response.json();
-    //   this.props.actions.set_code_build_state(mac);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const req = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const response = await fetch(`${urlapi}/api/network/mac`, req);
+      const { macAddress } = await response.json();
+      this.props.actions.set_code_build_state(macAddress);
+    } catch (error) {
+      console.log(error);
+    }
   }
   render() {
     if (
@@ -35,8 +35,6 @@ export default class TheLayout extends Component {
       extractcode(localStorage.getItem("state_data")) !=
         JSON.stringify(this.props.state_data)
     ) {
-      console.log(extractcode(localStorage.getItem("state_data")));
-      console.log(this.props.state_data);
       this.props.actions.revert_state();
     }
     return (

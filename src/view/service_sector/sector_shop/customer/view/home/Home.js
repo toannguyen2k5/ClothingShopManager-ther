@@ -18,10 +18,10 @@ class Home extends Component {
       data_list: {},
     };
     document.title = "Demo";
-    fetch(urlapi + "/get_list_post/")
-      .then((response) => response.json())
-      .then((data) => this.setState({ data_list: data }))
-      .catch((error) => console.error(error));
+    // fetch(urlapi + "/get_list_post/")
+    //   .then((response) => response.json())
+    //   .then((data) => this.setState({ data_list: data }))
+    //   .catch((error) => console.error(error));
   }
 
   render() {

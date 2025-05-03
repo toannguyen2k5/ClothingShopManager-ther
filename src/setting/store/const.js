@@ -62,6 +62,18 @@ export const define_nav = {
       name: "Dashboard",
       path: "/",
     },
+    listproduct: {
+      name: "Danh Sách Sản Phẩm",
+      path: "/admin/manager/product/list/",
+    },
+    newproduct: {
+      name: "Tạo mới Sản Phẩm",
+      path: "/admin/manager/product/new/",
+    },
+    categoryManager: {
+      name: "Quản lý Danh mục",
+      path: "/admin/manager/categories/",
+    },
     profile: {
       name: "Profile",
       path: "/admin/profile",

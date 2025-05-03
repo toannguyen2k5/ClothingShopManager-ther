@@ -1,0 +1,85 @@
+/* CSS for Category Manager */
+.category-navbar {
+  border: 1px solid #ccc;
+  background: #fafafa;
+  border-radius: 6px;
+  margin: 2rem auto;
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+}
+
+.navbar-nav .dropdown-menu {
+  margin-left: 10px;
+  position: static;
+  float: none;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 1rem;
+}
+
+.navbar-nav .dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+
+.navbar-nav .dropdown-menu.show {
+  display: block;
+}
+/* Đảm bảo dropdown hiển thị như pop-up ngang phải */
+.navbar-nav .dropdown-menu {
+  position: absolute;
+  top: 0;
+  left: 100%; /* Hiển thị ở bên phải của item cha */
+  margin-top: 0;
+  margin-left: 0.5rem;
+  z-index: 1000;
+  min-width: 200px;
+  display: none;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.navbar-nav .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item {
+  position: relative;
+}
+
+.navbar-nav .dropdown-toggle {
+  white-space: nowrap;
+}
+.menu-first {
+  left: 0 !important;
+}
+.menu-first:before,
+.menu-first .dropdown-menu.dropdown-menu.show:before {
+  color: #fc9b9b !important;
+}
+.menu-first .dropdown-menu.dropdown-menu {
+  top: -20px !important;
+}
+.menu-first .dropdown-menu li {
+  padding-left: 2px;
+}
+.menu-first li button,
+.menu-first .dropdown-menu.dropdown-menu li button {
+  width: 100%;
+  text-align: left;
+  border-bottom: solid 1px #f1f1f1 !important;
+}
+.menu-first li button:after,
+.menu-first .dropdown-menu.dropdown-menu li button:after {
+  float: right;
+}
