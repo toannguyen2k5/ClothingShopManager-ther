@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import "./style.css";
 import {
   mailformat,
   nameWebsite,
@@ -26,10 +27,8 @@ export default class Login extends Component {
     };
   }
   enter_email_dn(e) {
-    alert(e.target.value);
     this.setState({
       email_dn: e.target.value,
-      
     });
   }
   enter_password_dn(e) {
@@ -66,32 +65,49 @@ export default class Login extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        key: "111111111",
-        user: {
-          email: this.state.email_dn,
-          password: md5(this.state.password_dn),
-        },
+        username: this.state.email_dn,
+        password: md5(this.state.password_dn),
       }),
     };
 
-    const response = await fetch(
-      `${urlapi}/login/taikhoan/`
-        .concat(new Date().getTime().toString())
-        .concat("/")
-        .concat(md5("Login thất bại")),
-      req
-    );
-    const { data } = await response.json();
-    console.log(data);
-    if (data.status) {
-      alert("Login thành công");
-      const { actions } = this.props;
-      actions.login_success(data.data);
+    // const response = await fetch(
+    //   `${urlapi}/api/auth/login`,
+    //   req
+    // );
+    // const { data } = await response.json();
+    fetch(`${urlapi}/api/auth/login`, req)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const { actions } = this.props;
+        if(data.status && data.status === "200"){
+          
+          actions.login_success(data.data);
+          console.log(this.props);
+          this.setState({
+            requestHome: true,
+          });
+        }
+        else{
+          actions.log_out();
+        }
+        
+        
 
-      this.setState({
-        requestHome: true,
-      });
-    } else alert("Login thất bại");
+        
+      })
+      .catch((error) => console.error(error));
+
+    // console.log(data);
+    // if (data.status) {
+    //   alert("Login thành công");
+    //   const { actions } = this.props;
+    //   actions.login_success(data.data);
+
+    //   this.setState({
+    //     requestHome: true,
+    //   });
+    // } else alert("Login thất bại");
   }
   async checkLogin(code) {
     const req = {
@@ -145,7 +161,8 @@ export default class Login extends Component {
                   <span className="l l3"></span>
                   <span className="l l4"></span>
                   <span className="l l5"></span>
-                </div>&nbsp;
+                </div>
+                &nbsp;
                 {nameWebsite}
               </h1>
             </header>

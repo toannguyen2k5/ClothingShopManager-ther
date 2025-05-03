@@ -1,6 +1,7 @@
 import md5 from "md5";
 import React, { Component } from "react";
 import dateFormat from "dateformat";
+import "./style.css";
 import {
   mailformat,
   numberPhoneFormat,

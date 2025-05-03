@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./style.css";
 import {nameWebsite} from '../../../setting/store/const';
 export default class ResetPass extends Component {
   render() {
