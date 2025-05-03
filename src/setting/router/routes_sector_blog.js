@@ -2,6 +2,12 @@ import React from "react";
 const Cust_Home = React.lazy(() =>
   import("../../view/service_sector/sector_shop/customer/view/home/Home")
 );
+
+const DetailProduct = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/detail_product/DetailProduct"
+  )
+);
 export const routes_sector_blog = [
   {
     path: "/",
@@ -15,6 +21,13 @@ export const routes_sector_blog = [
     exact: true,
     name: "Form Home",
     component: Cust_Home,
+    file_name: "",
+  },
+  {
+    path: "/blog/detail_product",
+    exact: true,
+    name: "DetailProduct",
+    component: DetailProduct,
     file_name: "",
   },
   {

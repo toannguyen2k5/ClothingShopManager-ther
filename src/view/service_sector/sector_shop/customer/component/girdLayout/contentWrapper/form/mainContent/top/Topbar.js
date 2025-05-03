@@ -164,7 +164,7 @@ export default class Topbar extends Component {
                                   <input
                                     type="hidden"
                                     name="type"
-                                    value="product"
+                                    defaultValue="product"
                                   />
                                   <input
                                     name="q"
@@ -257,53 +257,53 @@ export default class Topbar extends Component {
                                         name="change-tinh"
                                         class="change-tinh"
                                       >
-                                        <option value="all" selected="">
+                                        <option defaultValue="all" selected="">
                                           Chọn tỉnh/thành phố
                                         </option>
                                         <option
-                                          value="Hồ Chí Minh"
+                                          defaultValue="Hồ Chí Minh"
                                           data-tinh="Hồ Chí Minh"
                                         >
                                           Hồ Chí Minh
                                         </option>
                                         <option
-                                          value="Hà Nội"
+                                          defaultValue="Hà Nội"
                                           data-tinh="Hà Nội"
                                         >
                                           Hà Nội
                                         </option>
                                         <option
-                                          value="Bà Rịa - Vũng Tàu"
+                                          defaultValue="Bà Rịa - Vũng Tàu"
                                           data-tinh="Bà Rịa - Vũng Tàu"
                                         >
                                           Bà Rịa - Vũng Tàu
                                         </option>
                                         <option
-                                          value="Cần Thơ"
+                                          defaultValue="Cần Thơ"
                                           data-tinh="Cần Thơ"
                                         >
                                           Cần Thơ
                                         </option>
                                         <option
-                                          value="Đà Nẵng"
+                                          defaultValue="Đà Nẵng"
                                           data-tinh="Đà Nẵng"
                                         >
                                           Đà Nẵng
                                         </option>
                                         <option
-                                          value="Đắk Lắk"
+                                          defaultValue="Đắk Lắk"
                                           data-tinh="Đắk Lắk"
                                         >
                                           Đắk Lắk
                                         </option>
                                         <option
-                                          value="Long An"
+                                          defaultValue="Long An"
                                           data-tinh="Long An"
                                         >
                                           Long An
                                         </option>
                                         <option
-                                          value="Tiền Giang"
+                                          defaultValue="Tiền Giang"
                                           data-tinh="Tiền Giang"
                                         >
                                           Tiền Giang
@@ -315,7 +315,7 @@ export default class Topbar extends Component {
                                         name="select-quan"
                                         class="select-quan"
                                       >
-                                        <option value="all">
+                                        <option defaultValue="all">
                                           Chọn Quận/huyện
                                         </option>
                                       </select>

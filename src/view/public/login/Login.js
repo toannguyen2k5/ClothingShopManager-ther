@@ -212,7 +212,7 @@ export default class Login extends Component {
                     type="button"
                     className="btn btn-block btn-primary"
                     onClick={this.btnLogin.bind(this)}
-                    value="Login"
+                    defaultValue="Login"
                   />
                 </div>
                 <div className="form-group">

@@ -276,7 +276,7 @@ class RegistSeller extends Component {
             <div className="col-6">
               <>
                 <div className="form-group">
-                  <label for="inputEmail">Địa chỉ email</label>
+                  <label htmlFor="inputEmail">Địa chỉ email</label>
                   <input
                     type="email"
                     className="form-control"
@@ -297,7 +297,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="fullname">Họ và tên</label> &nbsp;
+                  <label htmlFor="fullname">Họ và tên</label> &nbsp;
                   <small id="fullNameHelp" className="form-text text-muted">
                     Điền họ và tên như trên giấy tờ tùy thân.
                   </small>
@@ -321,7 +321,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="shopname">Tên cửa hàng</label>
+                  <label htmlFor="shopname">Tên cửa hàng</label>
                   <input
                     type="text"
                     className="form-control"
@@ -342,7 +342,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="numberphone">Số điện thoại</label>
+                  <label htmlFor="numberphone">Số điện thoại</label>
                   <input
                     type="text"
                     className="form-control"
@@ -363,7 +363,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputEmail1">Ngành hàng chủ lực</label>
+                  <label htmlFor="exampleInputEmail1">Ngành hàng chủ lực</label>
                   <select
                     className="form-control"
                     id="exampleFormControlSelect1"
@@ -385,7 +385,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="short_description">Mô Tả Shop</label>
+                  <label htmlFor="short_description">Mô Tả Shop</label>
                   <input
                     type="text"
                     className="form-control"
@@ -406,7 +406,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="numberphone">Mô Tả Chi Tiết</label>
+                  <label htmlFor="numberphone">Mô Tả Chi Tiết</label>
                   <input
                     type="text"
                     className="form-control"
@@ -427,7 +427,7 @@ class RegistSeller extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="inputPassword1">Mật khẩu</label>
+                  <label htmlFor="inputPassword1">Mật khẩu</label>
                   <input
                     type="password"
                     className="form-control"
@@ -438,7 +438,7 @@ class RegistSeller extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="inputPassword2">Xác nhận mật khẩu</label>
+                  <label htmlFor="inputPassword2">Xác nhận mật khẩu</label>
                   <input
                     type="password"
                     className="form-control"
@@ -461,7 +461,7 @@ class RegistSeller extends Component {
                 ) : null}
                 {this.state.show_input_otp ? (
                   <div className="form-group">
-                    <label for="password">OTP</label>
+                    <label htmlFor="password">OTP</label>
                     <div className="row">
                       <div className="col-sm-6">
                         <input
@@ -473,7 +473,8 @@ class RegistSeller extends Component {
                           required=""
                           value={this.state.re_otp}
                           onChange={this.enter_otp.bind(this)}
-                        />&nbsp;
+                        />
+                        &nbsp;
                       </div>
 
                       <div className="col-sm-12">
