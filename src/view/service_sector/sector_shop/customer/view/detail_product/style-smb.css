@@ -10,7 +10,6 @@
   border: 1px solid #e5e5e5;
 }
 
-/* css suplo-mobile-builder web */
 p.data_error {
   color: #f00;
   margin-top: 20px;
@@ -167,7 +166,6 @@ section.smb_section {
   border-bottom: solid 1px #e2e2e2;
 }
 
-/*=========================================  account info   ===========================================*/
 .update_info_err {
   color: #00f;
   display: none;
@@ -489,7 +487,6 @@ button#submit_info:hover {
   }
 }
 
-/*========================================= reset pass   ===========================================*/
 input#email {
   width: 100%;
 }
@@ -567,7 +564,6 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-/* 1.2 - HTML5 Elements */
 article,
 aside,
 details,
@@ -583,7 +579,6 @@ section {
   display: block;
 }
 
-/* 1.4 - Typography */
 h1,
 h2,
 h3,
@@ -630,7 +625,6 @@ p {
   word-break: break-word;
 }
 
-/* 1.5 - Links and Buttons */
 a {
   text-decoration: none;
   outline: none;
@@ -653,7 +647,6 @@ h6 a {
   line-height: 1.1;
 }
 
-/* 1.6 - Tables */
 table {
   width: 100%;
   border-spacing: 0;
@@ -687,7 +680,6 @@ em {
   font-style: italic;
 }
 
-/* 2.3 - Lists */
 ul {
   padding: 0;
   list-style-type: none;
@@ -734,7 +726,6 @@ input:focus {
   outline: none;
 }
 
-/*========================================================================*/
 .wrap-flex-align {
   display: -webkit-flex;
   display: flex;
@@ -742,10 +733,6 @@ input:focus {
   align-items: center;
 }
 
-/*--------------------------------------------------------------------------------
-HEADER
---------------------------------------------------------------------------------*/
-/*--------------------- Topbar ---------------------*/
 .header-mid {
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
@@ -797,7 +784,6 @@ table,
 th,
 td,
 tr {
-  /*border:1px solid #ccc;*/
   text-align: center;
   padding: 10px !important;
 }
@@ -864,7 +850,6 @@ table img {
   font-weight: bold;
 }
 
-/* --------------------- order ---- account -- address -----------------------  */
 .layout-info-account {
   padding-bottom: 30px;
   padding-top: 10px;
@@ -1213,9 +1198,6 @@ span.action_link {
   margin: 0;
 }
 
-/*---------------------------------------------------------------------------------
-RESPONSIVE
----------------------------------------------------------------------------------*/
 @media (max-width: 480px) {
   #customer_membership .right_cus {
     border-left: none;
@@ -1226,8 +1208,6 @@ RESPONSIVE
     border-bottom: none !important;
   }
 }
-
-/*=================================     sidebar         =======================================*/
 
 .title_account .title_account_img {
   width: 30%;
@@ -1315,7 +1295,6 @@ p {
   margin: 0;
 }
 
-/*=================================     prouct wishlist         =======================================*/
 .product_smb {
   overflow: hidden;
   border: 1px solid #e6e6e6;
@@ -1445,7 +1424,6 @@ p {
   }
 }
 
-/*=================================     smb  reviews    =======================================*/
 .review_col {
   width: 100%;
   padding-left: 15px;
@@ -1772,7 +1750,6 @@ p {
   }
 }
 
-/*=================================     smb  addresses    =======================================*/
 .addresses > p {
   width: 100%;
   text-align: center;
@@ -1983,7 +1960,6 @@ p {
   }
 }
 
-/*=================================     smb  quests    =======================================*/
 .quests_main {
   margin-top: 25px;
 }
@@ -2055,7 +2031,6 @@ p {
   }
 }
 
-/*=================================     smb  notification     =======================================*/
 ul.notification_tab_menu li.active a {
   background-color: #000;
 }
@@ -2174,7 +2149,6 @@ ul.notification_tab_menu {
   font-size: 20px;
 }
 
-/*=================================     smb  vouchers     =======================================*/
 .vouchers_main .voucher {
   display: flex;
   justify-content: space-between;
@@ -2277,7 +2251,6 @@ ul.notification_tab_menu {
   }
 }
 
-/*=================================     smb  logins     =======================================*/
 .logins {
   width: 70%;
   margin: 0 auto;
@@ -2444,7 +2417,6 @@ button#login_submit:hover {
   margin: 0;
 }
 
-/*=================================     smb  registers     =======================================*/
 .registers {
   width: 70%;
   margin: 0 auto;
@@ -2641,7 +2613,6 @@ button#registers_submit:hover {
   align-items: center;
 }
 
-/*=================================     smb  popup_smb     =======================================*/
 #popup_smb {
   position: fixed;
   width: 100%;
@@ -2751,7 +2722,6 @@ button#registers_submit:hover {
   display: none;
 }
 
-/*=================================     smb  send_mail_main     =======================================*/
 .send_mail_main {
   width: 700px;
   background-color: #fff;

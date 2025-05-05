@@ -8,6 +8,11 @@ const DetailProduct = React.lazy(() =>
     "../../view/service_sector/sector_shop/customer/view/detail_product/DetailProduct"
   )
 );
+const ShopingCart = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/shoping_cart/ShopingCart"
+  )
+);
 export const routes_sector_blog = [
   {
     path: "/",
@@ -26,15 +31,15 @@ export const routes_sector_blog = [
   {
     path: "/blog/detail_product",
     exact: true,
-    name: "DetailProduct",
+    name: "Detail Product",
     component: DetailProduct,
     file_name: "",
   },
   {
-    path: "/blog/home",
+    path: "/blog/shoping_cart",
     exact: true,
-    name: "Form Home",
-    component: Cust_Home,
+    name: "Shoping Cart",
+    component: ShopingCart,
     file_name: "",
   },
   {

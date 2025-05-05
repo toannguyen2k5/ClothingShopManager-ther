@@ -17,13 +17,14 @@ class MainPhoto extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ images: data });
+        if (data.status && data.status === "200")
+          this.setState({ images: data.data });
+        console.log(data);
       })
       .catch((error) => console.error(error));
   }
 
   render() {
-    console.log("Images :", this.state.images);
     return (
       <div>
         {this.state.images.map((image, index) => {
