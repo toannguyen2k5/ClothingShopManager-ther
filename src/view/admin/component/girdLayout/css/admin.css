@@ -23399,7 +23399,7 @@ body.dark-version {
     display: none !important;
   }
   .navbar-vertical.navbar-expand-xs .navbar-collapse {
-    /* height: 0 !important; */
+    height: 800px !important;
   }
 }
 

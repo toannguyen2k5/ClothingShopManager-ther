@@ -6,8 +6,18 @@ const Admin_Profile = React.lazy(() => import("../../view/admin/layout/profile/P
 const Admin_Setting = React.lazy(() => import("../../view/admin/layout/setting/Setting"));
 const ProductList = React.lazy(() => import("../../view/admin/layout/product/list/ProductList"));
 const ProductForm = React.lazy(() => import("../../view/admin/layout/product/add_new/ProductForm"));
-const PurchaseSlipManager = React.lazy(() => import("../../view/admin/layout/order/input/PurchaseSlipManager"));
+const UpdateProduct = React.lazy(() => import("../../view/admin/layout/product/update/UpdateProduct"));
+const PurchaseSlipManager = React.lazy(() => import("../../view/admin/layout/order/input/new/PurchaseSlipManager"));
+const PurchaseSlipList = React.lazy(() => import("../../view/admin/layout/order/input/list/PurchaseSlipList"));
+const UpdatePurchaseSlip = React.lazy(() => import("../../view/admin/layout/order/input/update/UpdatePurchaseSlip"));
+const PromoCodeManager = React.lazy(() => import("../../view/admin/layout/coupons/PromoCodeManager"));
+const StorePromoManager = React.lazy(() => import("../../view/admin/layout/coupons_product/StorePromoManager"));
+const CustomerManager = React.lazy(() => import("../../view/admin/layout/customer/list/CustomerManager"));
+const CustomerDetail = React.lazy(() => import("../../view/admin/layout/customer/detail/CustomerDetail"));
 const CategoryManager = React.lazy(() => import("../../view/admin/layout/category/CategoryManager"));
+const CommentManager = React.lazy(() => import("../../view/admin/layout/comment/CommentManager"));
+const ProductInventory = React.lazy(() => import("../../view/admin/layout/inventory/ProductInventory"));
+const AdminManager = React.lazy(() => import("../../view/admin/layout/admin_manager/AdminManager"));
 const Admin_Billing = React.lazy(() => import("../../view/admin/layout/billing/Billing"));
  
 export const routes_admin = [
@@ -15,8 +25,20 @@ export const routes_admin = [
   { path: "/admin/dashboard", exact: true, name: "Form Search", component: Admin_Home },
   { path: "/admin/manager/product/list/", exact: true, name: "Form Search", component: ProductList },
   { path: "/admin/manager/product/new/", exact: true, name: "Form Search", component: ProductForm },
+  { path: "/admin/manager/product/update/", exact: true, name: "Form Search", component: UpdateProduct },
+  { path: "/admin/manager/coupons/list/", exact: true, name: "Form Search", component: PromoCodeManager },
+  { path: "/admin/manager/coupons/update/", exact: true, name: "Form Search", component: StorePromoManager },
+  { path: "/admin/manager/customer/list/", exact: true, name: "Form Search", component: CustomerManager },
+  { path: "/admin/manager/customer/detail/:id/", exact: true, name: "Form Search", component: CustomerDetail },
+  { path: "/admin/manager/review_product/", exact: true, name: "Form Search", component: CommentManager },
+  { path: "/admin/manager/coupons/inventory/", exact: true, name: "Form Search", component: ProductInventory },
+  { path: "/admin/manager/account/list/", exact: true, name: "Form Search", component: AdminManager },
+  
+  
   { path: "/admin/manager/categories/", exact: true, name: "Form Search", component: CategoryManager },
-  { path: "/admin/manager/order/input/list/", exact: true, name: "Form Search", component: PurchaseSlipManager },
+  { path: "/admin/manager/order/input/list/", exact: true, name: "Form Search", component: PurchaseSlipList },
+  { path: "/admin/manager/order/input/new/", exact: true, name: "Form Search", component: PurchaseSlipManager },
+  { path: "/admin/manager/order/input/update/", exact: true, name: "Form Search", component: UpdatePurchaseSlip },
   { path: "/admin/profile/", exact: true, name: "Form Search", component: Admin_Profile },
   { path: "/admin/setting/", exact: true, name: "Form Search", component: Admin_Setting },
   { path: "/admin/billing/", exact: true, name: "Form Search", component: Admin_Billing },

@@ -83,7 +83,6 @@ export default class Login extends Component {
         if(data.status && data.status === "200"){
           
           actions.login_success(data.data);
-          console.log(this.props);
           this.setState({
             requestHome: true,
           });

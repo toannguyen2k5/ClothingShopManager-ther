@@ -63,7 +63,6 @@ export default class Nav extends Component {
         >
           <ul
             className="navbar-nav"
-            style={{ overflowY: "scroll" }}
           >
             <NavItem nav={nav} {...this.props} />
           </ul>

@@ -22236,3 +22236,7 @@ pre[class*="language-"] {
     overflow: auto !important;
   }
 }
+.navbar-nav {
+  overflow-y: scroll;
+  max-height: 650px;
+}

@@ -66,26 +66,8 @@ export const nav = [
         id_nav: "nav0004",
         nav_name: "Quản lý khách hàng",
         nav_icon: "fa fa-area-chart",
-        nav_to: "#",
+        nav_to: "/admin/manager/customer/list/",
         nav_sub_arr: [
-          {
-            id_sub_nav: "subnav007",
-            nav_sub_name: "Danh sách khách hàng đã đăng ký",
-            nav_sub_to: "/admin/manager/customer/list/",
-            nav_sub_icon: "",
-          },
-          {
-            id_sub_nav: "subnav008",
-            nav_sub_name: "Xem thông tin chi tiết khách hàng",
-            nav_sub_to: "/admin/manager/customer/detail/",
-            nav_sub_icon: "",
-          },
-          {
-            id_sub_nav: "subnav009",
-            nav_sub_name: "Cập nhật trạng thái tài khoản",
-            nav_sub_to: "/admin/manager/customer/update_status/",
-            nav_sub_icon: "",
-          },
         ],
       },
       {
@@ -101,14 +83,8 @@ export const nav = [
             nav_sub_icon: "",
           },
           {
-            id_sub_nav: "subnav011",
-            nav_sub_name: "Xem thông tin chi tiết mã khuyến mãi",
-            nav_sub_to: "/admin/manager/coupons/detail/",
-            nav_sub_icon: "",
-          },
-          {
             id_sub_nav: "subnav012",
-            nav_sub_name: "Cập nhật mã khuyến mãi",
+            nav_sub_name: "Cập nhật mã khuyến mãi cho sản phẩm",
             nav_sub_to: "/admin/manager/coupons/update/",
             nav_sub_icon: "",
           },
@@ -169,14 +145,8 @@ export const nav = [
           },
           {
             id_sub_nav: "subnav016",
-            nav_sub_name: "Xem chi tiết từng đơn hàng",
-            nav_sub_to: "/admin/manager/order/input/detail/",
-            nav_sub_icon: "",
-          },
-          {
-            id_sub_nav: "subnav017",
-            nav_sub_name: "Cập nhật trạng thái đơn hàng",
-            nav_sub_to: "/admin/manager/order/input/update_status/",
+            nav_sub_name: "Thêm đơn nhập hàng",
+            nav_sub_to: "/admin/manager/order/input/new/",
             nav_sub_icon: "",
           },
         ],
