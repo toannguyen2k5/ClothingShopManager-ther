@@ -1,0 +1,230 @@
+.action-video {
+  z-index: 1000;
+  position: absolute;
+}
+#playPauseBtn {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#muteBtn {
+  top: 30%;
+  right: 10px;
+  top: 10px;
+}
+#wheelContainer {
+  margin: 20px auto;
+  width: 350px;
+  padding: 20px 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  text-align: center;
+  background-image: url("https://file.hstatic.net/1000253775/file/vong_quay-05.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-height: 480px;
+  height: 480px;
+  /* height: 220px; */
+}
+#phoneForm {
+  margin: 20px auto;
+  width: 350px;
+  padding: 20px 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  text-align: center;
+  background-image: url("https://file.hstatic.net/1000253775/file/vong_quay-05.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-height: 480px;
+}
+.sao-vang {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+}
+.sao-bangron {
+  position: absolute;
+  bottom: -16%;
+  left: 50%;
+  transform: translate(-50%, -14%);
+  width: 100%;
+}
+#phoneForm h3 {
+  color: white;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+#phoneForm input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.sao-buc {
+  width: 160px;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  bottom: -22%;
+  transform: translate(-50%, 5%);
+}
+.wheel-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+
+#wheelContainer .arrow {
+  position: absolute;
+  top: -9px; /* Điều chỉnh sao cho sát viền vòng quay */
+  left: 50%;
+  transform: translateX(-50%); /* Giữ nguyên vị trí mà không cần xoay */
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(145deg, #fff7c1, #ffb100, #822600);
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    50% 100%
+  ); /* Điều chỉnh hình tam giác mũi tên sao cho đầu nhọn hướng xuống dưới */
+  border: 3px solid #ffd700; /* viền ánh kim */
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(255, 191, 0, 0.6);
+  z-index: 10;
+}
+#wheelContainer .wheel-bg::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: linear-gradient(
+      to right,
+      #fff7c1,
+      #ff9600,
+      #822600,
+      #ffecc3,
+      #ffb100,
+      #652500,
+      #c31f00
+    ),
+    radial-gradient(
+      circle,
+      #fff7c1,
+      #ff9600,
+      #822600,
+      #ffecc3,
+      #ffb100,
+      #652500,
+      #c31f00
+    );
+  z-index: -1;
+}
+#wheelContainer .wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* border: 8px solid #FCBA00; */
+  transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  background: conic-gradient(
+    #ffeaa6 0deg 40deg,
+    #bc0000 40deg 80deg,
+    #ffeaa6 80deg 120deg,
+    #bc0000 120deg 160deg,
+    #ffeaa6 160deg 200deg,
+    #bc0000 200deg 240deg,
+    #ffeaa6 240deg 280deg,
+    #bc0000 280deg 320deg,
+    #000000 320deg 360deg
+  );
+  position: relative;
+}
+
+#wheelContainer .prize-labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+#wheelContainer .prize-labels span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* transform: rotate(calc(45deg * var(--i))) translateY(-130px); */
+  transform-origin: center center;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  font-weight: 700;
+  z-index: 100000;
+}
+#formSubmitPhone {
+  display: flex;
+  flex-direction: column;
+}
+#formSubmitPhone input {
+  width: 100%;
+}
+#wheelContainer .prize-labels .span-1 {
+  transform: rotate(2deg) translateY(-76px) rotate(-69deg);
+  color: red;
+}
+#wheelContainer .prize-labels .span-2 {
+  transform: rotate(38deg) translateY(-60px) rotate(-66deg);
+  color: yellow;
+}
+#wheelContainer .prize-labels .span-3 {
+  transform: rotate(92deg) translateY(-35px) rotate(-90deg);
+  color: red;
+}
+#wheelContainer .prize-labels .span-4 {
+  transform: rotate(166deg) translateY(-56px) rotate(-118deg);
+  color: yellow;
+}
+#wheelContainer .prize-labels .span-5 {
+  transform: rotate(205deg) translateY(-73px) rotate(-295deg);
+  color: red;
+}
+#wheelContainer .prize-labels .span-6 {
+  transform: rotate(238deg) translateY(-106px) rotate(-283deg);
+  color: yellow;
+}
+#wheelContainer .prize-labels .span-7 {
+  transform: rotate(268deg) translateY(-138px) rotate(-272deg);
+  color: red;
+}
+#wheelContainer .prize-labels .span-8 {
+  transform: rotate(292deg) translateY(-140px) rotate(-265deg);
+  color: yellow;
+}
+#wheelContainer .prize-labels .span-9 {
+  transform: rotate(323deg) translateY(-115px) rotate(-254deg);
+  color: yellow;
+}
+.product_coupon_new:nth-child(-n + 9) {
+  margin-bottom: 7px;
+}

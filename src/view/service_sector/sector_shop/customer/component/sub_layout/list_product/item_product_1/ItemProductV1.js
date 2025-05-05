@@ -17,12 +17,12 @@ const ItemProductV1 = () => {
               <source
                 media="(max-width: 480px)"
                 data-srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
-                srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
+                srcSet="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
               />
               <source
                 media="(min-width: 481px)"
                 data-srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
-                srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
+                srcSet="//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg"
               />
               <img
                 class="dt-width-100 img-first ls-is-cached lazyloaded"
@@ -38,7 +38,7 @@ const ItemProductV1 = () => {
               <source
                 media="(min-width: 481px)"
                 data-srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-7_8c1746c0d1cb4a7fa54113577ff14621_large.jpg"
-                srcset="//product.hstatic.net/1000253775/product/160_ao_thun_544-7_8c1746c0d1cb4a7fa54113577ff14621_large.jpg"
+                srcSet="//product.hstatic.net/1000253775/product/160_ao_thun_544-7_8c1746c0d1cb4a7fa54113577ff14621_large.jpg"
               />
               <img
                 class="dt-width-100 img-hover hidden-xs ls-is-cached lazyloaded"
@@ -55,7 +55,7 @@ const ItemProductV1 = () => {
           <div class="button-loop-pro hidden-xs hidden-sm">
             <button
               class="btn-quickview"
-              onclick="window.wd.scofield.quickview('/products/a-o-thun-icondenim-orgnls-icdn?view=quickview-nochoose')"
+              onClick="window.wd.scofield.quickview('/products/a-o-thun-icondenim-orgnls-icdn?view=quickview-nochoose')"
               type="button"
             >
               <img
@@ -70,7 +70,7 @@ const ItemProductV1 = () => {
 
           <div class="atc-loop d-flex js-center mg-top-auto">
             <button
-              onclick="window.wd.scofield.addtocartloop('true','1141993122','/products/a-o-thun-icondenim-orgnls-icdn',event,'1062289023')"
+              onClick="window.wd.scofield.addtocartloop('true','1141993122','/products/a-o-thun-icondenim-orgnls-icdn',event,'1062289023')"
               class="atc-mb-loop"
               type="button"
             >

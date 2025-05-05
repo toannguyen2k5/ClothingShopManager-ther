@@ -349,7 +349,7 @@ export default class Signup extends Component {
                 novalidate="novalidate"
               >
                 <div className="form-group">
-                  <label for="firstname">Full Name</label>
+                  <label htmlFor="firstname">Full Name</label>
                   <div className="row">
                     <div className="col-sm-6">
                       <input
@@ -389,7 +389,7 @@ export default class Signup extends Component {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label for="email">Email</label>
+                  <label htmlFor="email">Email</label>
                   <input
                     type="email"
                     className="form-control underlined"
@@ -411,7 +411,7 @@ export default class Signup extends Component {
                   ) : null}
                 </div>
                 <div className="form-group">
-                  <label for="password">Password</label>
+                  <label htmlFor="password">Password</label>
                   <div className="row">
                     <div className="col-sm-6">
                       <input
@@ -423,7 +423,8 @@ export default class Signup extends Component {
                         required=""
                         value={this.state.password_dk}
                         onChange={this.enter_password_dk.bind(this)}
-                      />&nbsp;
+                      />
+                      &nbsp;
                     </div>
                     <div className="col-sm-6">
                       <input
@@ -452,7 +453,7 @@ export default class Signup extends Component {
                 </div>
                 {this.state.show_input_otp ? (
                   <div className="form-group">
-                    <label for="password">OTP</label>
+                    <label htmlFor="password">OTP</label>
                     <div className="row">
                       <div className="col-sm-6">
                         <input
@@ -464,12 +465,16 @@ export default class Signup extends Component {
                           required=""
                           value={this.state.re_otp}
                           onChange={this.enter_otp.bind(this)}
-                        />&nbsp;
+                        />
+                        &nbsp;
                       </div>
 
                       <div className="col-sm-12">
                         {this.state.status_input_otp ? (
-                          <small id="passHelp" className="form-text text-danger">
+                          <small
+                            id="passHelp"
+                            className="form-text text-danger"
+                          >
                             <p
                               dangerouslySetInnerHTML={{
                                 __html: this.state.err_input_otp,

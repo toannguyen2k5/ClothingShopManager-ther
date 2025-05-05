@@ -93,7 +93,7 @@ class Profile extends Component {
                       transition: "all 0.5s ease 0s",
                     }}
                     aria-selected="false"
-                    tabindex="-1"
+                    tabIndex="-1"
                     role="tab"
                   >
                     <a
@@ -128,11 +128,11 @@ class Profile extends Component {
                             class="form-check-input ms-auto"
                             type="checkbox"
                             id="flexSwitchCheckDefault"
-                            checked=""
+                            defaultChecked=""
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault"
+                            htmlFor="flexSwitchCheckDefault"
                           >
                             Email me when someone follows me
                           </label>
@@ -147,7 +147,7 @@ class Profile extends Component {
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault1"
+                            htmlFor="flexSwitchCheckDefault1"
                           >
                             Email me when someone answers on my post
                           </label>
@@ -159,11 +159,11 @@ class Profile extends Component {
                             class="form-check-input ms-auto"
                             type="checkbox"
                             id="flexSwitchCheckDefault2"
-                            checked=""
+                            defaultChecked=""
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault2"
+                            htmlFor="flexSwitchCheckDefault2"
                           >
                             Email me when someone mentions me
                           </label>
@@ -183,7 +183,7 @@ class Profile extends Component {
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault3"
+                            htmlFor="flexSwitchCheckDefault3"
                           >
                             New launches and projects
                           </label>
@@ -195,11 +195,11 @@ class Profile extends Component {
                             class="form-check-input ms-auto"
                             type="checkbox"
                             id="flexSwitchCheckDefault4"
-                            checked=""
+                            defaultChecked=""
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault4"
+                            htmlFor="flexSwitchCheckDefault4"
                           >
                             Monthly product updates
                           </label>
@@ -214,7 +214,7 @@ class Profile extends Component {
                           />
                           <label
                             class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            for="flexSwitchCheckDefault5"
+                            htmlFor="flexSwitchCheckDefault5"
                           >
                             Subscribe to newsletter
                           </label>
