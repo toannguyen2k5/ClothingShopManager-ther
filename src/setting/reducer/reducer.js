@@ -1,3 +1,4 @@
+import { data } from "jquery";
 import { define_name_sector, define_nav } from "../store/const";
 import * as types from "./actionTypes";
 const initialState = {
@@ -163,6 +164,14 @@ export const changeState = (state = initialState, action) => {
       let new_state = {
         ...state,
         sector: { ...state.sector, ...action.info },
+      };
+      buildcode(new_state);
+      return new_state;
+    }
+    case types.chang_state_data: {
+      let new_state = {
+        ...state,
+        data_page: { ...state.data_page, ...action.data_page },
       };
       buildcode(new_state);
       return new_state;

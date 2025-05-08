@@ -12,7 +12,11 @@ class ChooseUserDiscountCode extends Component {
   componentDidMount() {
     console.log("Get Data");
     fetch(
-      urlapi + "/api/UserDiscountCode/sellectAll?idUser=" + this.props.idUser
+      urlapi +
+        "/api/UserDiscountCode/sellectForOrder?idUser=" +
+        this.props.idUser +
+        "&minimumOrderValue=" +
+        this.props.total
     )
       .then((response) => response.json())
       .then((data) => {

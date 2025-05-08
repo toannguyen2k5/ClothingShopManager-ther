@@ -7,10 +7,9 @@ class ChooseAddress extends Component {
     this.state = {
       provinces: [],
       province_current: null,
-      districts: [], // Thêm districts vào state
+      districts: [],
     };
   }
-
   componentDidMount() {
     console.log("Get Data");
     fetch(urlapi + "/api/Province/SellectAll")
@@ -29,7 +28,6 @@ class ChooseAddress extends Component {
       this.state.province_current &&
       this.state.province_current !== prevState.province_current
     ) {
-      // Lấy dữ liệu Districts khi province_current thay đổi
       fetch(
         urlapi +
           "/api/District/Sellect?idProvince=" +
@@ -38,7 +36,7 @@ class ChooseAddress extends Component {
         .then((response) => response.json())
         .then((data) => {
           if (data.status && data.status === "200") {
-            this.setState({ districts: data.data }); // Cập nhật districts vào state
+            this.setState({ districts: data.data });
           }
           console.log(data);
         })
@@ -55,7 +53,7 @@ class ChooseAddress extends Component {
     if (selectedProvince) {
       this.setState({ province_current: selectedProvince });
     } else {
-      this.setState({ province_current: null, districts: [] }); // Xóa danh sách districts khi không chọn tỉnh
+      this.setState({ province_current: null, districts: [] });
     }
   };
 
@@ -113,7 +111,6 @@ class ChooseAddress extends Component {
                 }}
               />
             </div>
-
             <div className="address-cont">
               <div className="address-detail">
                 <div id="address-link" className="d-flex d-flex-wrap"></div>

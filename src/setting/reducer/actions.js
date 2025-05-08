@@ -1,7 +1,7 @@
 import * as types from "./actionTypes";
 
 export function login_success(user) {
-  console.log("user:",user);
+  console.log("user:", user);
   let user_info = {
     id_user: user.idUser,
     email: user.email,
@@ -104,5 +104,12 @@ export function change_show_sector(info) {
   return {
     type: types.change_show_sector,
     info,
+  };
+}
+
+export function change_state_data(data_page) {
+  return {
+    type: types.chang_state_data,
+    data_page,
   };
 }

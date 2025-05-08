@@ -7,3 +7,4 @@ export const current_nav = "CURRENT NAV";
 export const no_change = "NO CHANGE";
 export const set_code_build_state = "SET CODE BUILD STATE";
 export const change_show_sector = "CHANGE SHOW SECTOR";
+export const chang_state_data = "CHANGE STATE DATA";

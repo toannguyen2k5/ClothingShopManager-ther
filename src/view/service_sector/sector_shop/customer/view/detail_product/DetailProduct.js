@@ -57,7 +57,7 @@ class DetailProduct extends Component {
                         >
                           <MainPhoto
                             index="0"
-                            idproduct="Product01"
+                            idproduct="Product000000000000"
                             {...this.props}
                           />
                         </div>
