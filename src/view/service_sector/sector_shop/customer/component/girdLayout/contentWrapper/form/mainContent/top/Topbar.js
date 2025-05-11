@@ -68,7 +68,7 @@ export default class Topbar extends Component {
                       class="dt-width-auto1 logo-img"
                       height="35"
                       width="130"
-                      src="https://file.hstatic.net/1000253775/file/logo_no_bf-05_3e6797f31bda4002a22464d6f2787316.png"
+                      src="./icon_page.png"
                       alt="160STORE"
                     />
                   </a>
