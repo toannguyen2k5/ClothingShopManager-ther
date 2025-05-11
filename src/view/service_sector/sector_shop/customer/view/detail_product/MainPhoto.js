@@ -17,51 +17,31 @@ class MainPhoto extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data.status && data.status === "200")
+        if (data.status && data.status === "200") {
           this.setState({ images: data.data });
-        console.log(data);
+          const mainImage = this.state.images.find((img) => img.main === true);
+          if (mainImage && this.props.actions?.change_state_data) {
+            this.props.actions.change_state_data({ data: mainImage });
+            console.log("path :", mainImage.path);
+          }
+        }
+        console.log("data :", data);
       })
       .catch((error) => console.error(error));
   }
 
   render() {
+    const { images } = this.state;
     return (
       <div>
-        {this.state.images.map((image, index) => {
-          if (image.status) {
-            return (
-              <div
-                key={index}
-                className="item item-owl slick-slide slick-current slick-active"
-                style={{ width: "118px" }}
-                tabIndex="0"
-                data-slick-index="0"
-                aria-hidden="false"
-              >
-                <a
-                  href="javascript:void(0)"
-                  className="product__thumbnail"
-                  data-image={image.path}
-                  data-index={index}
-                  tabIndex="0"
-                >
-                  <img
-                    alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
-                    className="lazyload-cus dt-width-100"
-                    loading="lazy"
-                    src={image.path}
-                    width="100"
-                    height="100"
-                  />
-                </a>
-              </div>
-            );
-          }
-          console.log("path :", image.path, " index :", index);
-          return (
-            <SecondaryPhoto index={index} path={image.path} {...this.props} />
-          );
-        })}
+        {images.map((image, index) => (
+          <SecondaryPhoto
+            key={index}
+            index={index}
+            path={image.path}
+            {...this.props}
+          />
+        ))}
       </div>
     );
   }

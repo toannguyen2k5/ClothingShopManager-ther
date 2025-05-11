@@ -16,6 +16,7 @@ const initialState = {
   },
   data: [],
   code: false,
+  data_page: {},
   current_page: {
     name: define_nav.admin.home.name,
     path: define_nav.admin.home.path,

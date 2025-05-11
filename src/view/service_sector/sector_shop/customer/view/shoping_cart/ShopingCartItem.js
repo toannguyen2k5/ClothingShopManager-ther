@@ -7,15 +7,8 @@ class ShopingCartItem extends Component {
     this.state = {
       shopingcart_items: [],
     };
-    this.data = {
-      total_Bill_Before_DisCode: 0,
-      total_Bill_After_DisCode: 0,
-      amount_discounted: 0,
-      quantity: 0,
-    };
   }
   componentDidMount() {
-    const { actions } = this.props;
     console.log("Get Data");
     fetch(
       urlapi +
@@ -25,11 +18,6 @@ class ShopingCartItem extends Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
-          const totalquantity = data.data.reduce(
-            (sum, item) => sum + item.quantity,
-            0
-          );
-          actions.change_state_data({ totalquantity: totalquantity });
           this.setState({ shopingcart_items: data.data });
         }
         console.log(data);
@@ -37,31 +25,56 @@ class ShopingCartItem extends Component {
       .catch((error) => console.error(error));
   }
   TotalMoneyNoDiscountEvent = (shopingcart_item) => {
-    const total = shopingcart_item.quantity * shopingcart_item.price;
-    this.data.total_Bill_Before_DisCode += total;
-    return total;
+    return shopingcart_item.quantity * shopingcart_item.price;
   };
   TotalMoneyCurrent = (item) => {
     let total = 0;
-    this.data.quantity += item.quantity;
     if (item.decrease && item.quantityLimit) {
       if (item.quantity > item.quantityLimit) {
         total =
           (item.quantity - item.quantityLimit) * item.price +
-          item.quantityLimit * item.price * item.decrease;
+          item.quantityLimit * item.price * (1 - item.decrease);
       } else {
-        total = item.quantity * item.price * item.decrease;
+        total = item.quantity * item.price * (1 - item.decrease);
       }
     } else {
       total = item.quantity * item.price;
     }
-    this.data.total_Bill_After_DisCode += total;
     return total;
   };
-  increase(index) {
-    const { actions, state_data } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { actions } = this.props;
+    if (prevState.shopingcart_items !== this.state.shopingcart_items) {
+      this.data = {
+        total_Bill_Before_DisCode: 0,
+        total_Bill_After_DisCode: 0,
+        quantity: 0,
+      };
+      const result = this.state.shopingcart_items.reduce(
+        (acc, item) => {
+          if (item.status && item.status === true) {
+            acc.total_Bill_Before_DisCode +=
+              this.TotalMoneyNoDiscountEvent(item);
+            acc.total_Bill_After_DisCode += this.TotalMoneyCurrent(item);
+          }
+          acc.quantity += item.quantity;
+          return acc;
+        },
+        {
+          total_Bill_Before_DisCode: 0,
+          total_Bill_After_DisCode: 0,
+          quantity: 0,
+        }
+      );
+
+      actions.change_state_data({
+        data: result,
+      });
+    }
+  }
+  UpdateQuantity(index, is_increase) {
     let items = [...this.state.shopingcart_items];
-    items[index].quantity += 1;
+    is_increase ? (items[index].quantity += 1) : (items[index].quantity -= 1);
     fetch(
       urlapi +
         "/api/shoppingcart/updateShoppingCart?quantity=" +
@@ -71,42 +84,65 @@ class ShopingCartItem extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data.status && data.status === "200") this.data.quantity += 1;
+        if (data.status && data.status === "200") {
+          this.setState({ shopingcart_items: items });
+        }
         console.log(data);
       })
       .catch((error) => console.error(error));
-    this.setState({ shopingcart_items: items });
-    actions.change_state_data({
-      totalquantity: state_data.data_page.totalquantity + 1,
-    });
+  }
+  increase(index) {
+    fetch(
+      urlapi +
+        "/api/detailproduct/sellect/inventory?idDetail=" +
+        this.state.shopingcart_items[index].idDetail
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          if (data.data >= this.state.shopingcart_items[index].quantity + 1)
+            this.UpdateQuantity(index, true);
+          else alert("⚠️ Sản phẩm đã hết hàng!");
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
   }
   decrease(index) {
-    const { actions, state_data } = this.props;
+    this.state.shopingcart_items[index].quantity > 1 &&
+      this.UpdateQuantity(index, false);
+  }
+  OnclickCheckbox(index) {
     let items = [...this.state.shopingcart_items];
-    items[index].quantity -= 1;
+    items[index].status = !items[index].status;
     fetch(
       urlapi +
-        "/api/shoppingcart/updateShoppingCart?quantity=" +
-        items[index].quantity +
+        "/api/shoppingcart/updateStatusShoppingCart?status=" +
+        items[index].status +
         "&idShoppingCart=" +
         items[index].idShoppingCart
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data.status && data.status === "200") this.data.quantity -= 1;
+        if (data.status && data.status === "200") {
+          this.setState({ shopingcart_items: items });
+        }
         console.log(data);
       })
       .catch((error) => console.error(error));
-    this.setState({ shopingcart_items: items });
-    actions.change_state_data({
-      totalquantity: state_data.data_page.totalquantity - 1,
-    });
   }
   render() {
     return (
       <div>
         {this.state.shopingcart_items.map((shopingcart_item, index) => (
           <div className="cart-wrap" key={index}>
+            <input
+              type="checkbox"
+              name="selectedProduct"
+              value="product_id"
+              onClick={() => this.OnclickCheckbox(index)}
+              checked={shopingcart_item.status}
+            />
             <div className="item-info">
               <div className="item-img">
                 <a href="#">
@@ -116,7 +152,11 @@ class ShopingCartItem extends Component {
               <div className="cart_content">
                 <div className="item-title">
                   <div className="cart_des">
-                    <a href="#">{shopingcart_item.nameProduct}</a>
+                    <a
+                      href={`/blog/detail_product/${shopingcart_item.idDetail}/`}
+                    >
+                      {shopingcart_item.nameProduct}
+                    </a>
                   </div>
                   <div className="item-remove">
                     <span className="remove-wrap">
@@ -163,14 +203,17 @@ class ShopingCartItem extends Component {
                       <span className="item-option">
                         <span className="item-price">
                           <span className="money">
-                            {this.TotalMoneyCurrent(shopingcart_item)}đ
+                            {this.TotalMoneyCurrent(
+                              shopingcart_item
+                            ).toLocaleString()}
+                            đ
                           </span>
                           <del>
                             {shopingcart_item.decrease !== null && (
                               <>
                                 {this.TotalMoneyNoDiscountEvent(
                                   shopingcart_item
-                                )}
+                                ).toLocaleString()}
                                 <span>đ</span>
                               </>
                             )}
@@ -184,7 +227,6 @@ class ShopingCartItem extends Component {
             </div>
           </div>
         ))}
-        {this.props.onDataSend(this.data)}
       </div>
     );
   }

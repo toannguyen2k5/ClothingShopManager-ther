@@ -29,7 +29,7 @@ export const routes_sector_blog = [
     file_name: "",
   },
   {
-    path: "/blog/detail_product",
+    path: "/blog/detail_product/:idProduct/",
     exact: true,
     name: "Detail Product",
     component: DetailProduct,
