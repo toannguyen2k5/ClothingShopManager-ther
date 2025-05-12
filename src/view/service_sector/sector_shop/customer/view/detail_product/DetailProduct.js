@@ -143,7 +143,6 @@ class DetailProduct extends Component {
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 order-mb-2">
                 <div class="bg-while">
                   <div class="product-content">
-                    // thông tin sản phẩm
                     <div class="pro-content-head clearfix">
                       <div class="head-product-title">
                         <h1 data-available="Còn hàng" class="green">
@@ -177,7 +176,6 @@ class DetailProduct extends Component {
                         </span>
                       </div>
                     </div>
-                    // giờ phút giây của sự kiện
                     <div class="bg-countdown-product">
                       <div class="count-down-index d-flex d-flex-center">
                         <span>Kết thúc trong: </span>
@@ -201,7 +199,6 @@ class DetailProduct extends Component {
                       </div>
                     </div>
                   </div>
-                  // mô tả khuyến mãi
                   <div class="coupon-product clear">
                     <div class="product-promotion">
                       <h3 class="product-promotion__heading">

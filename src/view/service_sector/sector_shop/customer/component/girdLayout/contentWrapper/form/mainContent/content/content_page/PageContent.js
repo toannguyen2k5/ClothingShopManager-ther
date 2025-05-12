@@ -1,6 +1,6 @@
 import React, { Component, Suspense } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
-import { routes_sector_blog } from "../../../../../../../../../../../setting/router/routes_sector_blog";
+import { routes_shop } from "../../../../../../../../../../../setting/router/routes_shop";
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -12,7 +12,7 @@ export default class PageContent extends Component {
     return (
       <Suspense fallback={loading}>
         <Switch>
-          {routes_sector_blog.map((route, idx) => {
+          {routes_shop.map((route, idx) => {
             return (
               route.component && (
                 <Route

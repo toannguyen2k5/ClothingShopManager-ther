@@ -70,6 +70,11 @@ export const define_nav = {
       name: "Tạo mới Sản Phẩm",
       path: "/admin/manager/product/new/",
     },
+    
+    newOrderInputProduct: {
+      name: "Thêm Đơn Nhập Hàng",
+      path: "/admin/manager/order/input/new/",
+    },
     categoryManager: {
       name: "Quản lý Danh mục",
       path: "/admin/manager/categories/",

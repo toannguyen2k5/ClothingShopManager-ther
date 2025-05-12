@@ -1,5 +1,11 @@
 import React, { Component } from "react";
 import "./PurchaseSlipManager.css";
+import { define_nav } from "../../../../../../setting/store/const";
+import ModalSupplier from "../../../../component/sub_layout/modal/modal_ncc/ModalSupplier";
+import DataTable from "react-data-table-component";
+import ModalShop from "../../../../component/sub_layout/modal/moda_shop/ModalShop";
+import { make_id } from "../../../../../../setting/reducer/reducer";
+import ModalProduct from "../../../../component/sub_layout/modal/modal_product/ModalProduct";
 
 // Dummy product list for autocomplete popup
 const PRODUCT_CATALOG = [
@@ -23,10 +29,67 @@ const PRODUCT_CATALOG = [
   // ... thêm sản phẩm mẫu
 ];
 
+const listproduct = [
+  {idShop:"",shopName:"",idCategory:"",categoryName:"",idProduct:"",productName:"",color:"",sizeProduct:"",quantity:"",price:99999},
+  {idShop:"",shopName:"",idCategory:"",categoryName:"",idProduct:"",productName:"",color:"",sizeProduct:"",quantity:"",price:99999},
+  {idShop:"",shopName:"",idCategory:"",categoryName:"",idProduct:"",productName:"",color:"",sizeProduct:"",quantity:"",price:99999},
+  {idShop:"",shopName:"",idCategory:"",categoryName:"",idProduct:"",productName:"",color:"",sizeProduct:"",quantity:"",price:99999},
+  {idShop:"",shopName:"",idCategory:"",categoryName:"",idProduct:"",productName:"",color:"",sizeProduct:"",quantity:"",price:99999},
+];
+
+const columns = [
+  { name: "STT", selector: (row, index) => (index+1) },
+  { name: "Tên Cửa Hàng", selector: (row) => row.shopName, sortable: true },
+  { name: "Tên Danh Mục", selector: (row) => row.categoryName },
+  { name: "Mã Sản Phẩm", selector: (row) => row.idProduct, sortable: true },
+  { name: "Tên Sản Phẩm", selector: (row) => row.productName },
+  { name: "Màu Sắc", selector: (row) => row.color },
+  { name: "Size", selector: (row) => row.sizeProduct },
+  { name: "Số Lượng", selector: (row) => row.quantity },
+  {
+    name: "Giá Nhập",
+    selector: (row) => `${row.price.toLocaleString()}đ`,
+  },
+  {
+    name: "Hành Động",
+    cell: (row) => (
+      <>
+        <button className="bg-yellow-400 text-white px-2 py-1 rounded mr-2">
+        <i class="fa-solid fa-square-pen"></i>
+        </button>
+        <button className="bg-red-500 text-white px-2 py-1 rounded"><i class="fa-solid fa-trash-can"></i></button>
+      </>
+    ),
+    ignoreRowClick: true,
+    allowOverflow: true,
+    button: true,
+  },
+];
+
 export default class PurchaseSlipManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isOpenModalSupplier: false,
+      isOpenModalShop:false,
+      isOpenModalProduct:false,
+      searchText: "",
+      listproduct: listproduct,
+      data_shop_selected:{
+        idShop:"",
+        nameShop:""
+      },
+      data_order:{
+        idPurchaseSlip: make_id(45),
+        idCreater:"",
+        dayCreate:"",
+        idSupplier:"",
+        totalBill:0,
+        statusReceive:false,
+        listProduct:[]
+      },
+
+      //-------------------------------------
       purchaseSlip: {
         idPurchaseSlip: "",
         idCreater: "",
@@ -53,6 +116,30 @@ export default class PurchaseSlipManager extends Component {
       showProductPopup: false,
       responseMessage: ""
     };
+  }
+  updateShopOrder = (data)=>{
+    this.setState({...this.state, data_shop_selected: data});
+  };
+  handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    const { listproduct} = this.state;
+
+    const filtered = listproduct.filter(
+      (p) =>
+        p.productName.toLowerCase().includes(value) || p.shopName.toLowerCase().includes(value) 
+      || p.categoryName.toLowerCase().includes(value) || p.color.toLowerCase().includes(value) 
+      || p.sizeProduct.toLowerCase().includes(value)
+    );
+    this.setState({ searchText: value, listproduct: filtered});
+  };
+  handleOpenModalSupplier = () => {
+    this.setState({...this.state, isOpenModalSupplier:true});
+  }
+  handleOpenModalShop = () => {
+    this.setState({...this.state, isOpenModalShop:true});
+  }
+  handleOpenModalProduct = () => {
+    this.setState({...this.state, isOpenModalProduct:true});
   }
 
   handleSlipChange = e => {
@@ -110,70 +197,193 @@ export default class PurchaseSlipManager extends Component {
   }
 
   render() {
+    if (this.props.state_data.current_page.name !== define_nav.admin.newOrderInputProduct.name)
+          this.props.actions.current_page({
+            name_new: define_nav.admin.newOrderInputProduct.name,
+            path_new: define_nav.admin.newOrderInputProduct.path,
+            old_page: this.props.state_data.current_page,
+          });
     const { purchaseSlip, newItem, items, productFilter, showProductPopup, responseMessage } = this.state;
     return (
-      <div className="purchase-slip-manager">
-        <h2>Thêm Đơn Nhập Hàng</h2>
-        <div className="slip-section">
-          {Object.keys(purchaseSlip).map(key => (
-            <label key={key}>{key}:
-              <input name={key} value={purchaseSlip[key]} onChange={this.handleSlipChange} />
-            </label>
-          ))}
-        </div>
-
-        <h3>Thêm sản phẩm (quần áo)</h3>
-        <div className="item-section">
-          <label>Shop ID:
-            <input name="shopId" value={newItem.shopId} onChange={this.handleItemChange} placeholder="Nhập mã shop" />
-          </label>
-          <label>Product:
-            <input name="productFilter" value={productFilter} onChange={e => this.setState({ productFilter: e.target.value, showProductPopup: true })} placeholder="Mã hoặc tên sản phẩm" readOnly={false} />
-            {showProductPopup && (
-              <div className="product-popup">
-                <ul>
-                  {this.filterProducts().map(p => (
-                    <li key={p.productId} onClick={() => this.selectProduct(p)}>
-                      {p.productId} - {p.name}
-                    </li>
-                  ))}
-                </ul>
+      <div className="">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"></link>
+        {/* thông tin đơn hàng*/}
+        <div className="row">
+          <h2>Thông Tin Đơn Hàng</h2>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+              <label for="dayCreate" class="col-sm-3 col-form-label">Ngày Tạo Hóa Đơn</label>
+                <div class="col-sm-7">
+                  <input type="date" readonly class="form-control form-control-sm" id="dayCreate" disabled/>
+                </div>
               </div>
-            )}
-          </label>
-          <label>Name:
-            <input name="name" value={newItem.name} readOnly />
-          </label>
-          <label>Category:
-            <input name="category" value={newItem.category} readOnly />
-          </label>
-          <label>Color:
-            <input name="color" value={newItem.color} readOnly />
-          </label>
-          <label>Size:
-            <input name="size" value={newItem.size} readOnly />
-          </label>
-          <label>Quantity:
-            <input type="number" name="quantity" value={newItem.quantity} onChange={this.handleItemChange} min="1" />
-          </label>
-          <label>Unit Price:
-            <input type="number" name="unitPrice" value={newItem.unitPrice} onChange={this.handleItemChange} />
-          </label>
-          <button onClick={this.addItem}>Thêm sản phẩm</button>
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="idCreater" class="col-sm-3 col-form-label">Người Tạo Hóa Đơn</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control form-control-sm" id="idCreater"value={"aaaa"} disabled/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="idSupplier " class="col-sm-3 col-form-label">Nhà Cung Cấp</label>
+                <div class="col-sm-7">
+                <div className="row form-inline">
+                  <div className="col-10"><input type="text" class="form-control form-control-sm" id="idSupplier "value={"aaaa"}/></div>
+                  <button type="button" class="btn btn-outline-info col-2" onClick={this.handleOpenModalSupplier}><i class="bi bi-search"></i></button>
+                  <ModalSupplier isOpen = {this.state.isOpenModalSupplier} onClose={() => this.setState({ isOpenModalSupplier: false })}/>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="statusReceive" class="col-sm-4 col-form-label">Trạng Thái Đơn Hàng</label>
+                <div class="col-sm-6">
+                <select id="statusReceive" class="form-control form-control-sm">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="totalBill" class="col-sm-3 col-form-label">Tổng Tiền</label>
+                <div class="col-sm-7">
+                  <input type="text" readonly class="form-control form-control-sm" id="totalBill" disabled/>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <h4>Danh sách sản phẩm</h4>
-        <table className="items-table">
-          <thead>
-            <tr><th>#</th><th>Shop</th><th>ID</th><th>Name</th><th>Cat</th><th>Color</th><th>Size</th><th>Qty</th><th>Price</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            {items.map((it, idx) => (
-              <tr key={idx}><td>{idx+1}</td><td>{it.shopId}</td><td>{it.productId}</td><td>{it.name}</td><td>{it.category}</td><td>{it.color}</td><td>{it.size}</td><td>{it.quantity}</td><td>{it.unitPrice}</td><td><button onClick={() => this.removeItem(idx)}>Xóa</button></td></tr>
-            ))}
-          </tbody>
-        </table>
-
+        {/** thông tin sản phẩm */}
+        <div className="row">
+          <h2>Thông Tin Sản Phẩm</h2>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="idShop" class="col-sm-3 col-form-label">Cửa Hàng</label>
+                <div class="col-sm-8">
+                <div className="row form-inline">
+                  <div className="col-10"><input type="text" class="form-control form-control-sm" id="idShop" value={this.state.data_shop_selected.nameShop} readOnly disabled/></div>
+                  <button type="button" class="btn btn-outline-info col-2" onClick={this.handleOpenModalShop}><i class="bi bi-search"></i></button>
+                  <ModalShop isOpen = {this.state.isOpenModalShop} onClose={() => this.setState({ isOpenModalShop: false })} updateShop={(data)=>this.updateShopOrder(data)}/>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="idProduct" class="col-sm-3 col-form-label">Sản Phẩm</label>
+                <div class="col-sm-8">
+                <div className="row form-inline">
+                  <div className="col-10"><input type="text" class="form-control form-control-sm" id="idProduct"value={"aaaa"}  readOnly disabled/></div>
+                  <button type="button" class="btn btn-outline-info col-2" onClick={this.handleOpenModalProduct}><i class="bi bi-search"></i></button>
+                  <ModalProduct isOpen = {this.state.isOpenModalProduct} onClose={() => this.setState({ isOpenModalProduct: false })} updateProduct={(data)=>this.updateShopOrder(data)}/>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="idCategoty" class="col-sm-3 col-form-label">Danh Mục</label>
+                <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="idCategoty" value={"aaaa"} readOnly disabled/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-3">
+              <div className="row">
+                <label for="idProduct" class="col-sm-2 col-form-label">Màu</label>
+                <div class="col-sm-9">
+                <select id="inputState" class="form-control form-control-sm">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-3">
+              <div className="row">
+                <label for="size" class="col-sm-2 col-form-label">Size</label>
+                <div class="col-sm-4">
+                <input type="text" readonly class="form-control" id="size" value="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="Quantity" class="col-sm-3 col-form-label">Số Lượng</label>
+                <div class="col-sm-4">
+                <input type="number" class="form-control form-control-sm" id="Quantity" value={0} min={0}/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="Price" class="col-sm-3 col-form-label">Giá Nhập</label>
+                <div class="col-sm-4">
+                <input type="text" class="form-control form-control-sm" id="Price" value={0} min={0}/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="totalPrice" class="col-sm-3 col-form-label">Tổng Giá Trị</label>
+                <div class="col-sm-4">
+                <input type="text" class="form-control form-control-sm" id="totalPrice"  value={0} min={0} readOnly disabled/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-outline-success" onClick={this.addItem}>Thêm sản phẩm</button>
+            </div>
+          </div>
+          
+        </div>
+        {/** Danh sách sản phẩm */}
+        <div className="row">
+          <div className="row d-flex justify-content-between align-items-center mb-3">
+            <div className="col-7"></div>
+            <input
+              type="text"
+              placeholder="Tìm kiếm sản phẩm..."
+              className="col-5 border p-2 rounded form-control-sm"
+              onChange={this.handleSearch}
+              value={this.state.searchText}
+              style={{ float: "right" }}
+            />
+          </div>
+          <div className="row">
+            <DataTable
+            columns={columns}
+            data={this.state.listproduct}
+            pagination
+            paginationPerPage={5}
+            highlightOnHover
+            striped
+            responsive
+          />
+          </div>
+        </div>
         <button className="submit-btn" onClick={this.submitForm}>Tạo phiếu nhập</button>
         {responseMessage && <div className="response-msg">{responseMessage}</div>}
       </div>
