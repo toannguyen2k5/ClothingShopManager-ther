@@ -39,7 +39,7 @@ export default class Nav extends Component {
               <div className="col-4">
                 <img
                   alt=""
-                  src={`${urlapi}/image/admin/logo_dashboard.png`}
+                  src={`./icon_page.png`}
                   className="navbar-brand-img h-100"
                   style={{ width: "40px", height: "auto" }}
                 />

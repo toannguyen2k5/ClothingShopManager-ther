@@ -153,7 +153,7 @@ class ShopingCartItem extends Component {
                 <div className="item-title">
                   <div className="cart_des">
                     <a
-                      href={`/blog/detail_product/${shopingcart_item.idDetail}/`}
+                      href={`/shop/detail_product/${shopingcart_item.idDetail}/`}
                     >
                       {shopingcart_item.nameProduct}
                     </a>

@@ -64,7 +64,7 @@ class ShopingCart extends Component {
                         <h2>Giỏ hàng:</h2>
                         <span class="cart-count">
                           <span class="cart-counter">
-                            {this.props.state_data.data_page.data.quantity}{" "}
+                            {this.props.state_data.data_page.data?.quantity}{" "}
                           </span>
                           <span class="cart-item-title">Sản phẩm</span>
                         </span>
@@ -104,7 +104,7 @@ class ShopingCart extends Component {
                               class="total-price total-price-cart"
                               style={{ color: "#000" }}
                             >
-                              {this.props.state_data.data_page.data.total_Bill_Before_DisCode.toLocaleString()}{" "}
+                              {this.props.state_data.data_page.data?.total_Bill_Before_DisCode?.toLocaleString()}{" "}
                               đ
                             </span>
                           </p>
@@ -114,17 +114,17 @@ class ShopingCart extends Component {
                               -{" "}
                               {(
                                 this.props.state_data.data_page.data
-                                  .total_Bill_Before_DisCode -
+                                  ?.total_Bill_Before_DisCode -
                                 this.props.state_data.data_page.data
-                                  .total_Bill_After_DisCode
-                              ).toLocaleString()}{" "}
+                                  ?.total_Bill_After_DisCode
+                              )?.toLocaleString()}{" "}
                               đ
                             </span>
                           </p>
                           <p>
                             Tổng tiền:
                             <span id="total-price-new" class="total-price">
-                              {this.props.state_data.data_page.data.total_Bill_After_DisCode.toLocaleString()}{" "}
+                              {this.props.state_data.data_page.data?.total_Bill_After_DisCode?.toLocaleString()}{" "}
                               đ
                             </span>
                           </p>

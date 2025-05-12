@@ -45,7 +45,7 @@ export const routes_admin = [
   { path: "/", exact: true, name: "Form Search", component: Admin_Home },
 ];
 //Transtion_Sector
-const Transtion_Sector_Blog = React.lazy(() =>
+const Transtion_Sector_Shop = React.lazy(() =>
   import("../../view/service_sector/sector_shop/TranstionRole")
 );
 export const routes_sector = [
@@ -53,13 +53,13 @@ export const routes_sector = [
     path: "/",
     exact: true,
     name: "Form Search",
-    component: Transtion_Sector_Blog,
+    component: Transtion_Sector_Shop,
   },
   {
-    path: "/blog/*",
+    path: "/shop/*",
     exact: true,
     name: "Form Search",
-    component: Transtion_Sector_Blog,
+    component: Transtion_Sector_Shop,
   },
 ];
 //=========================================================
