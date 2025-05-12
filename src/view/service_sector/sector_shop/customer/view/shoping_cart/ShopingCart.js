@@ -12,9 +12,6 @@ import "./styles-new.scss.css";
 class ShopingCart extends Component {
   constructor(props) {
     super(props);
-    this.total_Bill_Before_DisCode = 0;
-    this.total_Bill_After_DisCode = 0;
-    this.quantity = 0;
   }
   render() {
     console.log(this.props);
@@ -64,7 +61,8 @@ class ShopingCart extends Component {
                         <h2>Giỏ hàng:</h2>
                         <span class="cart-count">
                           <span class="cart-counter">
-                            {this.props.state_data.data_page.data.quantity}{" "}
+                            {this.props?.state_data?.data_page?.data
+                              ?.quantity || 0}{" "}
                           </span>
                           <span class="cart-item-title">Sản phẩm</span>
                         </span>
@@ -104,7 +102,10 @@ class ShopingCart extends Component {
                               class="total-price total-price-cart"
                               style={{ color: "#000" }}
                             >
-                              {this.props.state_data.data_page.data.total_Bill_Before_DisCode.toLocaleString()}{" "}
+                              {(
+                                this.props?.state_data?.data_page?.data
+                                  ?.total_Bill_Before_DisCode || 0
+                              ).toLocaleString()}{" "}
                               đ
                             </span>
                           </p>
@@ -113,10 +114,10 @@ class ShopingCart extends Component {
                             <span class="total-price-sale">
                               -{" "}
                               {(
-                                this.props.state_data.data_page.data
-                                  .total_Bill_Before_DisCode -
-                                this.props.state_data.data_page.data
-                                  .total_Bill_After_DisCode
+                                (this.props?.state_data?.data_page?.data
+                                  ?.total_Bill_Before_DisCode || 0) -
+                                (this.props?.state_data?.data_page?.data
+                                  ?.total_Bill_After_DisCode || 0)
                               ).toLocaleString()}{" "}
                               đ
                             </span>
@@ -124,7 +125,10 @@ class ShopingCart extends Component {
                           <p>
                             Tổng tiền:
                             <span id="total-price-new" class="total-price">
-                              {this.props.state_data.data_page.data.total_Bill_After_DisCode.toLocaleString()}{" "}
+                              {(
+                                this.props?.state_data?.data_page?.data
+                                  ?.total_Bill_After_DisCode || 0
+                              ).toLocaleString()}{" "}
                               đ
                             </span>
                           </p>

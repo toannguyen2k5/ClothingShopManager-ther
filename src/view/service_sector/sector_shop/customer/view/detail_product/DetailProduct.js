@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { urlapi } from "../../../../../../setting/store/const";
 import "./style-smb.css";
 import "./plugin-style.css";
 import "./render-style-other.scss.css";
@@ -11,10 +12,34 @@ import MainPhoto from "./MainPhoto";
 class DetailProduct extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    console.log("id : ", this.props.match.params.idProduct);
+    console.log("props : ", this.props);
+    this.state = {
+      product: null,
+    };
   }
-
+  componentDidMount() {
+    console.log("Get Data");
+    fetch(
+      urlapi +
+        "/api/detailproduct/sellect/detailProperty?idProduct=Product000000000000"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ product: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
   render() {
+    console.log(this.state);
+    if (this.state.product === undefined || this.state.product === null) {
+      this.componentDidMount();
+      return null;
+    }
     return (
       <>
         <section id="product-template" class="product-page">
@@ -46,8 +71,7 @@ class DetailProduct extends Component {
                           }}
                         >
                           <MainPhoto
-                            index="0"
-                            idproduct="Product000000000000"
+                            images={this.state.product?.images || null}
                             {...this.props}
                           />
                         </div>
@@ -81,7 +105,11 @@ class DetailProduct extends Component {
                             tabIndex="0"
                           >
                             <a
-                              href={this.props.state_data.data_page.data.path}
+                              href={
+                                this.state.product.images?.find(
+                                  (image) => image.main
+                                )?.path || "#"
+                              }
                               data-fancybox="gallery"
                               class="product__thumbnail"
                               data-pos="1"
@@ -91,9 +119,15 @@ class DetailProduct extends Component {
                                 alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
                                 class="product-image-feature dt-width-100 ls-is-cached lazyloaded"
                                 loading="lazy"
-                                src={this.props.state_data.data_page.data.path}
+                                src={
+                                  this.state.product.images?.find(
+                                    (image) => image.main
+                                  )?.path || "#"
+                                }
                                 data-src={
-                                  this.props.state_data.data_page.data.path
+                                  this.state.product.images?.find(
+                                    (image) => image.main
+                                  )?.path || "#"
                                 }
                                 width="600"
                                 height="600"

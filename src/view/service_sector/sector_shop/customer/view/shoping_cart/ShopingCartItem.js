@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { urlapi } from "../../../../../../setting/store/const";
+import { Link } from "react-router-dom";
 
 class ShopingCartItem extends Component {
   constructor(props) {
@@ -131,6 +132,23 @@ class ShopingCartItem extends Component {
       })
       .catch((error) => console.error(error));
   }
+  DeleteShopingCartItem(index) {
+    let ShopingCartItems = this.state.shopingcart_items;
+    fetch(
+      urlapi +
+        "/api/shoppingcart/deleteShoppingCart?idShoppingCart=" +
+        ShopingCartItems[index].idShoppingCart
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          ShopingCartItems.splice(index, 1);
+          this.setState({ shopingcart_items: ShopingCartItems });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
   render() {
     return (
       <div>
@@ -153,7 +171,7 @@ class ShopingCartItem extends Component {
                 <div className="item-title">
                   <div className="cart_des">
                     <a
-                      href={`/blog/detail_product/${shopingcart_item.idDetail}/`}
+                      href={`/blog/detail_product/${shopingcart_item.idProduct}/`}
                     >
                       {shopingcart_item.nameProduct}
                     </a>
@@ -161,7 +179,10 @@ class ShopingCartItem extends Component {
                   <div className="item-remove">
                     <span className="remove-wrap">
                       <a href="#">
-                        <i className="fa fa-times"></i>
+                        <i
+                          className="fa fa-times"
+                          onClick={() => this.DeleteShopingCartItem(index)}
+                        ></i>
                       </a>
                     </span>
                   </div>

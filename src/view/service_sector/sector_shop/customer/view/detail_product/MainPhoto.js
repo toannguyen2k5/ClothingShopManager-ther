@@ -1,46 +1,37 @@
 import react, { Component } from "react";
-import { urlapi } from "../../../../../../setting/store/const";
-import SecondaryPhoto from "./SecondaryPhoto";
 class MainPhoto extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      images: [],
-    };
   }
-  componentDidMount() {
-    console.log("Get Data");
-    fetch(
-      urlapi +
-        "/api/ProductImage/sellectProductImage?idProduct=" +
-        this.props.idproduct
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          this.setState({ images: data.data });
-          const mainImage = this.state.images.find((img) => img.main === true);
-          if (mainImage && this.props.actions?.change_state_data) {
-            this.props.actions.change_state_data({ data: mainImage });
-            console.log("path :", mainImage.path);
-          }
-        }
-        console.log("data :", data);
-      })
-      .catch((error) => console.error(error));
-  }
-
   render() {
-    const { images } = this.state;
+    console.log(this.props);
     return (
       <div>
-        {images.map((image, index) => (
-          <SecondaryPhoto
-            key={index}
-            index={index}
-            path={image.path}
-            {...this.props}
-          />
+        {this.props.images.map((image, index) => (
+          <div
+            class="item item-owl slick-slide slick-active"
+            style={{ width: " 118px" }}
+            tabIndex="0"
+            data-slick-index={index}
+            aria-hidden="false"
+          >
+            <a
+              href="javascript:void(0)"
+              class="product__thumbnail"
+              data-image={image.path}
+              data-index={index}
+              tabIndex="0"
+            >
+              <img
+                alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
+                class="lazyload-cus dt-width-100"
+                loading="lazy"
+                src={image.path}
+                width="100"
+                height="100"
+              />
+            </a>
+          </div>
         ))}
       </div>
     );
