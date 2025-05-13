@@ -1,4 +1,4 @@
-import react, { Component } from "react";
+import React, { Component } from "react";
 class MainPhoto extends Component {
   constructor(props) {
     super(props);

@@ -1,4 +1,5 @@
 import React from "react";
+import { routes_shop } from "./routes_shop";
 
 // admin
 const Admin_Home = React.lazy(() =>
@@ -178,20 +179,10 @@ export const routes_admin = [
 const Transtion_Sector_Shop = React.lazy(() =>
   import("../../view/service_sector/sector_shop/TranstionRole")
 );
-export const routes_sector = [
-  {
-    path: "/",
-    exact: true,
-    name: "Form Search",
-    component: Transtion_Sector_Shop,
-  },
-  {
-    path: "/shop/*",
-    exact: true,
-    name: "Form Search",
-    component: Transtion_Sector_Shop,
-  },
-];
+export const routes_sector = routes_shop.map((item) => ({
+  ...item,
+  component: Transtion_Sector_Shop,
+}));
 //=========================================================
 
 // public

@@ -8,11 +8,11 @@ import "./style-page.scss.css";
 import "./style-product.scss.css";
 import "./styles-new.scss.css";
 import "./vong-quay.css";
+import "./new-style.css";
 import MainPhoto from "./MainPhoto";
 class DetailProduct extends Component {
   constructor(props) {
     super(props);
-    console.log("id : ", this.props.match.params.idProduct);
     console.log("props : ", this.props);
     this.state = {
       product: null,
@@ -22,7 +22,8 @@ class DetailProduct extends Component {
     console.log("Get Data");
     fetch(
       urlapi +
-        "/api/detailproduct/sellect/detailProperty?idProduct=Product000000000000"
+        "/api/detailproduct/sellect/detailProperty?idProduct=" +
+        this.props.match.params.idProduct
     )
       .then((response) => response.json())
       .then((data) => {
@@ -34,6 +35,26 @@ class DetailProduct extends Component {
       })
       .catch((error) => console.error(error));
   }
+  initQuantityControls() {
+    const areas = document.querySelectorAll(".quantity-area");
+
+    areas.forEach((area) => {
+      const minusBtn = area.querySelector(".qtyminus");
+      const plusBtn = area.querySelector(".qtyplus");
+      const input = area.querySelector(".quantity-selector");
+
+      minusBtn.addEventListener("click", () => {
+        let current = parseInt(input.value);
+        if (current > 1) input.value = current - 1;
+      });
+
+      plusBtn.addEventListener("click", () => {
+        let current = parseInt(input.value);
+        input.value = current + 1;
+      });
+    });
+  }
+
   render() {
     console.log(this.state);
     if (this.state.product === undefined || this.state.product === null) {
@@ -116,7 +137,10 @@ class DetailProduct extends Component {
                               tabIndex="0"
                             >
                               <img
-                                alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
+                                alt={
+                                  this.state.product?.nameProduct ||
+                                  "name product"
+                                }
                                 class="product-image-feature dt-width-100 ls-is-cached lazyloaded"
                                 loading="lazy"
                                 src={
@@ -146,7 +170,7 @@ class DetailProduct extends Component {
                     <div class="pro-content-head clearfix">
                       <div class="head-product-title">
                         <h1 data-available="Còn hàng" class="green">
-                          Áo Sweatshirt Nam ICONDENIM Orgnls Painted
+                          {this.state.product?.nameProduct || "name product"}
                         </h1>
                       </div>
                       <div class="d-flex product-info">
@@ -158,44 +182,37 @@ class DetailProduct extends Component {
                               rel="nofollow"
                               href="/collections/types?q=ao-ni-sweatshirt"
                             >
-                              Áo Nỉ - Sweatshirt
+                              {this.state.product?.nameStyle +
+                                " - " +
+                                this.state.product?.nameCategory ||
+                                "name style - name category"}
                             </a>
                           </div>
                           <span class="line-info">|</span>
                           <div class="pro-sku ProductSku">
                             <span>MSP:</span>
-                            <span class="sku-number title">SWID0042-01</span>
+                            <span class="sku-number title">
+                              {this.state.product?.idProduct || "idProduct"}
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       <div id="pro-price">
-                        <span class="price-now">279,000₫</span>
-                        <span class="price-compare">
-                          <del>389,000₫</del>
+                        <span class="price-now">
+                          {this.state.product.price *
+                            ((this.state.product.discountEvent &&
+                              1 - this.state.product.discountEvent.decrease) ||
+                              1)}
+                          ₫
                         </span>
-                      </div>
-                    </div>
-                    <div class="bg-countdown-product">
-                      <div class="count-down-index d-flex d-flex-center">
-                        <span>Kết thúc trong: </span>
-                        <ul
-                          class="countdown-deal d-flex d-flex-center js-center"
-                          data-countdown="Feb 18, 2023 22:00:00"
-                        >
-                          <li>
-                            <strong class="days">01</strong>
-                            <small>Ngày</small>
-                          </li>
-                          <li>
-                            <strong class="hours">01</strong>
-                            <small>Giờ</small>
-                          </li>
-                          <li>
-                            <strong class="minutes">27</strong>
-                            <small>Phút</small>
-                          </li>
-                        </ul>
+                        <span class="price-compare">
+                          <del>
+                            {this.state.product.discountEvent &&
+                              this.state.product.price}
+                            ₫
+                          </del>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -212,28 +229,13 @@ class DetailProduct extends Component {
                           height="22"
                           class="mr-2"
                         />{" "}
-                        KHUYẾN MÃI - ƯU ĐÃI
+                        KHUYẾN MÃI SẢN PHẨM
                       </h3>
                       <div class="product_coupon_new">
                         <ul class="product-promotion__box">
                           <li>
                             <span class="big-bold">
-                              <strong>
-                                TỰ HÀO ĐẠI LỄ - ĐỒNG GIÁ CHỈ TỪ 149K
-                              </strong>
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold" style={{ color: " red" }}>
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/-pngtree-elegant_vietnam_flag_realistic_with_7667465_2ab99aec214b4431b273993c89fcc5c9.png"
-                                style={{ width: " 20px", height: "20px" }}
-                              />
-                              Tặng Sticker TỰ HÀO cho mọi đơn hàng
+                              <strong>CHI TIẾT KHUYẾN MÃI</strong>
                             </span>
                           </li>
                         </ul>
@@ -246,7 +248,8 @@ class DetailProduct extends Component {
                                 src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                 style={{ width: "20px", height: "20px" }}
                               />
-                              Tham gia ngay "VÒNG QUAY TỰ DO" 100% nhận quà
+                              Mã Sự Kiện :{" "}
+                              {this.state.product.discountEvent.eventCode}
                             </span>
                           </li>
                         </ul>
@@ -259,38 +262,8 @@ class DetailProduct extends Component {
                                 src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                 style={{ width: "20px", height: "20px" }}
                               />
-                              Đơn từ 599K tặng "MÓC KHÓA NÓN VIỆT NAM"
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold"></span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold"></span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold">
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
-                                style={{ width: "20px", height: "20px" }}
-                              />
-                              Đơn 899K Giảm ngay 70K nhập mã
-                              <strong>"CHIENTHANG"</strong> - Only Online
+                              Ngày , giờ Kết thúc sự kiện :{" "}
+                              {this.state.product.discountEvent.eventDeadline}
                             </span>
                           </li>
                         </ul>
@@ -304,30 +277,22 @@ class DetailProduct extends Component {
                                 src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                 style={{ width: "20px", height: "20px" }}
                               />
-                              Đơn 1.199K Giảm ngay 100K nhập mã
-                              <strong>"TUDO"</strong>
+                              Số Lượng Tối Đa Mỗi Đơn :{" "}
+                              {this.state.product.discountEvent.quantityLimit}
                             </span>
                           </li>
                         </ul>
                       </div>
-
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold"></span>
-                          </li>
-                        </ul>
-                      </div>
-
                       <div class="product_coupon_new">
                         <ul class="product-promotion__box">
                           <li>
                             <span class="big-bold">
                               <img
-                                src="https://file.hstatic.net/1000253775/file/icon-03.png"
+                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                 style={{ width: "20px", height: "20px" }}
                               />
-                              <strong>FREESHIP</strong> MỌI ĐƠN HÀNG
+                              Mô Tả :{" "}
+                              {this.state.product.discountEvent.description}
                             </span>
                           </li>
                         </ul>
@@ -341,112 +306,6 @@ class DetailProduct extends Component {
                       method="post"
                       class="variants clearfix"
                     >
-                      <div class="select hidden">
-                        <div class="selector-wrapper">
-                          <label htmlFor="product-select-option-0">
-                            Màu sắc
-                          </label>
-                          <span class="custom-dropdown custom-dropdown--white">
-                            <select
-                              class="single-option-selector custom-dropdown__select custom-dropdown__select--white"
-                              data-option="option1"
-                              id="product-select-option-0"
-                            >
-                              <option defaultValue="Đen-0042">Đen-0042</option>
-                              <option defaultValue="Xám Đậm-0042">
-                                Xám Đậm-0042
-                              </option>
-                            </select>
-                          </span>
-                        </div>
-                        <div class="selector-wrapper">
-                          <label htmlFor="product-select-option-1">
-                            Kích thước
-                          </label>
-                          <span class="custom-dropdown custom-dropdown--white">
-                            <select
-                              class="single-option-selector custom-dropdown__select custom-dropdown__select--white"
-                              data-option="option2"
-                              id="product-select-option-1"
-                            >
-                              <option defaultValue="S">S</option>
-                              <option defaultValue="M">M</option>
-                              <option defaultValue="L">L</option>
-                              <option defaultValue="XL">XL</option>
-                            </select>
-                          </span>
-                        </div>
-                        <select
-                          id="product-select"
-                          name="id"
-                          style={{ display: "none" }}
-                        >
-                          <option
-                            defaultValue="1130107769"
-                            data-inventory="33"
-                            data-available="true"
-                            data-variant="Đen-0042 ## S"
-                          >
-                            Đen-0042 / S
-                          </option>
-                          <option
-                            defaultValue="1130107770"
-                            data-inventory="89"
-                            data-available="true"
-                            data-variant="Đen-0042 ## M"
-                          >
-                            Đen-0042 / M
-                          </option>
-                          <option
-                            defaultValue="1130107771"
-                            data-inventory="126"
-                            data-available="true"
-                            data-variant="Đen-0042 ## L"
-                          >
-                            Đen-0042 / L
-                          </option>
-                          <option
-                            defaultValue="1130107772"
-                            data-inventory="46"
-                            data-available="true"
-                            data-variant="Đen-0042 ## XL"
-                          >
-                            Đen-0042 / XL
-                          </option>
-                          <option
-                            defaultValue="1130107773"
-                            data-inventory="16"
-                            data-available="true"
-                            data-variant="Xám Đậm-0042 ## S"
-                          >
-                            Xám Đậm-0042 / S
-                          </option>
-                          <option
-                            defaultValue="1130107774"
-                            data-inventory="56"
-                            data-available="true"
-                            data-variant="Xám Đậm-0042 ## M"
-                          >
-                            Xám Đậm-0042 / M
-                          </option>
-                          <option
-                            defaultValue="1130107775"
-                            data-inventory="88"
-                            data-available="true"
-                            data-variant="Xám Đậm-0042 ## L"
-                          >
-                            Xám Đậm-0042 / L
-                          </option>
-                          <option
-                            defaultValue="1130107776"
-                            data-inventory="29"
-                            data-available="true"
-                            data-variant="Xám Đậm-0042 ## XL"
-                          >
-                            Xám Đậm-0042 / XL
-                          </option>
-                        </select>
-                      </div>
                       <div class="row">
                         <div class="select-swatch clearfix col-xs-12 col-md-12 col-sm-12">
                           <div
@@ -455,76 +314,25 @@ class DetailProduct extends Component {
                             data-option="option1"
                             data-option-index="0"
                           >
-                            <div class="header">
-                              Màu sắc: <span class="color-text">Đen</span>
-                            </div>
-
-                            <div class="select-swap">
-                              <div
-                                data-value="Đen-0042"
-                                class="n-sd swatch-element color den-0042"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-0 color-change"
-                                  id="swatch-0-den-0042"
-                                  type="radio"
-                                  name="option1"
-                                  defaultValue="Đen-0042"
-                                  data-vhandle="den-0042"
-                                  data-title="Đen"
-                                  defaultChecked=""
-                                />
-
-                                <label
-                                  data-color="den-0042"
-                                  class="den-0042 sd"
-                                  data-title="Đen"
-                                  htmlFor="swatch-0-den-0042"
-                                  data-image="https://product.hstatic.net/1000253775/product/160_ao_tay_dai_042-7_c09ac3555db04f53bcfbf40a5a64d744.jpg"
+                            <div className="header">
+                              <div className="big-label mb-3">Màu sắc:</div>
+                              <div className="form-group mb-3">
+                                <select
+                                  id="category"
+                                  name="category"
+                                  className="form-control big-select"
+                                  value={this.state.product.Colors}
+                                  onChange={this.handleChange}
                                 >
-                                  <span
-                                    style={{
-                                      backgroundImage:
-                                        "url(//product.hstatic.net/1000253775/product/160_ao_tay_dai_042-7_c09ac3555db04f53bcfbf40a5a64d744_thumb.jpg)",
-                                    }}
-                                  >
-                                    Đen
-                                  </span>
-                                </label>
-                              </div>
-
-                              <div
-                                data-value="Xám Đậm-0042"
-                                class="n-sd swatch-element color xam-dam-0042"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-0 color-change"
-                                  id="swatch-0-xam-dam-0042"
-                                  type="radio"
-                                  name="option1"
-                                  defaultValue="Xám Đậm-0042"
-                                  data-vhandle="xam-dam-0042"
-                                  data-title="Xám Đậm"
-                                />
-
-                                <label
-                                  data-color="xam-dam-0042"
-                                  class="xam-dam-0042"
-                                  data-title="Xám Đậm"
-                                  htmlFor="swatch-0-xam-dam-0042"
-                                  data-image="https://product.hstatic.net/1000253775/product/160_ao_tay_dai_042-1_678536ee4a3e457892d6b2e0be6d91b7.jpg"
-                                >
-                                  <span
-                                    style={{
-                                      backgroundImage:
-                                        "url(//product.hstatic.net/1000253775/product/160_ao_tay_dai_042-1_678536ee4a3e457892d6b2e0be6d91b7_thumb.jpg)",
-                                    }}
-                                  >
-                                    Xám Đậm
-                                  </span>
-                                </label>
+                                  <option value="">Choose...</option>
+                                  {Object.entries(
+                                    this.state.product.colors
+                                  ).map(([key, value]) => (
+                                    <option key={key} value={value}>
+                                      {value}
+                                    </option>
+                                  ))}
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -540,139 +348,38 @@ class DetailProduct extends Component {
                             </div>
 
                             <div class="select-swap">
-                              <div
-                                data-value="S"
-                                class="n-sd swatch-element s is-size"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-1"
-                                  id="swatch-1-s"
-                                  type="radio"
-                                  name="option2"
-                                  defaultValue="S"
-                                  data-vhandle="s"
-                                  data-title="S"
-                                  defaultChecked=""
-                                />
-                                <label
-                                  data-size="1-s"
-                                  data-title="S"
-                                  htmlFor="swatch-1-s"
-                                  class="sd"
-                                >
-                                  <span>S</span>
-                                  <img
-                                    class="img-check"
-                                    width="12"
-                                    height="12"
-                                    src="https://file.hstatic.net/200000525917/file/select-pro_e3e51c75e13340c1805618324bab59f0.png"
-                                  />
-                                </label>
+                              {Object.entries(this.state.product.sizes).map(
+                                ([key, value]) => (
+                                  <div
+                                    data-value={value}
+                                    class="n-sd swatch-element s is-size"
+                                  >
+                                    <input
+                                      data-new="279,000₫"
+                                      class="variant-1"
+                                      id="swatch-1-s"
+                                      type="radio"
+                                      name="option2"
+                                      defaultValue={value}
+                                      data-vhandle={value}
+                                      data-title={value}
+                                      defaultChecked=""
+                                    />
+                                    <label
+                                      data-size="1-s"
+                                      data-title="S"
+                                      htmlFor="swatch-1-s"
+                                      class="sd"
+                                    >
+                                      <strong>{value}</strong>
+                                    </label>
 
-                                <div class="popupover-size">
-                                  <div class="wrapper-popupover"></div>
-                                </div>
-                              </div>
-
-                              <div
-                                data-value="M"
-                                class="n-sd swatch-element m is-size"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-1"
-                                  id="swatch-1-m"
-                                  type="radio"
-                                  name="option2"
-                                  defaultValue="M"
-                                  data-vhandle="m"
-                                  data-title="M"
-                                />
-                                <label
-                                  data-size="1-m"
-                                  data-title="M"
-                                  htmlFor="swatch-1-m"
-                                >
-                                  <span>M</span>
-                                  <img
-                                    class="img-check"
-                                    width="12"
-                                    height="12"
-                                    src="https://file.hstatic.net/200000525917/file/select-pro_e3e51c75e13340c1805618324bab59f0.png"
-                                  />
-                                </label>
-
-                                <div class="popupover-size">
-                                  <div class="wrapper-popupover"></div>
-                                </div>
-                              </div>
-
-                              <div
-                                data-value="L"
-                                class="n-sd swatch-element l is-size"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-1"
-                                  id="swatch-1-l"
-                                  type="radio"
-                                  name="option2"
-                                  defaultValue="L"
-                                  data-vhandle="l"
-                                  data-title="L"
-                                />
-                                <label
-                                  data-size="1-l"
-                                  data-title="L"
-                                  htmlFor="swatch-1-l"
-                                >
-                                  <span>L</span>
-                                  <img
-                                    class="img-check"
-                                    width="12"
-                                    height="12"
-                                    src="https://file.hstatic.net/200000525917/file/select-pro_e3e51c75e13340c1805618324bab59f0.png"
-                                  />
-                                </label>
-
-                                <div class="popupover-size">
-                                  <div class="wrapper-popupover"></div>
-                                </div>
-                              </div>
-
-                              <div
-                                data-value="XL"
-                                class="n-sd swatch-element xl is-size"
-                              >
-                                <input
-                                  data-new="279,000₫"
-                                  class="variant-1"
-                                  id="swatch-1-xl"
-                                  type="radio"
-                                  name="option2"
-                                  defaultValue="XL"
-                                  data-vhandle="xl"
-                                  data-title="XL"
-                                />
-                                <label
-                                  data-size="1-xl"
-                                  data-title="XL"
-                                  htmlFor="swatch-1-xl"
-                                >
-                                  <span>XL</span>
-                                  <img
-                                    class="img-check"
-                                    width="12"
-                                    height="12"
-                                    src="https://file.hstatic.net/200000525917/file/select-pro_e3e51c75e13340c1805618324bab59f0.png"
-                                  />
-                                </label>
-
-                                <div class="popupover-size">
-                                  <div class="wrapper-popupover"></div>
-                                </div>
-                              </div>
+                                    <div class="popupover-size">
+                                      <div class="wrapper-popupover"></div>
+                                    </div>
+                                  </div>
+                                )
+                              )}
                             </div>
                           </div>
                         </div>
@@ -696,6 +403,7 @@ class DetailProduct extends Component {
                           defaultValue="1"
                           min="1"
                           class="quantity-selector"
+                          readonly
                         />
                         <input
                           type="button"
@@ -871,55 +579,24 @@ class DetailProduct extends Component {
                         </p>
                         <ul>
                           <li>
-                            <strong>Chất liệu</strong>: Vải nỉ&nbsp;chân cua
+                            <strong>Chất liệu</strong>:{" "}
+                            {this.state.product?.nameMaterial ||
+                              "name material"}
                           </li>
                           <li>
-                            <strong>Form áo</strong>: Regular
+                            <strong>Tên thương hiệu </strong>:{" "}
+                            {this.state.product?.nameBrand || "name brand"}
                           </li>
                         </ul>
                         <hr />
                         <p>&nbsp;</p>
                         <p>
                           <span style={{ fontSize: "15px" }}>
-                            <strong>▶️ CHẤT LIỆU NỈ CHÂN CUA</strong>
+                            <strong>▶️ Mô tả sản phẩm </strong>
                           </span>
                         </p>
-                        <p>
-                          Chất liệu vải nỉ chân cua&nbsp;mang lại cảm giác mềm
-                          mại, bền bỉ, ít nhăn và giữ màu lâu hơn sau nhiều lần
-                          giặt. Với cấu trúc vải ni chân cua, bề mặt áo có độ
-                          mềm mại và độ dày vừa phải, tạo cảm giác thoải mái và
-                          ấm áp khi mặc.
-                        </p>
-                        <p>
-                          <span style={{ fontSize: "15px" }}>
-                            <strong>▶️ THIẾT KẾ ĐƠN GIẢN</strong>
-                          </span>
-                        </p>
-                        <p>
-                          Chi tiết in dẻo kết hợp với in cao thành ngực trái
-                          thân trước, tạo nên vẻ đẹp cuốn hút, mà còn mang lại
-                          sự cá tính, hiện đại cho sản phẩm. Thiết kế tối giản
-                          với typo tên thương hiệu và từ "ORNGLS" theo font chữ
-                          hiện đại cũng giúp sản phẩm thêm phần trẻ trung, năng
-                          động. Cách thức phối hợp này không chỉ tạo ra sự kết
-                          nối về mặt thẩm mỹ mà còn làm cho áo dễ mặc, dễ phối
-                          đồ trong các dịp đón đông. Phần bo tay và lai của áo
-                          được chăm chút tỷ mỉ, tạo nên một tổng thể hài hòa,
-                          vừa vặn, đồng thời giúp tôn lên phong cách năng động
-                          và thời thượng.&nbsp;
-                        </p>
-                        <p>
-                          <span style={{ fontSize: "15px" }}>
-                            <strong>▶️ FORM REGULAR</strong>
-                          </span>
-                        </p>
-                        <p>
-                          Form dáng Regular mang lại một dáng vẻ khỏe khoắn và
-                          dễ mặc cho mọi hình dáng cơ thể. Có độ ôm vừa vặn, tạo
-                          cảm giác thoải mái, không gò bó. Kiểu dáng này phù hợp
-                          với nhiều phong cách, từ casual, thể thao cho đến
-                          streetwear.
+                        <p style={{ textIndent: "2em", fontSize: "16px" }}>
+                          {this.state.product?.description || ""}
                         </p>
                       </div>
                     </div>
