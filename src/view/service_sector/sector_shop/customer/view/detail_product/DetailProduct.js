@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { urlapi } from "../../../../../../setting/store/const";
+import ViewInfoBuyProduct from "./ViewInfoBuyProduct";
 import "./style-smb.css";
 import "./plugin-style.css";
 import "./render-style-other.scss.css";
@@ -34,25 +35,6 @@ class DetailProduct extends Component {
         console.log(data);
       })
       .catch((error) => console.error(error));
-  }
-  initQuantityControls() {
-    const areas = document.querySelectorAll(".quantity-area");
-
-    areas.forEach((area) => {
-      const minusBtn = area.querySelector(".qtyminus");
-      const plusBtn = area.querySelector(".qtyplus");
-      const input = area.querySelector(".quantity-selector");
-
-      minusBtn.addEventListener("click", () => {
-        let current = parseInt(input.value);
-        if (current > 1) input.value = current - 1;
-      });
-
-      plusBtn.addEventListener("click", () => {
-        let current = parseInt(input.value);
-        input.value = current + 1;
-      });
-    });
   }
 
   render() {
@@ -299,153 +281,7 @@ class DetailProduct extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="select-swatch-detail">
-                    <form
-                      id="add-item-form"
-                      action="/cart/add"
-                      method="post"
-                      class="variants clearfix"
-                    >
-                      <div class="row">
-                        <div class="select-swatch clearfix col-xs-12 col-md-12 col-sm-12">
-                          <div
-                            id="variant-swatch-0"
-                            class="swatch clearfix type-image"
-                            data-option="option1"
-                            data-option-index="0"
-                          >
-                            <div className="header">
-                              <div className="big-label mb-3">Màu sắc:</div>
-                              <div className="form-group mb-3">
-                                <select
-                                  id="category"
-                                  name="category"
-                                  className="form-control big-select"
-                                  value={this.state.product.Colors}
-                                  onChange={this.handleChange}
-                                >
-                                  <option value="">Choose...</option>
-                                  {Object.entries(
-                                    this.state.product.colors
-                                  ).map(([key, value]) => (
-                                    <option key={key} value={value}>
-                                      {value}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div
-                            id="variant-swatch-1"
-                            class="swatch clearfix type-image"
-                            data-option="option2"
-                            data-option-index="1"
-                          >
-                            <div class="header">
-                              Kích thước: <span class="color-text">S</span>
-                            </div>
-
-                            <div class="select-swap">
-                              {Object.entries(this.state.product.sizes).map(
-                                ([key, value]) => (
-                                  <div
-                                    data-value={value}
-                                    class="n-sd swatch-element s is-size"
-                                  >
-                                    <input
-                                      data-new="279,000₫"
-                                      class="variant-1"
-                                      id="swatch-1-s"
-                                      type="radio"
-                                      name="option2"
-                                      defaultValue={value}
-                                      data-vhandle={value}
-                                      data-title={value}
-                                      defaultChecked=""
-                                    />
-                                    <label
-                                      data-size="1-s"
-                                      data-title="S"
-                                      htmlFor="swatch-1-s"
-                                      class="sd"
-                                    >
-                                      <strong>{value}</strong>
-                                    </label>
-
-                                    <div class="popupover-size">
-                                      <div class="wrapper-popupover"></div>
-                                    </div>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="row quantity">
-                    <div class="col-xs-12 selector-actions d-flex d-flex-center pd-top-10 button-swatch-detail-8">
-                      <div class="quantity-area">
-                        <input
-                          type="button"
-                          defaultValue="–"
-                          onClick="window.wd.scofield.minusQuantity($(this))"
-                          class="qty-btn qtyminus"
-                        />
-                        <input
-                          readOnly=""
-                          type="text"
-                          id="quantity"
-                          name="quantity"
-                          defaultValue="1"
-                          min="1"
-                          class="quantity-selector"
-                          readonly
-                        />
-                        <input
-                          type="button"
-                          defaultValue="+"
-                          onClick="window.wd.scofield.plusQuantity($(this))"
-                          class="qty-btn qtyplus"
-                        />
-                      </div>
-                      <div class="wrap-addcart">
-                        <div class="row-flex">
-                          <div class="btn-action-addtocart">
-                            <button
-                              type="button"
-                              id="add-to-cart"
-                              class="flex-addcart-mb add-to-cart-style loading-container"
-                              name="add"
-                              data-id="1056846128"
-                            >
-                              <span
-                                id="loading-content"
-                                class="loading-content"
-                              >
-                                Thêm vào giỏ
-                              </span>
-                            </button>
-                          </div>
-                          <div class="btn-action btn-action-buynow">
-                            <button
-                              type="button"
-                              class="btn-buynow hidden-xs buynow-style buy-now-event"
-                              id="buy-now"
-                              name="add"
-                              data-id="1056846128"
-                            >
-                              <span>Mua ngay</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="service-product"></div>
-                  </div>
+                  <ViewInfoBuyProduct idProduct = {this.state.product.idProduct} sizes = {this.state.product?.sizes || null} colors = {this.state.product?.colors || null} {...this.props}/>
                 </div>
                 <div class="product-single__policy">
                   <div class="product-policy">
@@ -506,7 +342,7 @@ class DetailProduct extends Component {
                         />
                       </div>
                       <span class="product-policy__title">
-                        Hotline 0287.100.6789 hỗ trợ từ 8h30-24h
+                        Hotline 0934.234.6789 hỗ trợ từ 8h30-24h
                       </span>
                     </div>
                     <div class="product-policy__item">
@@ -572,8 +408,7 @@ class DetailProduct extends Component {
                         <p>
                           <span style={{ fontSize: "20px" }}>
                             <strong>
-                              160STORE -&nbsp;Áo Sweatshirt&nbsp;ICONDENIM
-                              Orgnls Painted
+                              {this.state.product?.nameProduct || ""}
                             </strong>
                           </span>
                         </p>
@@ -587,16 +422,13 @@ class DetailProduct extends Component {
                             <strong>Tên thương hiệu </strong>:{" "}
                             {this.state.product?.nameBrand || "name brand"}
                           </li>
+                          <li>
+                            <strong>Mô tả  </strong>:{" "}
+                            {this.state.product?.description || ""}
+                          </li>
                         </ul>
-                        <hr />
-                        <p>&nbsp;</p>
-                        <p>
-                          <span style={{ fontSize: "15px" }}>
-                            <strong>▶️ Mô tả sản phẩm </strong>
-                          </span>
-                        </p>
                         <p style={{ textIndent: "2em", fontSize: "16px" }}>
-                          {this.state.product?.description || ""}
+                          
                         </p>
                       </div>
                     </div>

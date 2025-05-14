@@ -11,13 +11,22 @@ class ModalProduct extends Component {
       list_shop: [],
       data: [],
       isShowList: true,
-      shopName: "",
-      adress: "",
-      openingTime: "",
-      closeTime: "",
+      nameProduct: "",
+      brand: "",
+      category: "",
+      material: "",
+      style: "",
+      description: "",
+      data_category: [],
+      data_brand: [],
+      data_material: [],
+      data_style: [],
     };
   }
-
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
   changShopName = (e) => {
     const value = e.target.value;
     this.setState({ shopName: value });
@@ -60,7 +69,7 @@ class ModalProduct extends Component {
     );
     this.setState({ searchText: value, data: filtered });
   };
-  AddShop = () => {
+  AddProduct = () => {
     const req = {
       method: "POST",
       headers: {
@@ -68,14 +77,16 @@ class ModalProduct extends Component {
       },
       body: JSON.stringify({
         // dữ liệu gửi lên server
-        nameShop: this.state.shopName,
-        address: this.state.adress,
-        openingTime: this.state.openingTime,
-        closingTime: this.state.closeTime,
+        nameProduct: this.state.nameProduct,
+        idBrand: this.state.brand,
+        idCategory: this.state.category,
+        idMaterial: this.state.material,
+        idStyle: this.state.style,
+        description: this.state.description,
         status: true,
       }),
     };
-    fetch(urlapi + "/api/Shop/insertShop", req)
+    fetch(urlapi + "/api/product/insertProductFormSlip", req)
       .then((response) => response.json())
       .then((data) => {
         console.log("Response từ server:", data);
@@ -89,33 +100,62 @@ class ModalProduct extends Component {
     fetch(urlapi + "/api/product/sellectAll/all/all/")
       .then((response) => response.json())
       .then((data) =>
-        this.setState({ show: this.props.isOpen, list_shop: data.data, data: data.data})
+        this.setState({
+          show: this.props.isOpen,
+          list_shop: data.data,
+          data: data.data,
+        })
       )
       .catch((error) => console.error(error));
+
+    fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => this.setState({ data_category: data.data }))
+      .catch((error) => console.error(error));
+
+    fetch(urlapi + "/api/Style/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => this.setState({ data_style: data.data }))
+      .catch((error) => console.error(error));
+
+    fetch(urlapi + "/api/Brand/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => this.setState({ data_brand: data.data }))
+      .catch((error) => console.error(error));
+
+    fetch(urlapi + "/api/ProductMaterial/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => this.setState({ data_material: data.data }))
+      .catch((error) => console.error(error));
+
     this.columns = [
       { name: "STT", selector: (row, index) => index + 1, width: "80px" },
-      { name: "Mã Sản Phẩm", selector: (row) => row.idShop, width: "200px" },
+      { name: "Mã Sản Phẩm", selector: (row) => row.idProduct, width: "200px" },
       {
         name: "Tên Sản Phẩm",
         selector: (row) => row.nameProduct,
         sortable: true,
         width: "200px",
-      },{
+      },
+      {
         name: "Thương Hiệu",
         selector: (row) => row.nameBrand,
         sortable: true,
         width: "200px",
-      },{
+      },
+      {
         name: "Danh Mục",
         selector: (row) => row.nameCategory,
         sortable: true,
         width: "200px",
-      },{
+      },
+      {
         name: "Style",
         selector: (row) => row.nameStyle,
         sortable: true,
         width: "200px",
-      },{
+      },
+      {
         name: "Chất Liệu",
         selector: (row) => row.nameMaterial,
         sortable: true,
@@ -219,71 +259,158 @@ class ModalProduct extends Component {
               )}
               {!this.state.isShowList && (
                 <div className="row">
-                  <div class="form-group">
+                  <div className="form-group mt-3">
                     <div className="row">
-                      <label for="shopName" class="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="nameProduct"
+                        className="col-sm-2 col-form-label"
+                      >
                         Tên Sản Phẩm
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
-                          onChange={this.changShopName}
-                          id="shopName"
-                          value={this.state.shopName}
+                          className="form-control form-control-sm"
+                          id="nameProduct"
+                          name="nameProduct"
+                          value={this.state.nameProduct}
+                          onChange={this.handleChange}
                         />
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+
+                  <div className="form-group mt-3">
                     <div className="row">
-                      <label for="adress" class="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="brand"
+                        className="col-sm-2 col-form-label"
+                      >
                         Thương Hiệu
                       </label>
-                      <div class="col-sm">
-                        <select id="inputState" class="form-control">
-                          <option selected>Choose...</option>
-                          <option>...</option>
+                      <div className="col-sm">
+                        <select
+                          id="brand"
+                          name="brand"
+                          className="form-control"
+                          value={this.state.brand}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Choose...</option>
+                          {this.state.data_brand.map((item) => (
+                            <option key={item.idBrand} value={item.idBrand}>
+                              {item.nameBrand}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+
+                  <div className="form-group mt-3">
                     <div className="row">
-                      <label for="adress" class="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="category"
+                        className="col-sm-2 col-form-label"
+                      >
                         Danh Mục
                       </label>
-                      <div class="col-sm">
-                        <select id="inputState" class="form-control">
-                          <option selected>Choose...</option>
-                          <option>...</option>
+                      <div className="col-sm">
+                        <select
+                          id="category"
+                          name="category"
+                          className="form-control"
+                          value={this.state.category}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Choose...</option>
+                          {this.state.data_category.map((item) => (
+                            <option
+                              key={item.idCategory}
+                              value={item.idCategory}
+                            >
+                              {item.nameCategory}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+
+                  <div className="form-group mt-3">
                     <div className="row">
-                      <label for="adress" class="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="material"
+                        className="col-sm-2 col-form-label"
+                      >
                         Chất Liệu
                       </label>
-                      <div class="col-sm">
-                        <select id="inputState" class="form-control">
-                          <option selected>Choose...</option>
-                          <option>...</option>
+                      <div className="col-sm">
+                        <select
+                          id="material"
+                          name="material"
+                          className="form-control"
+                          value={this.state.material}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Choose...</option>
+                          {this.state.data_material.map((item) => (
+                            <option
+                              key={item.idMaterial}
+                              value={item.idMaterial}
+                            >
+                              {item.nameMaterial}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+
+                  <div className="form-group mt-3">
                     <div className="row">
-                      <label for="adress" class="col-sm-2 col-form-label">
+                      <label
+                        htmlFor="style"
+                        className="col-sm-2 col-form-label"
+                      >
                         Style
                       </label>
-                      <div class="col-sm">
-                        <select id="inputState" class="form-control">
-                          <option selected>Choose...</option>
-                          <option>...</option>
+                      <div className="col-sm">
+                        <select
+                          id="style"
+                          name="style"
+                          className="form-control"
+                          value={this.state.style}
+                          onChange={this.handleChange}
+                        >
+                          <option value="">Choose...</option>
+                          {this.state.data_style.map((item) => (
+                            <option key={item.idStyle} value={item.idStyle}>
+                              {item.nameStyle}
+                            </option>
+                          ))}
                         </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-group mt-3">
+                    <div className="row">
+                      <label
+                        htmlFor="description"
+                        className="col-sm-2 col-form-label"
+                      >
+                        Mô Tả
+                      </label>
+                      <div className="col-sm">
+                        <textarea
+                          className="form-control form-control-sm"
+                          id="description"
+                          name="description"
+                          rows="3"
+                          value={this.state.description}
+                          onChange={this.handleChange}
+                        />
                       </div>
                     </div>
                   </div>
@@ -298,8 +425,8 @@ class ModalProduct extends Component {
                 >
                   Back
                 </button>
-                <button className="btn btn-primary" onClick={this.AddShop}>
-                  Thêm Cửa Hàng
+                <button className="btn btn-primary" onClick={this.AddProduct}>
+                  Thêm Sản Phẩm
                 </button>
               </div>
             )}
