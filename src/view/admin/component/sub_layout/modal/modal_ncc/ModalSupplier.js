@@ -1,12 +1,38 @@
 import React, { Component } from "react";
+import { urlapi } from "../../../../../../setting/store/const";
+import DataTable from "react-data-table-component";
 
 class ModalSupplier extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
+      searchText: "",
+      list_shop: [],
+      data: [],
+      isShowList: true,
+      shopName: "",
+      adress: "",
+      openingTime: "",
+      closeTime: "",
     };
   }
+  handleRowClick = (row) => {
+    console.log("Row clicked:", row);
+    this.props.updateSupplier({
+      idSupplier: row.idSupplier,
+      nameSupplier: row.nameSupplier,
+    });
+    this.setState({ show: false });
+    if (this.props.onClose) {
+      this.props.onClose(); // gọi hàm đóng từ component cha nếu có
+    }
+    // You can navigate or open modal or perform other actions here
+  };
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
   handleClose = () => {
     this.setState({ show: false });
@@ -14,9 +40,104 @@ class ModalSupplier extends Component {
       this.props.onClose(); // gọi hàm đóng từ component cha nếu có
     }
   };
+  handleShowList = () => {
+    this.setState({ isShowList: true });
+  };
 
+  handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    const { list_shop } = this.state;
+
+    const filtered = list_shop.filter(
+      (p) =>
+        p.idSupplier.toLowerCase().includes(value) ||
+        p.nameSupplier.toLowerCase().includes(value) ||
+        p.contactName.toLowerCase().includes(value) ||
+        p.phoneNumber.toLowerCase().includes(value) ||
+        p.email.toLowerCase().includes(value) ||
+        p.address.toLowerCase().includes(value)
+    );
+    this.setState({ searchText: value, data: filtered });
+  };
+  AddShop = () => {
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // dữ liệu gửi lên server
+        nameSupplier: this.state.nameSupplier,
+        contactName: this.state.contactName,
+        phoneNumber: this.state.phoneNumber,
+        email: this.state.email,
+        address: this.state.address,
+        status: true,
+      }),
+    };
+    fetch(urlapi + "/api/Supplier/insertSupplier", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") alert("Thêm Nhà Cung Cấp Thành Công!");
+        console.log("Response từ server:", data);
+        // cập nhật state nếu cần
+        this.setState({ message: data.message });
+        this.getListSupplier();
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
+  };
+  getListSupplier = () => {
+    fetch(urlapi + "/api/Supplier/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          show: this.props.isOpen,
+          list_shop: data.data,
+          data: data.data,
+        })
+      )
+      .catch((error) => console.error(error));
+  };
   componentDidMount() {
-    this.setState({ show: this.props.isOpen });
+    this.getListSupplier();
+    this.columns = [
+      { name: "STT", selector: (row, index) => index + 1, width: "80px" },
+      {
+        name: "Mã Nhà Cung Cấp",
+        selector: (row) => row.idSupplier,
+        width: "200px",
+      },
+      {
+        name: "Tên Nhà Cung Cấp",
+        selector: (row) => row.nameSupplier,
+        sortable: true,
+        width: "200px",
+      },
+      {
+        name: "Người Liên Hệ",
+        selector: (row) => row.contactName,
+        sortable: true,
+        width: "200px",
+      },
+      {
+        name: "Số Điện Thoại",
+        selector: (row) => row.phoneNumber,
+        sortable: true,
+        width: "200px",
+      },
+      {
+        name: "Email",
+        selector: (row) => row.email,
+        sortable: true,
+        width: "200px",
+      },
+      {
+        name: "Địa Chỉ",
+        selector: (row) => row.address,
+        sortable: true,
+        width: "450px",
+      },
+    ];
   }
 
   componentDidUpdate(prevProps) {
@@ -27,7 +148,7 @@ class ModalSupplier extends Component {
 
   render() {
     const { show } = this.state;
-
+    console.log(this.state);
     if (!show) return null;
 
     return (
@@ -37,21 +158,169 @@ class ModalSupplier extends Component {
         role="dialog"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       >
-        <div className="modal-dialog  modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Modal title</h5>
-              <button type="button" className="close btn" onClick={this.handleClose}>
+        <div
+          className="modal-dialog  modal-dialog-centered"
+          role="document"
+          style={{ maxWidth: "none", width: "1100px", margin: "1.75rem auto" }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              width: "1100px",
+              minHeight: "500px",
+              height: "550px",
+              maxHeight: "600px",
+            }}
+          >
+            <div className="modal-header" style={{ width: "1100px" }}>
+              <h5 className="modal-title">Chọn Nhà Cung Cấp</h5>
+              <button
+                type="button"
+                className="close btn"
+                onClick={this.handleClose}
+              >
                 <span>&times;</span>
               </button>
             </div>
-            <div className="modal-body">Nội dung modal...</div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={this.handleClose}>
-                Close
-              </button>
-              <button className="btn btn-primary">Save changes</button>
+            <div className="modal-body">
+              {this.state.isShowList && (
+                <div className="row">
+                  <div className="row d-flex justify-content-between align-items-center mb-3">
+                    <button
+                      className="btn btn-primary ml-3"
+                      onClick={() => this.setState({ isShowList: false })}
+                      style={{ width: "100px" }}
+                    >
+                      [<i class="fa-solid fa-plus"></i>]&nbsp;Add
+                    </button>
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm nhà cung cấp..."
+                      className="col-5 border p-2 rounded form-control-sm"
+                      onChange={this.handleSearch}
+                      value={this.state.searchText}
+                      style={{ float: "right" }}
+                    />
+                  </div>
+                  <div className="row">
+                    <DataTable
+                      columns={this.columns}
+                      data={this.state.data}
+                      onRowClicked={this.handleRowClick}
+                      pagination
+                      paginationPerPage={5} // 👈 Số dòng mỗi trang
+                      paginationRowsPerPageOptions={[5]} // 👈 Ẩn tùy chọn khác
+                      highlightOnHover
+                      striped
+                      responsive
+                    />
+                  </div>
+                </div>
+              )}
+              {!this.state.isShowList && (
+                <div className="row">
+                  <div class="form-group">
+                    <div className="row">
+                      <label for="nameSupplier" class="col-sm-2 col-form-label">
+                        Tên Nhà Cung Cấp
+                      </label>
+                      <div class="col-sm">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          onChange={this.handleChange}
+                          name="nameSupplier"
+                          id="nameSupplier"
+                          value={this.state.nameSupplier}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div className="row">
+                      <label for="contactName" class="col-sm-2 col-form-label">
+                        Người Liên Hệ
+                      </label>
+                      <div class="col-sm">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          onChange={this.handleChange}
+                          name="contactName"
+                          id="contactName"
+                          value={this.state.contactName}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div className="row">
+                      <label for="phoneNumber" class="col-sm-2 col-form-label">
+                        Số Điện Thoại
+                      </label>
+                      <div class="col-sm">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          onChange={this.handleChange}
+                          name="phoneNumber"
+                          id="phoneNumber"
+                          value={this.state.phoneNumber}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div className="row">
+                      <label for="email" class="col-sm-2 col-form-label">
+                        Email
+                      </label>
+                      <div class="col-sm">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          onChange={this.handleChange}
+                          name="email"
+                          id="email"
+                          value={this.state.email}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div className="row">
+                      <label for="address" class="col-sm-2 col-form-label">
+                        Địa Chỉ
+                      </label>
+                      <div class="col-sm">
+                        <textarea
+                          class="form-control  form-control-sm"
+                          id="address"
+                          onChange={this.handleChange}
+                          name="address"
+                          rows="3"
+                        >
+                          {this.state.address}
+                        </textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
+            {!this.state.isShowList && (
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={this.handleShowList}
+                >
+                  Back
+                </button>
+                <button className="btn btn-primary" onClick={this.AddShop}>
+                  Thêm Nhà Cung Cấp
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

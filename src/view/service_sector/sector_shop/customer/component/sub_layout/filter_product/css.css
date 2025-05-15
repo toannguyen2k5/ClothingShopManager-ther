@@ -1,5 +1,4 @@
 .cate-main-filter {
-    max-width: 1200px;
     display: flex
 ;
     margin: auto;
@@ -11,7 +10,6 @@
     transition: .3s;
 }
 .cate-main-filter .margin-filter {
-    max-width: 1200px;
     display: flex
 ;
     margin: auto;

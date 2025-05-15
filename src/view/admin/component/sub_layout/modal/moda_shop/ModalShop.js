@@ -17,7 +17,18 @@ class ModalShop extends Component {
       closeTime: "",
     };
   }
-
+  handleRowClick = (row) => {
+    console.log("Row clicked:", row);
+    this.props.updateShop({
+      idShop: row.idShop,
+      nameShop: row.nameShop,
+    });
+    this.setState({ show: false });
+    if (this.props.onClose) {
+      this.props.onClose(); // gọi hàm đóng từ component cha nếu có
+    }
+    // You can navigate or open modal or perform other actions here
+  };
   changShopName = (e) => {
     const value = e.target.value;
     this.setState({ shopName: value });
@@ -78,20 +89,29 @@ class ModalShop extends Component {
     fetch(urlapi + "/api/Shop/insertShop", req)
       .then((response) => response.json())
       .then((data) => {
+        if (data.status === "200") alert("Thêm Cửa Hàng Thành Công!");
         console.log("Response từ server:", data);
         // cập nhật state nếu cần
         this.setState({ message: data.message });
+        this.getListShop();
       })
       .catch((error) => console.error("Lỗi POST:", error));
   };
 
-  componentDidMount() {
+  getListShop = () => {
     fetch(urlapi + "/api/Shop/sellectAll/all/all/")
       .then((response) => response.json())
       .then((data) =>
-        this.setState({ show: this.props.isOpen, list_shop: data.data, data: data.data})
+        this.setState({
+          show: this.props.isOpen,
+          list_shop: data.data,
+          data: data.data,
+        })
       )
       .catch((error) => console.error(error));
+  };
+  componentDidMount() {
+    this.getListShop();
     this.columns = [
       { name: "STT", selector: (row, index) => index + 1, width: "80px" },
       { name: "Mã Cửa Hàng", selector: (row) => row.idShop, width: "200px" },
@@ -106,24 +126,6 @@ class ModalShop extends Component {
         selector: (row) => row.address,
         sortable: true,
         width: "450px",
-      },
-      {
-        name: "Hành Động",
-        cell: (row) => (
-          <button
-            className="bg-yellow-400 text-white px-2 py-1 rounded mr-2"
-            onClick={this.props.updateShop({
-              idShop: row.idShop,
-              nameShop: row.nameShop,
-            })}
-          >
-            <i class="fa-solid fa-square-pen"></i>
-          </button>
-        ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-        width: "100px",
       },
     ];
   }
@@ -194,8 +196,10 @@ class ModalShop extends Component {
                     <DataTable
                       columns={this.columns}
                       data={this.state.data}
+                      onRowClicked={this.handleRowClick}
                       pagination
-                      paginationPerPage={[5]}
+                      paginationPerPage={5} // 👈 Số dòng mỗi trang
+                      paginationRowsPerPageOptions={[5]} // 👈 Ẩn tùy chọn khác
                       highlightOnHover
                       striped
                       responsive

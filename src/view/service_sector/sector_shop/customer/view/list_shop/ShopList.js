@@ -1,40 +1,64 @@
 import React, { Component } from "react";
-import ShopingCartItem from "./ShopingCartItem";
-import ChooseAddress from "./ChooseAddress";
-import ChooseUserDiscountCode from "./ChooseUserDiscountCode";
-import "./plugin-style.css";
-import "./render-style-other.scss.css";
-import "./render-style.css";
-import "./style-cart.scss.css";
-import "./style-page.scss.css";
-import "./style-smb.css";
-import "./styles-new.scss.css";
+import StoreCard from "./store_card/StoreCard";
+import { urlapi } from "../../../../../../setting/store/const";
+import BreadcrumbNavigation from "../../component/sub_layout/breadcrumb_navigation/BreadcrumbNavigation";
 class ShopList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      list_shop: [],
+    };
   }
-  componentDidMount(){
 
+  getListShop = () => {
+    fetch(urlapi + "/api/Shop/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          list_shop: data.data,
+        })
+      )
+      .catch((error) => console.error(error));
+  };
+  componentDidMount() {
+    this.getListShop();
   }
   render() {
     return (
       <>
         <main>
-          <section id="home-slider-home" class="mg-top-15 mg-0-mb">
-            <div class="container pd-0-mb">
-              <SliderImage />
-            </div>
-          </section>
           <section>
-          <BreadcrumbNavigation
-            prevPage={[
-              { pageName: "Trang chủ", link: "/" },
-              { pageName: "Điện thoại", link: "/dien-thoai" },
-            ]}
-            thisPage="iPhone 14 Pro Max"
-          />
+            <BreadcrumbNavigation
+              prevPage={[{ pageName: "Trang chủ", link: "/" }]}
+              thisPage="Danh Sách Cửa Hàng"
+            />
+            <section id="mystore-template" className="mg-top-15">
+              <div className="container">
+                <div className="sectionContentStore stores d-flex">
+                  <div className="col-xs-12 col-sm-12 col-md-12"></div>
+                  <div className="address-map">
+                    <ul className="tab-list"></ul>
+                    <div className="tab-content">
+                      <div id="tabaddress1" className="tab-pane fade in active">
+                        <div className="address-cont">
+                          <div className="address-detail">
+                            <div
+                              id="address-link"
+                              className="d-flex d-flex-wrap row"
+                            >
+                              {this.state.list_shop.map((store) => (
+                                <StoreCard key={store.idShop} store={store} />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </section>
-
         </main>
       </>
     );

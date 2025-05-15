@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./css/nucleo-icons.css";
 import "./css/nucleo-svg.css";
 import "./css/admin.css";
-import "./css/material-dashboard.min.css";
+// 
 import { urlapi } from "../../../../setting/store/const";
 import ContentWrapper from "./contentWrapper/ContentWrapper";
 import Nav from "./nav/Nav";
