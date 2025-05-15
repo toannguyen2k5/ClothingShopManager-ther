@@ -109,7 +109,7 @@ export default class Login extends Component {
     const { data } = await response.json();
     console.log(data);
     let bool = false;
-    if (data.status) {
+    if (data?.status) {
       bool = true;
     }
     this.setState({

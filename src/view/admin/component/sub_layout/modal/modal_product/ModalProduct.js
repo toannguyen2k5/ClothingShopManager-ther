@@ -23,6 +23,22 @@ class ModalProduct extends Component {
       data_style: [],
     };
   }
+  handleRowClick = (row) => {
+    console.log("Row clicked:", row);
+    this.props.updateProduct({
+      idProduct: row.idProduct,
+      nameProduct: row.nameProduct,
+      nameBrand: row.nameBrand,
+      nameCategory: row.nameCategory,
+      nameMaterial: row.nameMaterial,
+      nameStyle: row.nameStyle,
+    });
+    this.setState({ show: false });
+    if (this.props.onClose) {
+      this.props.onClose(); // gọi hàm đóng từ component cha nếu có
+    }
+    // You can navigate or open modal or perform other actions here
+  };
   handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -63,9 +79,12 @@ class ModalProduct extends Component {
 
     const filtered = list_shop.filter(
       (p) =>
-        p.idShop.toLowerCase().includes(value) ||
-        p.nameShop.toLowerCase().includes(value) ||
-        p.address.toLowerCase().includes(value)
+        p.idProduct.toLowerCase().includes(value) ||
+        p.nameProduct.toLowerCase().includes(value) ||
+        p.nameBrand.toLowerCase().includes(value) ||
+        p.nameCategory.toLowerCase().includes(value) ||
+        p.nameStyle.toLowerCase().includes(value) ||
+        p.nameMaterial.toLowerCase().includes(value)
     );
     this.setState({ searchText: value, data: filtered });
   };
@@ -90,13 +109,14 @@ class ModalProduct extends Component {
       .then((response) => response.json())
       .then((data) => {
         console.log("Response từ server:", data);
+        if (data.status === "200") alert("Thêm Sản Phẩm Thành Công!");
         // cập nhật state nếu cần
         this.setState({ message: data.message });
+        this.getListProduct();
       })
       .catch((error) => console.error("Lỗi POST:", error));
   };
-
-  componentDidMount() {
+  getListProduct = () => {
     fetch(urlapi + "/api/product/sellectAll/all/all/")
       .then((response) => response.json())
       .then((data) =>
@@ -107,7 +127,9 @@ class ModalProduct extends Component {
         })
       )
       .catch((error) => console.error(error));
-
+  };
+  componentDidMount() {
+    this.getListProduct();
     fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
       .then((response) => response.json())
       .then((data) => this.setState({ data_category: data.data }))
@@ -161,24 +183,24 @@ class ModalProduct extends Component {
         sortable: true,
         width: "200px",
       },
-      {
-        name: "Hành Động",
-        cell: (row) => (
-          <button
-            className="bg-yellow-400 text-white px-2 py-1 rounded mr-2"
-            // onClick={this.props.updateShop({
-            //   idShop: row.idShop,
-            //   nameShop: row.nameShop,
-            // })}
-          >
-            <i class="fa-solid fa-square-pen"></i>
-          </button>
-        ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-        width: "100px",
-      },
+      // {
+      //   name: "Hành Động",
+      //   cell: (row) => (
+      //     <button
+      //       className="bg-yellow-400 text-white px-2 py-1 rounded mr-2"
+      //       // onClick={this.props.updateShop({
+      //       //   idShop: row.idShop,
+      //       //   nameShop: row.nameShop,
+      //       // })}
+      //     >
+      //       <i class="fa-solid fa-square-pen"></i>
+      //     </button>
+      //   ),
+      //   ignoreRowClick: true,
+      //   allowOverflow: true,
+      //   button: true,
+      //   width: "100px",
+      // },
     ];
   }
 
@@ -187,6 +209,18 @@ class ModalProduct extends Component {
       this.setState({ show: this.props.isOpen });
     }
   }
+  onRowClick = (state, rowInfo, column, instance) => {
+    alert("aaa");
+    return {
+      onClick: (e) => {
+        console.log("A Td Element was clicked!");
+        console.log("it produced this event:", e);
+        console.log("It was in this column:", column);
+        console.log("It was in this row:", rowInfo);
+        console.log("It was in this table instance:", instance);
+      },
+    };
+  };
 
   render() {
     const { show } = this.state;
@@ -249,7 +283,9 @@ class ModalProduct extends Component {
                       columns={this.columns}
                       data={this.state.data}
                       pagination
-                      paginationPerPage={[5]}
+                      onRowClicked={this.handleRowClick}
+                      paginationPerPage={5} // 👈 Số dòng mỗi trang
+                      paginationRowsPerPageOptions={[5]} // 👈 Ẩn tùy chọn khác
                       highlightOnHover
                       striped
                       responsive

@@ -13,6 +13,17 @@ const ShopingCart = React.lazy(() =>
     "../../view/service_sector/sector_shop/customer/view/shoping_cart/ShopingCart"
   )
 );
+
+const ShopList = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/list_shop/ShopList"
+  )
+);
+const ListProductCategory = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/view_product_category/ListProductCategory"
+  )
+);
 export const routes_shop = [
   {
     path: "/",
@@ -36,10 +47,24 @@ export const routes_shop = [
     file_name: "",
   },
   {
+    path: "/shop/list_product/c_:id_category/",
+    exact: true,
+    name: "Detail Product",
+    component: ListProductCategory,
+    file_name: "",
+  },
+  {
     path: "/shop/shoping_cart",
     exact: true,
     name: "Shoping Cart",
     component: ShopingCart,
+    file_name: "",
+  },
+  {
+    path: "/shop/view_list",
+    exact: true,
+    name: "Form Home",
+    component: ShopList,
     file_name: "",
   },
   {

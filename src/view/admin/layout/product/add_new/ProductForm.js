@@ -1,6 +1,6 @@
 import React from "react";
 import "./ProductForm.css";
-import { define_nav } from "../../../../../setting/store/const";
+import { define_nav, urlapi } from "../../../../../setting/store/const";
 
 const convert = (arr, prefix) =>
   arr.map((val, i) => ({
@@ -54,6 +54,22 @@ class ProductForm extends React.Component {
       this.setState({ [name]: value });
     }
   };
+  handleChangeImageMain = (e)=>{
+    let file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("addimages", file);
+    const req = {
+      method: "POST",
+      body: formData,
+    };
+    fetch(urlapi + "/api/Image/upload1/product/P001", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") alert("Thêm Image Thành Công!");
+        console.log("Response từ server:", data);
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
+  }
 
   handleSelectObject = (e, field, list) => {
     const selectedId = e.target.value;
@@ -241,7 +257,7 @@ class ProductForm extends React.Component {
                 type="file"
                 name="mainImage"
                 accept="image/*"
-                onChange={this.handleChange}
+                onChange={this.handleChangeImageMain}
               />
             </label>
 

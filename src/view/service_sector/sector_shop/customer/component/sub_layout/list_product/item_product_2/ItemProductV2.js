@@ -5,9 +5,9 @@ const ItemProductV2 = ({ product }) => {
   return (
     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 mg-bottom-15 pd-right-0 d-flex-column">
       <div className="product-card">
-        <div className="image-wrapper">
+        <div className="image-wrapper" style={{height:"300px"}}>
             <a href={`/product/${product.id}`}>
-                <img src={product.image} alt={product.name} />
+                <img src={product.image} alt={product.name}/>
                 <span className="new-badge">
                     New
                 </span>
