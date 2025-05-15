@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { urlapi } from "../../../../../../setting/store/const";
 class MainPhoto extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,7 @@ class MainPhoto extends Component {
             <a
               href="javascript:void(0)"
               class="product__thumbnail"
-              data-image={image.path}
+              data-image={urlapi + "/api/Image/product/" + image.path}
               data-index={index}
               tabIndex="0"
             >
@@ -26,7 +27,7 @@ class MainPhoto extends Component {
                 alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
                 class="lazyload-cus dt-width-100"
                 loading="lazy"
-                src={image.path}
+                src={urlapi + "/api/Image/product/" + image.path}
                 width="100"
                 height="100"
               />

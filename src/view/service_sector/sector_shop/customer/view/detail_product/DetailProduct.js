@@ -109,9 +109,11 @@ class DetailProduct extends Component {
                           >
                             <a
                               href={
-                                this.state.product.images?.find(
-                                  (image) => image.main
-                                )?.path || "#"
+                                urlapi +
+                                  "/api/Image/product/" +
+                                  this.state.product.images?.find(
+                                    (image) => image.main
+                                  )?.path || "#"
                               }
                               data-fancybox="gallery"
                               class="product__thumbnail"
@@ -126,9 +128,11 @@ class DetailProduct extends Component {
                                 class="product-image-feature dt-width-100 ls-is-cached lazyloaded"
                                 loading="lazy"
                                 src={
-                                  this.state.product.images?.find(
-                                    (image) => image.main
-                                  )?.path || "#"
+                                  urlapi +
+                                    "/api/Image/product/" +
+                                    this.state.product.images?.find(
+                                      (image) => image.main
+                                    )?.path || "#"
                                 }
                                 data-src={
                                   this.state.product.images?.find(
@@ -281,7 +285,11 @@ class DetailProduct extends Component {
                       </div>
                     </div>
                   </div>
-                  <ViewInfoBuyProduct idProduct = {this.state.product.idProduct} sizes = {this.state.product?.sizes || null} colors = {this.state.product?.colors || null} {...this.props}/>
+                  <ViewInfoBuyProduct
+                    idProduct={this.state.product.idProduct}
+                    ColorSize={this.state.product?.colorSize || null}
+                    {...this.props}
+                  />
                 </div>
                 <div class="product-single__policy">
                   <div class="product-policy">
@@ -423,13 +431,11 @@ class DetailProduct extends Component {
                             {this.state.product?.nameBrand || "name brand"}
                           </li>
                           <li>
-                            <strong>Mô tả  </strong>:{" "}
+                            <strong>Mô tả </strong>:{" "}
                             {this.state.product?.description || ""}
                           </li>
                         </ul>
-                        <p style={{ textIndent: "2em", fontSize: "16px" }}>
-                          
-                        </p>
+                        <p style={{ textIndent: "2em", fontSize: "16px" }}></p>
                       </div>
                     </div>
                   </div>

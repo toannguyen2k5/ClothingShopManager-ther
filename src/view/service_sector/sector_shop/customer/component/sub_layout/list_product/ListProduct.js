@@ -1,56 +1,49 @@
-import React from "react";
-import ItemProductV1 from "./item_product_1/ItemProductV1";
+import React, { Component } from "react";
+import { urlapi } from "../../../../../../../setting/store/const";
 import ItemProductV2 from "./item_product_2/ItemProductV2";
 
-const ListProduct = ({ src, alt }) => {
-  return (
-    <div
-      class="content-product-list product-list filter d-flex row-left-list "
-      data-count="95"
-    >
-      <ItemProductV2
-        product={{
-          name: "iPhone 14 Pro Max 256GB hdsjhfsdf sdf sdf sd fsd f sd f sdf sd fsd f sd ewr ưe rwe rwerwe rwer",
-          image: "//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id:"ID001"
-        }}
-      />
-      <ItemProductV2
-        product={{
-          name: "iPhone 14 Pro Max 256GB hdsjhfsdf sdf sdf sd fsd f sd f sdf sd fsd f sd ewr ưe rwe rwerwe rwer",
-          image: "//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id:"ID001"
-        }}
-      />
-      <ItemProductV2
-        product={{
-          name: "iPhone 14 Pro Max 256GB hdsjhfsdf sdf sdf sd fsd f sd f sdf sd fsd f sd ewr ưe rwe rwerwe rwer",
-          image: "//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id:"ID001"
-        }}
-      />
-      <ItemProductV2
-        product={{
-          name: "iPhone 14 Pro Max 256GB hdsjhfsdf sdf sdf sd fsd f sd f sdf sd fsd f sd ewr ưe rwe rwerwe rwer",
-          image: "//product.hstatic.net/1000253775/product/160_ao_thun_544-6_7a37a6976a3049538b7924af184e050c_large.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id:"ID001"
-        }}
-      />
-      
-    </div>
-  );
-};
+class ListProduct extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: [],
+      quantity: 0,
+    };
+  }
+  componentDidMount() {
+    console.log("Get Data");
+    fetch(urlapi + `/api/product/sellectAll/${this.state.quantity}/20/`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ products: [...this.state.products, ...data.data] });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+  render() {
+    return (
+      <div
+        class="content-product-list product-list filter d-flex row-left-list "
+        data-count="95"
+      >
+        {this.state.products.map((item, index) => (
+          <ItemProductV2
+            product={{
+              name: item.nameProduct,
+              image: urlapi + "/api/Image/product/" + item.path,
+              price: item?.price * (1 - item?.decrease) || 0,
+              oldPrice: item?.price || 0,
+              sale: item?.decrease * 100 || 0,
+              id: item.idProduct,
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+}
 
 export default ListProduct;
