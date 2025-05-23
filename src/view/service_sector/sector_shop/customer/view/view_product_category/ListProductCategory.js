@@ -10,26 +10,7 @@ class Home extends Component {
     this.state = {
       id_category: new URLSearchParams(this.props.location.search).get("code"),
       runGetListProduct: true,
-      list_product: [
-        {
-          name: "iPhone 14 Pro Max",
-          image:
-            "//product.hstatic.net/1000253775/product/160_ao_thun_544-6.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id: "ID001",
-        },
-        {
-          name: "iPhone 14 Pro Max",
-          image:
-            "//product.hstatic.net/1000253775/product/160_ao_thun_544-6.jpg",
-          price: 28990000,
-          oldPrice: 31990000,
-          sale: 10,
-          id: "ID001",
-        },
-      ],
+      list_product: [],
       sort_product: "default",
       data_list: {},
     };
@@ -39,7 +20,6 @@ class Home extends Component {
     fetch(
       urlapi +
         `/api/product/sellect/c_${this.props.match.params.id_category}/all/all/`
-        
     )
       .then((response) => response.json())
       .then((data) =>

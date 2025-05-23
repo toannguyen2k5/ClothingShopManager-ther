@@ -28,8 +28,8 @@ const ItemProductV2 = ({ product }) => {
                 )}
               </span>
             </div>
+            <button>Thêm vào giỏ hàng</button>
           </a>
-          <button>Thêm vào giỏ hàng</button>
         </div>
       </div>
     </div>

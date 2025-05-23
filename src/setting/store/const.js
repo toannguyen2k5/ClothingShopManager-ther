@@ -1,4 +1,5 @@
-export const urlapi = "http://192.168.1.7:8080";
+export const urlapi1 = "http://192.168.1.7:8080";
+export const urlapi = "http://localhost:8080";
 export const urllaypoy = "http://localhost:3000";
 export const nameWebsite = "Shop Quần Áo Online";
 export const rePassword =
@@ -70,7 +71,7 @@ export const define_nav = {
       name: "Tạo mới Sản Phẩm",
       path: "/admin/manager/product/new/",
     },
-    
+
     newOrderInputProduct: {
       name: "Thêm Đơn Nhập Hàng",
       path: "/admin/manager/order/input/new/",
@@ -94,8 +95,8 @@ export const define_nav = {
   },
 };
 
-export const define_name_sector={
-  main:{
-    home:"blog"
-  }
-}
+export const define_name_sector = {
+  main: {
+    home: "blog",
+  },
+};

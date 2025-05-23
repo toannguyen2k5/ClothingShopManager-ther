@@ -226,63 +226,87 @@ class DetailProduct extends Component {
                           </li>
                         </ul>
                       </div>
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold">
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
-                                style={{ width: "20px", height: "20px" }}
-                              />
-                              Mã Sự Kiện :{" "}
-                              {this.state.product.discountEvent.eventCode}
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold">
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
-                                style={{ width: "20px", height: "20px" }}
-                              />
-                              Ngày , giờ Kết thúc sự kiện :{" "}
-                              {this.state.product.discountEvent.eventDeadline}
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
+                      {this.state.product.discountEvent && (
+                        <>
+                          <div class="product_coupon_new">
+                            <ul class="product-promotion__box">
+                              <li>
+                                <span class="big-bold">
+                                  <img
+                                    src="https://file.hstatic.net/1000253775/file/icon-04.png"
+                                    style={{ width: "20px", height: "20px" }}
+                                  />
+                                  Mã Sự Kiện :{" "}
+                                  {this.state.product.discountEvent.eventCode}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="product_coupon_new">
+                            <ul class="product-promotion__box">
+                              <li>
+                                <span class="big-bold">
+                                  <img
+                                    src="https://file.hstatic.net/1000253775/file/icon-04.png"
+                                    style={{ width: "20px", height: "20px" }}
+                                  />
+                                  Ngày , giờ Kết thúc sự kiện :{" "}
+                                  {
+                                    this.state.product.discountEvent
+                                      .eventDeadline
+                                  }
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
 
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold">
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
-                                style={{ width: "20px", height: "20px" }}
-                              />
-                              Số Lượng Tối Đa Mỗi Đơn :{" "}
-                              {this.state.product.discountEvent.quantityLimit}
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
-                          <li>
-                            <span class="big-bold">
-                              <img
-                                src="https://file.hstatic.net/1000253775/file/icon-04.png"
-                                style={{ width: "20px", height: "20px" }}
-                              />
-                              Mô Tả :{" "}
-                              {this.state.product.discountEvent.description}
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
+                          <div class="product_coupon_new">
+                            <ul class="product-promotion__box">
+                              <li>
+                                <span class="big-bold">
+                                  <img
+                                    src="https://file.hstatic.net/1000253775/file/icon-04.png"
+                                    style={{ width: "20px", height: "20px" }}
+                                  />
+                                  Số Lượng Tối Đa Mỗi Đơn :{" "}
+                                  {
+                                    this.state.product.discountEvent
+                                      .quantityLimit
+                                  }
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="product_coupon_new">
+                            <ul class="product-promotion__box">
+                              <li>
+                                <span class="big-bold">
+                                  <img
+                                    src="https://file.hstatic.net/1000253775/file/icon-04.png"
+                                    style={{ width: "20px", height: "20px" }}
+                                  />
+                                  Mô Tả :{" "}
+                                  {this.state.product.discountEvent.description}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </>
+                      )}
+                      {!this.state.product.discountEvent && (
+                        <>
+                          <div class="product_coupon_new">
+                            <ul class="product-promotion__box">
+                              <li>
+                                <span class="big-bold">
+                                  Mô Tả : Xin lỗi quý khách , hiện tại mặt hàng
+                                  này không được giảm giá
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                   <ViewInfoBuyProduct

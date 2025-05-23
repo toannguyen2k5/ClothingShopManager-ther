@@ -24,6 +24,11 @@ const ListProductCategory = React.lazy(() =>
     "../../view/service_sector/sector_shop/customer/view/view_product_category/ListProductCategory"
   )
 );
+const InforUser = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/infor_user/InforUser"
+  )
+);
 export const routes_shop = [
   {
     path: "/",
@@ -68,10 +73,10 @@ export const routes_shop = [
     file_name: "",
   },
   {
-    path: "/shop/",
+    path: "/shop/infor",
     exact: true,
-    name: "Form Home",
-    component: Cust_Home,
+    name: "Information User",
+    component: InforUser,
     file_name: "",
   },
   {

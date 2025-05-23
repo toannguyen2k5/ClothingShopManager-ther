@@ -30,24 +30,21 @@ class Home extends Component {
         <main>
           <section id="home-slider-home" class="mg-top-15 mg-0-mb">
             <div class="container pd-0-mb">
-              <SliderImage />
+              {/*
+             <SliderImage />*/}
             </div>
           </section>
 
           <section id="collection-template" class="collection-page">
             <div class="collection-body">
               <div class="container">
-                <Banner
+                {/*<Banner
                   src={"https://file.hstatic.net/1000253775/file/diachi_dk.jpg"}
                   alt={"dddddd"}
-                />
+                /> */}
                 <div class="row d-flex">
                   <div class="col-md-12 col-sm-12 col-xs-12 main-colection">
                     <ListProduct />
-
-                    <div class="collection-view-content">
-                      <button class="btn-collectionview">Xem thêm</button>
-                    </div>
                   </div>
                 </div>
               </div>
