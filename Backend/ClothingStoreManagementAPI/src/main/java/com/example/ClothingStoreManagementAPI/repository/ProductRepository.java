@@ -1,0 +1,46 @@
+package com.example.ClothingStoreManagementAPI.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
+
+import com.example.ClothingStoreManagementAPI.model.Entity.*;
+import com.example.ClothingStoreManagementAPI.model.DTO.*;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, String>{
+	@Query("SELECT MAX(idProduct) FROM Product")
+	String SelectMaxId();
+	@Query("SELECT p FROM Product p WHERE p.nameProduct = :nameProduct")
+	List<Product> SelectByName (@Param("nameProduct") String nameProduct);
+	// xem chi tiết sản phẩm dự trên thuộc tính id
+	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.DetailProductDTO(" +
+		       "p.idProduct,p.nameProduct,pc.nameCategory, pm.nameMaterial, b.nameBrand, s.nameStyle,pe.price, p.description) " +
+		       "FROM Product p " +
+		       "INNER JOIN ProductCategory pc ON p.idCategory = pc.idCategory " +
+		       "INNER JOIN ProductMaterial pm ON p.idMaterial = pm.idMaterial " +
+		       "INNER JOIN Brand b ON p.idBrand = b.idBrand " +
+		       "INNER JOIN Style s ON s.idStyle = p.idStyle " +
+		       "INNER JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true "+
+		       "WHERE p.idProduct = :idProduct")
+	DetailProductDTO selectDetailProduct(@Param("idProduct") String idProduct);
+	// tìm kiếm đường dẫn ảnh dựa trên mã sản phẩm
+	@Query("SELECT pi FROM ProductImage pi WHERE pi.idProduct = :idProduct")
+	List<ProductImage> SelectPathsByIdProduct(@Param("idProduct") String idProduct);
+	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ColorSizeDTO(c.nameColor, s.nameSize) "
+            + "FROM DetailProduct d "
+            + "INNER JOIN Color c On d.idColor = c.idColor "
+            + "INNER JOIN Size s On  d.idSize = s.idSize "
+            + "WHERE d.idProduct = :idProduct")
+	List<ColorSizeDTO> SelectColorSizeByIdProduct(@Param("idProduct") String idProduct);
+	// updtae sản phẩm
+	@Modifying
+	@Query("UPDATE Product p SET p.nameProduct=:nameProduct , p.idStyle=:idStyle, p.idMaterial =:idMaterial , p.idBrand =:idBrand , p.idCategory =:idCategory,\r\n"
+			+"p.status =:status , p.description=:description WHERE p.idProduct =:idProduct")
+	int UpdateProduct (@Param("idProduct") String idProduct,@Param("nameProduct") String nameProduct,@Param("idStyle") String idType,
+			@Param("idMaterial") String idMaterial,@Param("idBrand") String idBrand,@Param("idCategory") String idCategory,@Param("status") boolean status,
+			@Param("description") String description);
+}
