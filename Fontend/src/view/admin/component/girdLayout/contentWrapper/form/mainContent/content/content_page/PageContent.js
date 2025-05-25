@@ -10,11 +10,12 @@ const loading = (
 export default class PageContent extends Component {
   render() {
     const state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
-    if (state_data.user_info!=null && state_data.user_info.role == "Role0001")// "admin")
+    
+    if (state_data.user_info!=null && state_data.user_info.role_level >= 5)// "admin")
       return (
         <Suspense fallback={loading}>
           <Switch>
-            {routes_admin.map((route, idx) => {
+            {routes_admin.filter(route=>state_data.user_info.role_level>=route.role_level).map((route, idx) => {
               return (
                 route.component && (
                   <Route

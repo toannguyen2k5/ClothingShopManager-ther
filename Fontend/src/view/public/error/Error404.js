@@ -5,7 +5,7 @@ export default class Error404 extends Component {
   render() {
     console.log(this.props);
     let path_home = "/home";
-    if (this.props.state_data.user_info!=null && this.props.state_data.user_info.role === "Role0001")// "admin")
+    if (this.props.state_data.user_info!=null && this.props.state_data.user_info.role_level >=5)// "admin")
       path_home = "/admin/dashboard/";
     return (
       <div>

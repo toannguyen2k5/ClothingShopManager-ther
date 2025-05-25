@@ -11,6 +11,7 @@ const initialState = {
     time: null,
     ip_adress: null,
     role: null,
+    role_level:0
   },
   data: [],
   sector: {

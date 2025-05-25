@@ -8,7 +8,7 @@ const loading = (
 );
 export default class PageContent extends Component {
   render() {
-    console.log(this.props);
+    console.log("PageContent shop");
     return (
       <Suspense fallback={loading}>
         <Switch>

@@ -63,72 +63,84 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: Admin_Home,
+    role_level: 5
   },
   {
-    path: "/admin/dashboard",
+    path: "/admin/dashboard/",
     exact: true,
     name: "Form Search",
     component: Admin_Home,
+    role_level: 5
   },
   {
     path: "/admin/manager/product/list/",
     exact: true,
     name: "Form Search",
     component: ProductList,
+    role_level: 5
   },
   {
     path: "/admin/manager/product/new/",
     exact: true,
     name: "Form Search",
     component: ProductForm,
+    role_level: 5
   },
   {
     path: "/admin/manager/product/update/",
     exact: true,
     name: "Form Search",
     component: UpdateProduct,
+    role_level: 5
   },
   {
     path: "/admin/manager/coupons/list/",
     exact: true,
     name: "Form Search",
     component: PromoCodeManager,
+    role_level: 10
   },
   {
     path: "/admin/manager/coupons/update/",
     exact: true,
     name: "Form Search",
     component: StorePromoManager,
+    role_level: 10
   },
   {
     path: "/admin/manager/customer/list/",
     exact: true,
     name: "Form Search",
     component: CustomerManager,
+    role_level: 5
   },
   {
     path: "/admin/manager/customer/detail/:id/",
     exact: true,
     name: "Form Search",
     component: CustomerDetail,
+    role_level: 5
   },
   {
     path: "/admin/manager/review_product/",
     exact: true,
     name: "Form Search",
     component: CommentManager,
+    role_level: 5
   },
   {
     path: "/admin/manager/coupons/inventory/",
     exact: true,
     name: "Form Search",
     component: ProductInventory,
+    role_level: 5
   },
   {
     path: "/admin/manager/account/list/",
     exact: true,
     name: "Form Search",
     component: AdminManager,
+    role_level: 5
   },
 
   {
@@ -136,44 +148,52 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: CategoryManager,
+    role_level: 5
   },
   {
     path: "/admin/manager/order/input/list/",
     exact: true,
     name: "Form Search",
     component: PurchaseSlipList,
+    role_level: 5
   },
   {
     path: "/admin/manager/order/input/new/",
     exact: true,
     name: "Form Search",
     component: PurchaseSlipManager,
+    role_level: 5
   },
   {
     path: "/admin/manager/order/input/update/",
     exact: true,
     name: "Form Search",
     component: UpdatePurchaseSlip,
+    role_level: 5
   },
   {
     path: "/admin/profile/",
     exact: true,
     name: "Form Search",
     component: Admin_Profile,
+    role_level: 5
   },
   {
     path: "/admin/setting/",
     exact: true,
     name: "Form Search",
     component: Admin_Setting,
+    role_level: 5
   },
   {
     path: "/admin/billing/",
     exact: true,
     name: "Form Search",
     component: Admin_Billing,
+    role_level: 5
   },
-  { path: "/", exact: true, name: "Form Search", component: Admin_Home },
+  { path: "/", exact: true, name: "Form Search", component: Admin_Home,
+    role_level: 5 },
 ];
 //Transtion_Sector
 const Transtion_Sector_Shop = React.lazy(() =>

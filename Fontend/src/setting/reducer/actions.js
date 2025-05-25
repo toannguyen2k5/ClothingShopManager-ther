@@ -7,7 +7,8 @@ export function login_success(user) {
     email: user.email,
     avatar: user.avatar,
     full_name: user.fullName,
-    role: user.idRole,
+    role: user.role,
+    role_level:user.roleLevel
   };
   return {
     type: types.login_success,
@@ -24,6 +25,7 @@ export function login_fail(user) {
     time: user.time,
     ip_adress: user.ip_adress,
     role: null,
+    role_level:0
   };
   return {
     type: types.login_fail,
@@ -40,6 +42,7 @@ export function log_out() {
     time: null,
     ip_adress: null,
     role: null,
+    role_level:0
   };
   return {
     type: types.logout,

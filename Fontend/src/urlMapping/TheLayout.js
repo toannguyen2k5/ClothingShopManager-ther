@@ -14,6 +14,12 @@ import LayoutHome from "./LayoutHome";
 const loading = <div></div>;
 
 export default class TheLayout extends Component {
+  constructor(){
+    super();
+    this.state = {
+      reload:false
+    }
+  }
   async componentDidMount() {
     try {
       const req = {
@@ -23,6 +29,10 @@ export default class TheLayout extends Component {
       const response = await fetch(`${urlapi}/api/network/mac`, req);
       const { macAddress } = await response.json();
       this.props.actions.set_code_build_state(macAddress);
+      //--------------------------------------------------------
+      console.log("TheLayout Line 27", this.props.state_data);
+      //--------------------------------------------------------
+      this.setState({reload:true});
     } catch (error) {
       console.log(error);
     }
@@ -37,6 +47,7 @@ export default class TheLayout extends Component {
     ) {
       this.props.actions.revert_state();
     }
+        const state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
     return (
       <React.Suspense fallback={loading}>
         <Switch>
@@ -54,7 +65,7 @@ export default class TheLayout extends Component {
             name={""}
             render={(props) => <LayoutHome {...props} {...this.props} />}
           />
-          {routes_admin.map((route, idx) => {
+          {routes_admin.filter(route=>state_data.user_info.role_level>=route.role_level).map((route, idx) => {
             return (
               route.component && (
                 <Route

@@ -10,7 +10,7 @@ class Account extends Component {
   }
 
   render() {
-    if (this.props.state_data.user_info.role === "Role0001")// "admin")
+    if (this.props.state_data.user_info.role_level >=5)// "admin")
       return (
         <>
           <a

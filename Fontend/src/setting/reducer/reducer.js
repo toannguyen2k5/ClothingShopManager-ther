@@ -10,6 +10,7 @@ const initialState = {
     time: null,
     ip_adress: null,
     role: null,
+    role_level:0
   },
   sector: {
     name_current: define_name_sector.main.home,

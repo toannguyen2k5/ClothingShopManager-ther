@@ -1,4 +1,4 @@
-export const urlapi1 = "http://192.168.1.7:8080";
+export const urlapi1 = "http://192.168.1.10:8080";
 export const urlapi = "http://localhost:8080";
 export const urllaypoy = "http://localhost:3000";
 export const nameWebsite = "Shop Quần Áo Online";

@@ -69,26 +69,28 @@ export default class Login extends Component {
         password: md5(this.state.password_dn),
       }),
     };
-
-    // const response = await fetch(
-    //   `${urlapi}/api/auth/login`,
-    //   req
-    // );
-    // const { data } = await response.json();
-    fetch(`${urlapi}/api/auth/login`, req)
+    
+    fetch(`${urlapi}/api/users/login`, req)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         const { actions } = this.props;
+        console.log("data: ",data);
         if(data.status && data.status === "200"){
           
           actions.login_success(data.data);
+          //--------------------------------------------------------
+          console.log("Login Line 83", this.props.state_data);
+          //--------------------------------------------------------
           this.setState({
             requestHome: true,
           });
         }
         else{
           actions.log_out();
+          //--------------------------------------------------------
+          console.log("Logout 92", this.props.state_data);
+          //--------------------------------------------------------
         }
       })
       .catch((error) => console.error(error));
@@ -131,6 +133,7 @@ export default class Login extends Component {
     e.preventDefault();
   }
   render() {
+    console.log(this.props.state_data);
     if (this.state.requestHome) return <Redirect to="/home" />;
     if (!this.state.isCheckLogin) this.getRole();
     return (
