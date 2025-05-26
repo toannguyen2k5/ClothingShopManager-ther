@@ -1,9 +1,87 @@
 import React, { Component } from "react";
 import Information from "./Information";
+import "./plugin-style.css";
+import "./style-smb.css";
+import ChooseAddress from "../shoping_cart/ChooseAddress";
 class InforUser extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedMenu: null,
+    };
   }
+  renderContent = () => {
+    switch (this.state.selectedMenu) {
+      case "profile":
+        return <Information />;
+      case "orders":
+        return <></>;
+      case "address":
+        return (
+          <>
+            <div class="col-xs-12 col-sm-9 col-md-9 accounts-right">
+              <div class="row">
+                <div class="col-xs-12" id="customer_sidebar">
+                  <div class="accounts style-bg">
+                    <div class="accounts_title">
+                      <h2>Địa chỉ</h2>
+                    </div>
+                    <ChooseAddress />
+                    <div class="account_col">
+                      <div class="account_main col_main_submit">
+                        <button id="submit_info" class="updateAccount">
+                          <span>Cập nhật</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      case "vouchers":
+        return <></>;
+      case "reset":
+        return (
+          <>
+            <div class="col-xs-12 col-sm-9 col-md-9 accounts-right">
+              <div class="row">
+                <div class="col-xs-12" id="customer_sidebar">
+                  <div class="accounts style-bg">
+                    <div class="accounts_title">
+                      <h2>Đổi mật khẩu</h2>
+                    </div>
+                    <div class="account_col">
+                      <div class="account_main">
+                        <strong>Email </strong>
+                        <input
+                          required=""
+                          type="email"
+                          placeholder="Địa chỉ email"
+                          class="text"
+                          size="30"
+                          style={{ width: "850px" }}
+                        />
+                      </div>
+                    </div>
+                    <div class="account_col">
+                      <div class="account_main col_main_submit">
+                        <button id="submit_info" class="updateAccount">
+                          <span>Reset</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      default:
+        return <Information />;
+    }
+  };
   render() {
     return (
       <>
@@ -30,33 +108,40 @@ class InforUser extends Component {
                   <div class="AccountContent">
                     <div class="AccountList">
                       <ul class="list-unstyled">
-                        <li class="current">
-                          <a href="/account">
+                        <li
+                          class="current"
+                          onClick={() => {
+                            this.setState({ selectedMenu: "profile" });
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a>
                             <span>
                               <i class="fas fa-user"></i>
                             </span>
                             <span> Hồ sơ của tôi </span>
                           </a>
                         </li>
-                        <li>
-                          <a href="/account/?view=order.smb">
+                        <li
+                          onClick={() => {
+                            this.setState({ selectedMenu: "orders" });
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a>
                             <span>
                               <i class="fas fa-file-invoice"></i>
                             </span>
                             <span> Đơn hàng của tôi </span>
                           </a>
                         </li>
-                        <li>
-                          <a href="/account/?view=re-form.smb">
-                            <span>
-                              {" "}
-                              <i class="fas fa-bars"></i>
-                            </span>
-                            <span> Yêu cầu hỗ trợ</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/account/addresses">
+                        <li
+                          onClick={() => {
+                            this.setState({ selectedMenu: "address" });
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a>
                             <span>
                               {" "}
                               <i class="fas fa-map-marker-alt"></i>
@@ -65,11 +150,14 @@ class InforUser extends Component {
                           </a>
                         </li>
 
-                        <li id="voucher-content-acccount">
-                          <a
-                            class="btn-voucher"
-                            href="/account/?view=voucher.smb"
-                          >
+                        <li
+                          id="voucher-content-acccount"
+                          onClick={() => {
+                            this.setState({ selectedMenu: "vouchers" });
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a class="btn-voucher">
                             <span>
                               {" "}
                               <i class="fas fa-tags"></i>
@@ -83,17 +171,13 @@ class InforUser extends Component {
                           />
                         </li>
 
-                        <li>
-                          <a href="/account/?view=viewed.smb">
-                            <span>
-                              <i class="fas fa-heart"></i>
-                            </span>
-                            <span>Sản phẩm đã xem</span>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a href="/account/?view=reset_password.smb">
+                        <li
+                          onClick={() => {
+                            this.setState({ selectedMenu: "reset" });
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a>
                             <span>
                               <i class="fas fa-lock"></i>
                             </span>
@@ -104,111 +188,8 @@ class InforUser extends Component {
                     </div>
                   </div>
                 </div>
-                <div class="AccountSidebar visible-xs">
-                  <div class="title_account">
-                    <div class="title-account">Chào,</div>
-                  </div>
-                  <p class="hrv-loyalty-next-level">
-                    Chi tiêu thêm
-                    <span class="money" style={{ fontWeight: "600" }}></span> để
-                    thăng hạng
-                    <span
-                      class="next_membership"
-                      style={{ fontWeight: "600" }}
-                    ></span>
-                  </p>
-                  <div class="content-menu clearfix">
-                    <a
-                      class="vocher btn-voucher"
-                      href="/account/?view=voucher.smb"
-                    >
-                      <span class="icon">
-                        <i class="fas fa-tags" aria-hidden="true"></i>
-                      </span>
-                      <img
-                        class=""
-                        src="https://file.hstatic.net/1000253775/file/vouvher__tag-02_2b4bab40f8cf476daf4d0ddc6ea1d8c6_medium.png"
-                        alt="Tag Sale Img"
-                      />
-                      <span class="title-size">VOUCHER</span>
-                    </a>
-
-                    <div class="user-account">
-                      <a href="/account?view=account_update.smb">
-                        <span class="icon">
-                          <i class="fa fa-user" aria-hidden="true"></i>
-                        </span>
-                        <span class="title-size">Thông tin</span>
-                      </a>
-                    </div>
-                    <div class="user-pass">
-                      <a href="/account/addresses">
-                        <span class="icon">
-                          {" "}
-                          <i class="fas fa-map-marker-alt"></i>
-                        </span>
-                        <span class="title-size"> Sổ địa chỉ</span>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="accounts">
-                    <div class="content-info">
-                      <h2>Đơn hàng của tôi</h2>
-                    </div>
-                    <div class="content-list">
-                      <div class="content-order">
-                        <a href="/account/?view=re-form.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_support.png?v=2004" />
-                          </div>
-                          <span>Yêu cầu hỗ trợ</span>
-                        </a>
-                      </div>
-                      <div class="content-order">
-                        <a href="/account/?view=order.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_order.png?v=2004" />
-                          </div>
-                          <span>Tất cả đơn hàng</span>
-                        </a>
-                      </div>
-                      <div class="content-order">
-                        <a href="/account/?view=order.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_order.png?v=2004" />
-                          </div>
-                          <span>Chưa thanh toán</span>
-                        </a>
-                      </div>
-                      <div class="content-order">
-                        <a href="/account/?view=order.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_order.png?v=2004" />
-                          </div>
-                          <span>Xử lý</span>
-                        </a>
-                      </div>
-                      <div class="content-order">
-                        <a href="/account/?view=order.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_order.png?v=2004" />
-                          </div>
-                          <span>Đã vận chuyển</span>
-                        </a>
-                      </div>
-                      <div class="content-order">
-                        <a href="/account/?view=order.smb">
-                          <div class="icon">
-                            <img src="//theme.hstatic.net/1000253775/1001315144/14/icon_order.png?v=2004" />
-                          </div>
-                          <span>Trả lại</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
-              <Information {...this.props} />
+              {this.renderContent(this.state.selectedMenu)}
             </div>
           </div>
         </div>

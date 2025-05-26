@@ -9,8 +9,6 @@ class Information extends Component {
       gender: null,
     };
   }
-
-  componentDidMount() {}
   render() {
     return (
       <>
@@ -47,12 +45,12 @@ class Information extends Component {
                           <input
                             required=""
                             type="text"
-                            value=""
                             name="customer[last_name]"
-                            placeholder="Họ và tên đệm"
+                            placeholder="Họ và tên"
                             id="last_name"
                             class="text"
                             size="30"
+                            style={{ width: "850px" }}
                           />
                         </div>
                       </div>
@@ -64,7 +62,6 @@ class Information extends Component {
                             type="date"
                             id="datepicker"
                             name="datepicker"
-                            value=""
                             placeholder="Ngày sinh"
                             class="text"
                             size="30"
@@ -77,14 +74,24 @@ class Information extends Component {
                           <label>Số điện thoại</label>
                           <input
                             type="text"
-                            value="0347235815"
                             name="customer[phone]"
                             class="text phone"
                             size="30"
                           />
                         </div>
                       </div>
-
+                      <div class="account_col">
+                        <div class="account_main">
+                          <label>địa chỉ</label>
+                          <input
+                            type="text"
+                            name="customer[phone]"
+                            class="text phone"
+                            readOnly=""
+                            size="30"
+                          />
+                        </div>
+                      </div>
                       <div class="account_col account_col_seeq">
                         <div class="account_main">
                           <label>Giới tính</label>

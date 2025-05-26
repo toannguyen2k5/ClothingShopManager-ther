@@ -30,19 +30,19 @@ public interface UserRepository extends JpaRepository<Users, String> {
 	@Query("SELECT u FROM Users u WHERE u.email = :email")
 	Users findByEmail(@Param("email") String email);
 	// tìm kiếm tất cả nhân viên của kho , hay shop , hay các quản lý hay tìm kiếm người dùng
-	@Query("SELECT u FROM Users u WHERE u.idRole = :idRole")
-	List<Users> SellectByRole (@Param("idRole") String idRole);
+	@Query("SELECT u FROM Users u WHERE u.role = :role")
+	List<Users> SellectByRole (@Param("role") String role);
 	// tìm kiếm tất cả nhân viên hay quản lý của 1 shop 
 	@Query("SELECT u FROM Users u\r\n"
 			+ "INNER JOIN ListWarehouseInCharge l ON l.idStaff = u.idUser\r\n"
-			+ "WHERE u.idRole = :idRole AND l.idShop = :idShop")
-	List<Users> SellectByRoleAndShop(@Param("idRole") String idRole ,@Param("idShop") String idShop);
+			+ "WHERE u.role = :role AND l.idShop = :idShop")
+	List<Users> SellectByRoleAndShop(@Param("role") String role ,@Param("idShop") String idShop);
 	// cập nhật thông tin
-	@Query("UPDATE Users u SET u.username = :username,u.password=:password , u.status=:status ,u.idRole =:idRole, u.fullName =:fullName , u.address=:address,"
+	@Query("UPDATE Users u SET u.username = :username,u.password=:password , u.status=:status ,u.role =:role, u.fullName =:fullName , u.address=:address,"
 			+ "u.birthDay=:birthDay,u.gender =:gender, u.email=:email, u.phoneNumber =:phoneNumber , u.pathAvatar =:pathAvatar\r\n"
 			+ "WHERE u.idUser =:idUser")
 	@Modifying
 	int UpdateUsers(@Param("idUser") String idUser ,@Param("username") String username ,@Param("password") String password ,@Param("status") boolean status ,
-			@Param("idRole") String idRole ,@Param("fullName") String fullName ,@Param("address") String address ,@Param("birthDay") LocalDate birthDay ,@Param("gender") boolean gender ,
+			@Param("role") String role ,@Param("fullName") String fullName ,@Param("address") String address ,@Param("birthDay") LocalDate birthDay ,@Param("gender") boolean gender ,
 			@Param("email") String email ,@Param("phoneNumber") String phoneNumber ,@Param("pathAvatar") String pathAvatar);
 }

@@ -54,7 +54,7 @@ public class UserService {
 		try {
 			List<String> pathAvatar = ImageService.uploadImages(deleimages, addimages, "user", Users.getIdUser());
 			if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
-			return UserRepository.UpdateUsers(Users.getIdUser(),Users.getUsername(),Users.getPassword(),Users.isStatus(),Users.getIdRole(),Users.getFullName(),
+			return UserRepository.UpdateUsers(Users.getIdUser(),Users.getUsername(),Users.getPassword(),Users.isStatus(),Users.getRole().toString(),Users.getFullName(),
 					Users.getAddress(),Users.getBirthDay(),Users.isGender(),Users.getEmail(),Users.getPhoneNumber(),Users.getPathAvatar())>0;
 		}
 		catch(Exception e) {

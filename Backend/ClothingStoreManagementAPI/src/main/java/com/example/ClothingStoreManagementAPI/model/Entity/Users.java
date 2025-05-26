@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
+import com.example.ClothingStoreManagementAPI.model.Enum.Role;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -23,8 +25,9 @@ public class Users {
     @Column(name = "status", nullable = false)
     private boolean status;
     
-    @Column(name = "idRole", length = 45, nullable = false)
-    private String idRole;
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
+	private Role role;
     
     @Column(name = "fullName", length = 45, nullable = false)
     private String fullName;
