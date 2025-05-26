@@ -13,7 +13,6 @@ class ProductForm extends React.Component {
     super(props);
     this.state = {
       name: "",
-      sku: "",
       importPrice: "",
       salePrice: "",
       selectedColor: "",
@@ -54,7 +53,7 @@ class ProductForm extends React.Component {
       this.setState({ [name]: value });
     }
   };
-  handleChangeImageMain = (e)=>{
+  handleChangeImageMain = (e) => {
     let file = e.target.files[0];
     const formData = new FormData();
     formData.append("addimages", file);
@@ -69,7 +68,7 @@ class ProductForm extends React.Component {
         console.log("Response từ server:", data);
       })
       .catch((error) => console.error("Lỗi POST:", error));
-  }
+  };
 
   handleSelectObject = (e, field, list) => {
     const selectedId = e.target.value;
@@ -121,15 +120,17 @@ class ProductForm extends React.Component {
     ));
 
   render() {
-        if (this.props.state_data.current_page.name !== define_nav.admin.newproduct.name)
-              this.props.actions.current_page({
-                name_new: define_nav.admin.newproduct.name,
-                path_new: define_nav.admin.newproduct.path,
-                old_page: this.props.state_data.current_page,
-              });
+    if (
+      this.props.state_data.current_page.name !==
+      define_nav.admin.newproduct.name
+    )
+      this.props.actions.current_page({
+        name_new: define_nav.admin.newproduct.name,
+        path_new: define_nav.admin.newproduct.path,
+        old_page: this.props.state_data.current_page,
+      });
     const {
       name,
-      sku,
       importPrice,
       salePrice,
       selectedColor,
@@ -164,16 +165,6 @@ class ProductForm extends React.Component {
                 type="text"
                 name="name"
                 value={name}
-                onChange={this.handleChange}
-              />
-            </label>
-
-            <label>
-              Mã SKU:
-              <input
-                type="text"
-                name="sku"
-                value={sku}
                 onChange={this.handleChange}
               />
             </label>

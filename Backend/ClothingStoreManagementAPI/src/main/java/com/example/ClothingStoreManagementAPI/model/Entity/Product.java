@@ -28,6 +28,9 @@ public class Product {
     @Column(name = "idCategory",length = 45, nullable = false)
     private String idCategory;
     
+    @Column(name = "idSupplier",length = 45, nullable = false)
+    private String idSupplier;
+    
     @Column(name = "status",nullable = false)
     private boolean status;
 
