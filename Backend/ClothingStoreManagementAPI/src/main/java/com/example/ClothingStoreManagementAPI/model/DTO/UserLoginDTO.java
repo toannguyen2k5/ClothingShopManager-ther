@@ -12,7 +12,7 @@ public class UserLoginDTO {
     private String idUser;
     private String fullName;
     private Role role;
-    private int level;
+    private int roleLevel;
     private String email;
     private String Avatar;
 }
