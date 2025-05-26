@@ -14,11 +14,11 @@ import LayoutHome from "./LayoutHome";
 const loading = <div></div>;
 
 export default class TheLayout extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      reload:false
-    }
+      reload: false,
+    };
   }
   async componentDidMount() {
     try {
@@ -32,22 +32,31 @@ export default class TheLayout extends Component {
       //--------------------------------------------------------
       console.log("TheLayout Line 27", this.props.state_data);
       //--------------------------------------------------------
-      this.setState({reload:true});
+      this.setState({ reload: true });
     } catch (error) {
       console.log(error);
     }
   }
   render() {
+    let state_data = [];
     if (
       localStorage.getItem("state_data") != undefined &&
       localStorage.getItem("state_data") != null &&
-      localStorage.getItem("state_data") != "" &&
-      extractcode(localStorage.getItem("state_data")) !=
-        JSON.stringify(this.props.state_data)
+      localStorage.getItem("state_data") != ""
     ) {
-      this.props.actions.revert_state();
+      if (
+        extractcode(localStorage.getItem("state_data")) !=
+        JSON.stringify(this.props.state_data)
+      )
+        this.props.actions.revert_state();
+        try {
+          state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
+        } catch (e) {
+          console.error("Không thể parse JSON:", extractcode(localStorage.getItem("state_data")));
+        }
+      
     }
-        const state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
+
     return (
       <React.Suspense fallback={loading}>
         <Switch>
@@ -65,21 +74,25 @@ export default class TheLayout extends Component {
             name={""}
             render={(props) => <LayoutHome {...props} {...this.props} />}
           />
-          {routes_admin.filter(route=>state_data.user_info.role_level>=route.role_level).map((route, idx) => {
-            return (
-              route.component && (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  name={route.name}
-                  render={(props) => (
-                    <PageWrapperAdmin {...props} {...this.props} />
-                  )}
-                />
-              )
-            );
-          })}
+          {routes_admin
+            .filter(
+              (route) => state_data?.user_info?.role_level >= route.role_level
+            )
+            .map((route, idx) => {
+              return (
+                route.component && (
+                  <Route
+                    key={idx}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    render={(props) => (
+                      <PageWrapperAdmin {...props} {...this.props} />
+                    )}
+                  />
+                )
+              );
+            })}
           {routes_sector.map((route, idx) => {
             return (
               route.component && (

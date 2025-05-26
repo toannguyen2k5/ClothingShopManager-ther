@@ -70,7 +70,7 @@ export default class Login extends Component {
       }),
     };
     
-    fetch(`${urlapi}/api/users/login`, req)
+    fetch(`${urlapi}/api/auth/login`, req)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
