@@ -12,6 +12,6 @@ public class PriceBsDto {
     private LocalDateTime updatedAt;
     private String note;
     private String updatedBy;
-    private Integer status;
+    private Boolean status;
     private String idVariant;
 }

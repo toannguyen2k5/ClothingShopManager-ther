@@ -41,5 +41,5 @@ public class Price {
 	private String updatedBy;
 
 	@Column(name = "status")
-	private int status;
+	private Boolean status;
 }

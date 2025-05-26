@@ -3,9 +3,12 @@ package com.example.shopmanager.repository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Component
@@ -28,6 +31,10 @@ public class JdbcManager {
 	private String groupByClause = "";
 	private String havingClause = "";
 	private boolean distinct = false;
+	private String sqlFilePath;
+	private Map<String, Object> namedParams = new HashMap<>();
+	private Map<Integer, Object> positionalParams = new HashMap<>();
+	public Query query;
 
 	@PostConstruct
 	private void init() {
@@ -54,6 +61,11 @@ public class JdbcManager {
 
 	public JdbcManager leftJoin(String relation) {
 		joins.add("LEFT JOIN FETCH e." + relation);
+		return this;
+	}
+
+	public JdbcManager join(String relation, String alias) {
+		joins.add("JOIN " + relation + " " + alias);
 		return this;
 	}
 
@@ -145,6 +157,38 @@ public class JdbcManager {
 
 	public JdbcManager distinct() {
 		this.distinct = true;
+		return this;
+	}
+
+	public JdbcManager setSqlFile(String pathFileSql) {
+		this.sqlFilePath = pathFileSql;
+		String queryStr = "";
+		if (sqlFilePath != null && fileExists(sqlFilePath)) {
+			queryStr = readSqlFromFile(pathFileSql);
+		}
+		query = em.createNativeQuery(queryStr, entityClass);
+		return this;
+	}
+
+	private boolean fileExists(String path) {
+		return new java.io.File(path).exists();
+	}
+
+	private String readSqlFromFile(String path) {
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream(path)) {
+			if (is == null)
+				return "";
+			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
+	/**
+	 * Set parameter theo tên (ví dụ :status)
+	 */
+	public JdbcManager setParam(String name, Object value) {
+		namedParams.put(name, value);
 		return this;
 	}
 

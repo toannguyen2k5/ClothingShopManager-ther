@@ -58,7 +58,7 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SalesDetail> salesDetails = new ArrayList<>();
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_material", nullable = false) // tên cột khóa ngoại
 	private Material material;
 }

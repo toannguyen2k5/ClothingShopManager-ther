@@ -41,22 +41,22 @@ public class PriceService {
 
     // Lấy giá ACTIVE theo variant
     public List<Price> findActivePrices(ProductVariant variant) {
-        return priceRepository.findByProductVariantAndStatus(variant, 1);
+        return priceRepository.findByProductVariantAndStatus(variant, true);
     }
 
     // Tạo giá mới và vô hiệu hóa các giá cũ
     public Price createNewPrice(Price newPrice) {
         // Vô hiệu hoá tất cả các giá ACTIVE hiện tại
-        List<Price> activePrices = priceRepository.findByProductVariantAndStatus(newPrice.getProductVariant(), 1);
+        List<Price> activePrices = priceRepository.findByProductVariantAndStatus(newPrice.getProductVariant(), true);
         for (Price old : activePrices) {
-            old.setStatus(0); // INACTIVE
+            old.setStatus(false); // INACTIVE
         }
         priceRepository.saveAll(activePrices);
 
         // Gán ID, thời gian và lưu giá mới
         newPrice.setIdPrice(UUID.randomUUID().toString());
         newPrice.setDate(LocalDateTime.now());
-        newPrice.setStatus(1); // ACTIVE
+        newPrice.setStatus(true); // ACTIVE
 
         return priceRepository.save(newPrice);
     }

@@ -13,12 +13,15 @@ import com.example.shopmanager.entity.Product;
 import com.example.shopmanager.enums.Role;
 import com.example.shopmanager.security.CheckRole;
 import com.example.shopmanager.service.ProductService;
+import com.example.shopmanager.util.CommonUtil;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private CommonUtil commonUtil;
 
 	@GetMapping("/with-brand")
 	public ResponseEntity<List<Product>> getProductsWithBrand() {
@@ -28,8 +31,7 @@ public class ProductController {
 
 	@GetMapping("/{idUser}/get-list")
 	@CheckRole(allowedRoles = {Role.manager})
-	public ResponseEntity<List<Product>> getAllProductList(@PathVariable String idUser) {
-		List<Product> list = productService.findAll();
-		return ResponseEntity.ok(list);
+	public ResponseEntity<?> getAllProductList(@PathVariable String idUser) {
+		return commonUtil.ReturnReponse(productService.findAll(),null,null);
 	}
 }

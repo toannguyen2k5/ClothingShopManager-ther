@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductVariantDto extends ProductVariantBsDto {
-    private ProductBsDto product;
     private ColorBsDto color;
     private StyleBsDto style;
     private List<PriceBsDto> prices;

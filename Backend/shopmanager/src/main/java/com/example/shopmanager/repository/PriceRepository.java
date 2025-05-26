@@ -17,7 +17,7 @@ public interface PriceRepository extends JpaRepository<Price, String> {
     List<Price> findByProductVariant(ProductVariant variant);
 
     // Lấy các bản ghi giá ACTIVE theo variant
-    List<Price> findByProductVariantAndStatus(ProductVariant variant, int status);
+    List<Price> findByProductVariantAndStatus(ProductVariant variant, Boolean status);
 
     // Lấy bản ghi giá mới nhất (theo updated_at) cho variant
     Price findFirstByProductVariantOrderByDateDesc(ProductVariant variant);

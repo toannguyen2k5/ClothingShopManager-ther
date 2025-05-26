@@ -3,6 +3,7 @@ package com.example.shopmanager.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -30,6 +31,5 @@ public class Brand {
 	private String description;
 
 	@OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
-
 	private List<Product> products = new ArrayList<>();
 }
