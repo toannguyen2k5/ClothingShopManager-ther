@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.ClothingStoreManagementAPI.repository.UserRepository;
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
+import com.example.ClothingStoreManagementAPI.model.Enum.Role;
+
 import java.util.*;
 @Service
 public class UserService {
@@ -35,19 +37,26 @@ public class UserService {
 	}
 	public boolean InsertUsers(Users Users, List<MultipartFile> addimages) {
 		try {
+
 			String idcurrent = UserRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(Users.class);
+			if(!addimages.isEmpty()) {
+				List<String> pathAvatar = ImageService.InserImage("upload/user/", addimages, newId, "user");
+				if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
+			}
+			
 			Users.setIdUser(newId);
 			UserRepository.save(Users); // thêm brand vào csdl
 			UserRepository.flush();
-			List<String> pathAvatar = ImageService.InserImage("upload/user/", addimages, newId, "user");
-			if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
 			return UserRepository.existsById(newId); // trạng thái tồn tại của object mới
 		}
 		catch(Exception e) {
-			System.out.print("InsertColor, Error : " + e.getMessage());
+			System.out.print("Insert User, Error : " + e.getMessage());
 			return false;
 		}
+	}
+	public List<Users> getAllAdminsAndStaff() {
+	    return UserRepository.findByRoleNot(Role.customer); // loại bỏ customer
 	}
 	@Transactional
 	public boolean UpdateUsers(Users Users,HashMap<String,String> deleimages,List<MultipartFile> addimages) {
