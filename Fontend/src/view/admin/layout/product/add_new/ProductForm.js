@@ -2,45 +2,93 @@ import React from "react";
 import "./ProductForm.css";
 import { define_nav, urlapi } from "../../../../../setting/store/const";
 
-const convert = (arr, prefix) =>
-  arr.map((val, i) => ({
-    id: `${prefix}${String(i + 1).padStart(3, "0")}`,
-    value: val,
-  }));
-
 class ProductForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      importPrice: "",
-      salePrice: "",
-      selectedColor: "",
-      selectedSize: "",
-      description: "",
-      category: "",
-      supplier: "",
-      manufacturer: "",
-      discountCode: "",
-      mainImage: null,
-      subImages: [],
-      seriEntries: [],
-      modalOpen: false,
-      sizeModalOpen: false,
-      newSeri: "",
-      newSeriColor: "",
-      newSeriSize: "",
-      newSeriQty: "",
+      name: "", // v
+      importPrice: "", // v
+      salePrice: "", // v
+      selectedColor: "", // v
+      selectedSize: "", // v
+      description: "", // v
+      category: "", // v
+      supplier: "", // v
+      manufacturer: "", // v
+      mainImage: null, // v
+      subImages: [], // v
+      seriEntries: [], // v
+      modalOpen: false, // v
+      sizeModalOpen: false, // v
+      newSeri: "", // v
+      newSeriColor: "", // v
+      newSeriSize: "", // v
+      newSeriQty: "", // v
 
-      colors: convert(["Xanh Wash", "Xám Xanh Wash"], "C"),
-      sizes: convert(["29", "30", "31", "32", "34", "36"], "S"),
-      categories: convert(["Quần jean", "Aó thun", "Aó khoác"], "CT"),
-      suppliers: convert(["Công ty ABC", "Nhà cung cấp XYZ"], "SUP"),
-      manufacturers: convert(["Xưởng A", "Xưởng B"], "MNF"),
-      discountCodes: convert(["KM2024", "KM50"], "DC"),
+      colors: [], // v
+      sizes: [], // v
+      categories: [], // v
+      suppliers: [], // v
+      manufacturers: [], // v
     };
   }
-
+  componentDidMount = () => {
+    // lấy colors
+    fetch(urlapi + "/api/color/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ colors: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+    // lấy sizes
+    fetch(urlapi + "/api/Size/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ sizes: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+    // lấy danh mục
+    fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ categories: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+    // lấy nhà cung cấp
+    fetch(urlapi + "/api/Supplier/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ suppliers: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+    // lấy thương hiệu
+    fetch(urlapi + "/api/Brand/sellectAll/all/all/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          this.setState({ manufacturers: data.data });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  };
   handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
@@ -53,26 +101,12 @@ class ProductForm extends React.Component {
       this.setState({ [name]: value });
     }
   };
-  handleChangeImageMain = (e) => {
-    let file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("addimages", file);
-    const req = {
-      method: "POST",
-      body: formData,
-    };
-    fetch(urlapi + "/api/Image/upload1/product/P001", req)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "200") alert("Thêm Image Thành Công!");
-        console.log("Response từ server:", data);
-      })
-      .catch((error) => console.error("Lỗi POST:", error));
-  };
 
   handleSelectObject = (e, field, list) => {
     const selectedId = e.target.value;
-    const selected = list.find((item) => item.id === selectedId);
+    const selected = list.find(
+      (item) => item[Object.keys(item)[0]] === selectedId
+    );
     this.setState({ [field]: selected || "" });
   };
 
@@ -114,8 +148,11 @@ class ProductForm extends React.Component {
 
   renderOption = (list) =>
     list.map((item) => (
-      <option key={item.id} value={item.id}>
-        {item.value}
+      <option
+        key={item[Object.keys(item)[0]]}
+        value={item[Object.keys(item)[0]]}
+      >
+        {item[Object.keys(item)[1]]}
       </option>
     ));
 
@@ -133,19 +170,15 @@ class ProductForm extends React.Component {
       name,
       importPrice,
       salePrice,
-      selectedColor,
-      selectedSize,
       description,
       category,
       supplier,
       manufacturer,
-      discountCode,
       colors,
       sizes,
       categories,
       suppliers,
       manufacturers,
-      discountCodes,
       seriEntries,
       modalOpen,
       sizeModalOpen,
@@ -196,7 +229,7 @@ class ProductForm extends React.Component {
                 onChange={(e) =>
                   this.handleSelectObject(e, "category", categories)
                 }
-                value={category.id || ""}
+                value={category[Object.keys(category)[0]] || ""}
               >
                 <option value="">--Chọn--</option>
                 {this.renderOption(categories)}
@@ -209,7 +242,7 @@ class ProductForm extends React.Component {
                 onChange={(e) =>
                   this.handleSelectObject(e, "supplier", suppliers)
                 }
-                value={supplier.id || ""}
+                value={supplier[Object.keys(supplier)[0]] || ""}
               >
                 <option value="">--Chọn--</option>
                 {this.renderOption(suppliers)}
@@ -217,28 +250,15 @@ class ProductForm extends React.Component {
             </label>
 
             <label>
-              Nhà sản xuất:
+              Thương hiệu:
               <select
                 onChange={(e) =>
                   this.handleSelectObject(e, "manufacturer", manufacturers)
                 }
-                value={manufacturer.id || ""}
+                value={manufacturer[Object.keys(manufacturer)[0]] || ""}
               >
                 <option value="">--Chọn--</option>
                 {this.renderOption(manufacturers)}
-              </select>
-            </label>
-
-            <label>
-              Mã khuyến mãi:
-              <select
-                onChange={(e) =>
-                  this.handleSelectObject(e, "discountCode", discountCodes)
-                }
-                value={discountCode.id || ""}
-              >
-                <option value="">--Chọn--</option>
-                {this.renderOption(discountCodes)}
               </select>
             </label>
 
@@ -248,7 +268,7 @@ class ProductForm extends React.Component {
                 type="file"
                 name="mainImage"
                 accept="image/*"
-                onChange={this.handleChangeImageMain}
+                onChange={this.handleChange}
               />
             </label>
 
@@ -316,7 +336,7 @@ class ProductForm extends React.Component {
                     onChange={(e) =>
                       this.handleSelectObject(e, "newSeriColor", colors)
                     }
-                    value={newSeriColor.id || ""}
+                    value={newSeriColor[Object.keys(newSeriColor)[0]] || ""}
                   >
                     <option value="">--Chọn--</option>
                     {this.renderOption(colors)}
@@ -328,7 +348,7 @@ class ProductForm extends React.Component {
                     onChange={(e) =>
                       this.handleSelectObject(e, "newSeriSize", sizes)
                     }
-                    value={newSeriSize.id || ""}
+                    value={newSeriSize[Object.keys(newSeriSize)[0]] || ""}
                   >
                     <option value="">--Chọn--</option>
                     {this.renderOption(sizes)}
