@@ -1,74 +1,24 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
+import { urlapi } from "../../../../../setting/store/const";
 import "./style.css";
 import { define_nav } from "../../../../../setting/store/const";
 
-const mockProducts = [
-  {
-    id: 1,
-    id_ncc: "NCC001",
-    ten_san_pham: "Áo Hoodie Nam",
-    id_style: "STYLE123",
-    id_danh_muc: "DM01",
-    trang_thai: "Còn hàng",
-    so_luong: 50,
-    gia_nhap: 120000,
-    gia_ban: 199000,
-  },
-  {
-    id: 2,
-    id_ncc: "NCC002",
-    ten_san_pham: "Quần Jean Nữ",
-    id_style: "STYLE456",
-    id_danh_muc: "DM02",
-    trang_thai: "Hết hàng",
-    so_luong: 0,
-    gia_nhap: 150000,
-    gia_ban: 259000,
-  },
-  {
-    id: 3,
-    id_ncc: "NCC003",
-    ten_san_pham: "Áo thun trắng",
-    id_style: "STYLE789",
-    id_danh_muc: "DM01",
-    trang_thai: "Còn hàng",
-    so_luong: 20,
-    gia_nhap: 80000,
-    gia_ban: 150000,
-  },
+let mockProducts = [
 ];
 
 const columns = [
   { name: "ID", selector: (row) => row.id, sortable: true },
-  { name: "ID NCC", selector: (row) => row.id_ncc },
+  { name: "tên ncc", selector: (row) => row.id_ncc },
   { name: "Tên SP", selector: (row) => row.ten_san_pham, sortable: true },
-  { name: "ID Style", selector: (row) => row.id_style },
-  { name: "ID Danh Mục", selector: (row) => row.id_danh_muc },
+  { name: "Style", selector: (row) => row.id_style },
+  { name: "Danh Mục", selector: (row) => row.id_danh_muc },
   { name: "Trạng Thái", selector: (row) => row.trang_thai },
   { name: "Số Lượng", selector: (row) => row.so_luong },
   {
-    name: "Giá Nhập",
-    selector: (row) => `${row.gia_nhap.toLocaleString()}đ`,
-  },
-  {
     name: "Giá Bán",
     selector: (row) => `${row.gia_ban.toLocaleString()}đ`,
-  },
-  {
-    name: "Hành Động",
-    cell: (row) => (
-      <>
-        <button className="bg-yellow-400 text-white px-2 py-1 rounded mr-2">
-          Sửa
-        </button>
-        <button className="bg-red-500 text-white px-2 py-1 rounded">Xoá</button>
-      </>
-    ),
-    ignoreRowClick: true,
-    allowOverflow: true,
-    button: true,
-  },
+  }
 ];
 
 class ProductListClass extends Component {
@@ -84,11 +34,34 @@ class ProductListClass extends Component {
   }
 
   componentDidMount() {
-    // fetch('/api/products')...
-    this.setState({
-      allProducts: mockProducts,
-      filteredProducts: mockProducts,
-    });
+  fetch(`${urlapi}/api/product/sellectAll/all/all/`)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Dữ liệu nhận được:", data);
+    if(data.status && data.status == "200"){
+      data.data.map((item,index)=>{
+        mockProducts = [...mockProducts,{
+          id: item.idProduct,
+          id_ncc: item.nameBrand,
+          ten_san_pham: item.nameProduct,
+          id_style: item.nameStyle,
+          id_danh_muc: item.nameCategory,
+          trang_thai: item.status,
+          so_luong: 20,
+          gia_nhap: 80000,
+          gia_ban: item.price,
+        }]
+      })
+      this.setState({
+        allProducts: mockProducts,
+        filteredProducts: mockProducts,
+      });
+    }
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error("Lỗi khi fetch:", error);
+  });
   }
 
   handleSearch = (e) => {

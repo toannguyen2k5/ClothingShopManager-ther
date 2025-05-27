@@ -13,6 +13,7 @@ public class ProductDTO {
 	private String nameProduct;
 	private String nameBrand;
 	private String nameCategory;
+	private String nameSupplier;
 	private String nameStyle;
 	private String nameMaterial;
 	private Integer price;

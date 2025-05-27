@@ -9,6 +9,7 @@ import java.util.*;
 public class ProductImageService {
 	@Autowired
 	private ProductImageRepository ProductImageRepository;
+	@Autowired
 	private Common common;
 	public List<ProductImage> SellectProductImageByIdProduct(String idProduct) {
 		try {

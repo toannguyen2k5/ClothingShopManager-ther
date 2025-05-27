@@ -37,9 +37,10 @@ public class ProductService {
 		try {
 			Query query = entityManager.createQuery(
 				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ProductDTO(" +
-				    "p.idProduct, p.nameProduct,b.nameBrand,pc.nameCategory,s.nameStyle,pm.nameMaterial, pe.price, d.decrease, pi.path, p.status) " +
+				    "p.idProduct, p.nameProduct,b.nameBrand,pc.nameCategory,sup.nameSupplier,s.nameStyle,pm.nameMaterial, pe.price, d.decrease, pi.path, p.status) " +
 				    "FROM Product p " +
 				    "INNER JOIN Brand b ON p.idBrand = b.idBrand "+
+				    "INNER JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
 				    "INNER JOIN ProductCategory pc ON pc.idCategory = p.idCategory "+
 				    "INNER JOIN Style s On s.idStyle = p.idStyle "+
 				    "INNER JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial "+
@@ -113,19 +114,20 @@ public class ProductService {
 			return null;
 		}
 	}
-	public boolean InserProduct (Product Product, List<MultipartFile> addimages) {
+	public String InserProduct (Product Product, MultipartFile mainImage, List<MultipartFile> subImages) {
 		try {
 			String idcurrent = productRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(Product.class);
 			Product.setIdProduct(newId);
 			productRepository.save(Product); // thêm brand vào csdl
 			productRepository.flush();
-			ImageService.InserImage("upload/product/", addimages, newId, "product");
-			return productRepository.existsById(newId); // trạng thái tồn tại của object mới
+			if(mainImage!=null && !mainImage.isEmpty())ImageService.InserImage("upload/product/",Collections.singletonList(mainImage), newId, "product",true);
+			if(subImages!=null && !subImages.isEmpty())ImageService.InserImage("upload/product/", subImages, newId, "product",false);
+			return productRepository.existsById(newId)?newId:""; // trạng thái tồn tại của object mới
 		}
 		catch(Exception e) {
 			System.out.print("InserProduct, Error : " + e.getMessage());
-			return false;
+			return "";
 		}
 	}
 	public boolean InserProduct (Product Product) {
@@ -143,9 +145,9 @@ public class ProductService {
 		}
 	}
 	@Transactional
-	public boolean UpdateProduct (Product Product,HashMap<String,String> deleimages,List<MultipartFile> addimages) {
+	public boolean UpdateProduct (Product Product,HashMap<String,String> deleimages,List<MultipartFile> addimages,boolean IsMain) {
 		try {
-			ImageService.uploadImages(deleimages, addimages, "product", Product.getIdProduct());
+			ImageService.uploadImages(deleimages, addimages, "product", Product.getIdProduct(),IsMain);
 			return productRepository.UpdateProduct(Product.getIdProduct(),Product.getNameProduct(),Product.getIdStyle(),Product.getIdMaterial(),
 					Product.getIdBrand(),Product.getIdCategory(),Product.isStatus(),Product.getDescription())>0;
 		}

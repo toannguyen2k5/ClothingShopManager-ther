@@ -27,14 +27,14 @@ public class ImageService {
 		}
 	}
 	// cai key-value cua deleimage ung voi idimage va path còn những cái khác thì key là 1 giá trị tăng dần
-	public List<String> uploadImages(HashMap<String,String> deleimages,List<MultipartFile> addimages , String ScopeName, String id) {
+	public List<String> uploadImages(HashMap<String,String> deleimages,List<MultipartFile> addimages , String ScopeName, String id, boolean isMain) {
 		DeleteImage(deleimages,ScopeName.toLowerCase());
-    	return InserImage("upload/"+ScopeName.toLowerCase()+"/",addimages,id,ScopeName.toLowerCase());
+    	return InserImage("upload/"+ScopeName.toLowerCase()+"/",addimages,id,ScopeName.toLowerCase(),isMain);
     }
-	public List<String> uploadImages(List<MultipartFile> addimages , String ScopeName, String id) {
-    	return InserImage("upload/"+ScopeName.toLowerCase()+"/",addimages,id,ScopeName.toLowerCase());
+	public List<String> uploadImages(List<MultipartFile> addimages , String ScopeName, String id , boolean isMain) {
+    	return InserImage("upload/"+ScopeName.toLowerCase()+"/",addimages,id,ScopeName.toLowerCase(),isMain);
     }
-	public List<String> InserImage(String path , List<MultipartFile> addimages, String id,String ScopeName) {
+	public List<String> InserImage(String path , List<MultipartFile> addimages, String id,String ScopeName, boolean isMain) {
 		List<String> uploadedFileNames = new ArrayList<>();
 		try {
 				for (MultipartFile file : addimages) {
@@ -44,7 +44,10 @@ public class ImageService {
 		                Files.createDirectories(paths.getParent()); // Ensure directory exists
 		                Files.copy(file.getInputStream(), paths, StandardCopyOption.REPLACE_EXISTING);
 		                uploadedFileNames.add(path+filename);
-		                if(ScopeName.equals("product"))ProductImageService.InsertProductImage(new ProductImage(null,id,path+filename,false));
+		                if(ScopeName.equals("product")) {
+		                	if(isMain) ProductImageService.InsertProductImage(new ProductImage(null,id,path+filename,true));
+		                	else ProductImageService.InsertProductImage(new ProductImage(null,id,path+filename,false));
+		                }
 		            }
 		        }
 				return uploadedFileNames;

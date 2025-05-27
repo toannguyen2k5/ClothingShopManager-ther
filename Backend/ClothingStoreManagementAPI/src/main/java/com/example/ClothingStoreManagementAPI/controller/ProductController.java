@@ -8,6 +8,7 @@ import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.Product;
+import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +50,18 @@ public class ProductController {
 	}
 	// thêm hoặc chỉnh sửa sản phẩm
 	@PostMapping("inserProduct")
-	public ResponseEntity<?> InserOrUpdateProduct(@RequestBody Product product,@RequestParam List<MultipartFile> addimages){
-		return ResponseEntity.ok(common.ReturnReponse(ProductService.InserProduct(product,addimages), "Insert", "product"));
+	public ResponseEntity<?> InserOrUpdateProduct(@ModelAttribute InsertProductData InsertProductData){
+		Product newProduct = new Product();
+		newProduct.setDescription(InsertProductData.getDescription());
+		newProduct.setNameProduct(InsertProductData.getNameProduct());
+		newProduct.setIdStyle(InsertProductData.getIdStyle());
+		newProduct.setIdMaterial(InsertProductData.getIdMaterial());
+		newProduct.setIdBrand(InsertProductData.getIdBrand());
+		newProduct.setIdCategory(InsertProductData.getIdCategory());
+		newProduct.setIdSupplier(InsertProductData.getIdSupplier());
+		newProduct.setDescription(InsertProductData.getDescription());
+		newProduct.setStatus(true);
+		return ResponseEntity.ok(common.ReturnReponse(ProductService.InserProduct( newProduct,InsertProductData.getMainImage(),InsertProductData.getSubImages()), "Insert", "product"));
 	}
 	@PostMapping("insertProductFormSlip")
 	public ResponseEntity<?> InserOrUpdateProduct(@RequestBody Product Product){
@@ -58,5 +69,7 @@ public class ProductController {
 	}
 	@PostMapping("updateProduct")
 	public ResponseEntity<?> UpdateProduct(@RequestBody Product product,@RequestParam HashMap<String,String> deleimages,@RequestParam List<MultipartFile> addimages){
-		return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,deleimages,addimages), "Update", "product"));	} 
+		if(addimages.size()==1)return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,deleimages,addimages,true), "Update", "product"));
+		else return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,deleimages,addimages,false), "Update", "product"));
+	} 
 }

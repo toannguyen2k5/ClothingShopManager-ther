@@ -13,6 +13,8 @@ class ProductForm extends React.Component {
       selectedSize: "", // v
       description: "", // v
       category: "", // v
+      style:"",
+      Material:"",
       supplier: "", // v
       manufacturer: "", // v
       mainImage: null, // v
@@ -24,7 +26,8 @@ class ProductForm extends React.Component {
       newSeriColor: "", // v
       newSeriSize: "", // v
       newSeriQty: "", // v
-
+      Materials:[],
+      styles : [],
       colors: [], // v
       sizes: [], // v
       categories: [], // v
@@ -88,6 +91,28 @@ class ProductForm extends React.Component {
         console.log(data);
       })
       .catch((error) => console.error(error));
+      // lấy style
+    fetch(urlapi + "/api/Style/sellectAll/all/all/")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status && data.status === "200") {
+        console.log("data : ", data);
+        this.setState({ styles: data.data });
+      }
+      console.log(data);
+    })
+    .catch((error) => console.error(error));
+    // lấy chất liệu
+    fetch(urlapi + "/api/ProductMaterial/sellectAll/all/all/")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status && data.status === "200") {
+        console.log("data : ", data);
+        this.setState({ Materials: data.data });
+      }
+      console.log(data);
+    })
+    .catch((error) => console.error(error));
   };
   handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -142,7 +167,98 @@ class ProductForm extends React.Component {
       );
     }
   };
-  addInforToDataBase = () => {};
+  addPrice = async  (idpr,date,pce,stus) =>{
+    const req = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idPrice: null,
+        idProduct: idpr,
+        dateUpdate: date,
+        price : pce,
+        status:stus,
+      }),
+    };
+    await fetch(`${urlapi}/api/Price/insertPrice`, req)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data price :",data.data);
+      })
+      .catch((error) => console.error(error));
+  }
+  addDetaiProduct = async (Seri,idSi,dayImp,stus,idPro,seStatus,idCo) =>{
+    const req = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idDetail: null,
+        numberSeri: Seri,
+        idSize: idSi,
+        dayImport : dayImp,
+        status:stus,
+        idProduct : idPro,
+        sellStatus : seStatus,
+        idColor : idCo
+      }),
+    };
+    await fetch(`${urlapi}/api/detailproduct/insert`, req)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data detail :",data.data);
+      })
+      .catch((error) => console.error(error));
+  }
+  addInforToDataBase = () => {
+    // thêm dữ liệu vào bảng
+    console.log("data state :" ,this.state);
+    const formData = new FormData();
+    formData.append("nameProduct",this.state.name);
+    formData.append("idStyle", this.state.style.idStyle);
+    formData.append("idMaterial", this.state.Material.idMaterial);
+    formData.append("idBrand", this.state.manufacturer.idBrand);
+    formData.append("idCategory", this.state.category.idCategory);
+    formData.append("idSupplier", this.state.supplier.idSupplier);
+    formData.append("description", this.state.description);
+    if (this.state.mainImage) {
+      formData.append("mainImage", this.state.mainImage);
+    }
+    if (this.state.subImages) {
+      for (let i = 0; i < this.state.subImages.length; i++) {
+        formData.append("subImages", this.state.subImages[i]);  // Tên field phải khớp với backend
+      }
+    }
+    // Gửi request
+    fetch(`${urlapi}/api/product/inserProduct`, {
+      method: "POST",
+      body: formData
+    })
+      .then(res => res.json())
+      .then(data => {
+        const idProduct = data.data;
+        if (idProduct !== "") {
+          const isoDate = new Date().toISOString().split('T')[0];
+          console.log("date:", isoDate);
+          let statusAdd = true;
+          this.addPrice(idProduct, isoDate, this.state.importPrice, false);
+          this.addPrice(idProduct, isoDate, this.state.salePrice, true);
+          for (const item of this.state.seriEntries) {
+              this.addDetaiProduct(
+              item.seri,
+              item.size.idSize,
+              isoDate,
+              true,
+              idProduct,
+              true,
+              item.color.idColor
+            );
+          }
+          alert("Thêm sản phẩm mới thành công !");
+        } else {
+          alert("Thêm sản phẩm mới thất bại !");
+        }
+        console.log("Response:", data.data)})
+      .catch(err => console.error("Error:", err));      
+  };
   openSizeModal = () => {
     this.setState({ sizeModalOpen: true });
   };
@@ -177,9 +293,13 @@ class ProductForm extends React.Component {
       salePrice,
       description,
       category,
+      style,
       supplier,
       manufacturer,
+      Material,
+      Materials,
       colors,
+      styles,
       sizes,
       categories,
       suppliers,
@@ -240,7 +360,18 @@ class ProductForm extends React.Component {
                 {this.renderOption(categories)}
               </select>
             </label>
-
+            <label>
+              Style:
+              <select
+                onChange={(e) =>
+                  this.handleSelectObject(e, "style", styles)
+                }
+                value={style[Object.keys(style)[0]] || ""}
+              >
+                <option value="">--Chọn--</option>
+                {this.renderOption(styles)}
+              </select>
+            </label>
             <label>
               Nhà cung cấp:
               <select
@@ -255,6 +386,18 @@ class ProductForm extends React.Component {
             </label>
 
             <label>
+              Chất Liệu:
+              <select
+                onChange={(e) =>
+                  this.handleSelectObject(e, "Material", Materials)
+                }
+                value={Material[Object.keys(Material)[0]] || ""}
+              >
+                <option value="">--Chọn--</option>
+                {this.renderOption(Materials)}
+              </select>
+            </label>
+            <label>
               Thương hiệu:
               <select
                 onChange={(e) =>
@@ -266,7 +409,6 @@ class ProductForm extends React.Component {
                 {this.renderOption(manufacturers)}
               </select>
             </label>
-
             <label>
               Hình chính:
               <input
@@ -322,7 +464,7 @@ class ProductForm extends React.Component {
               ))}
             </ul>
 
-            <button type="submit" className="submit-btn">
+            <button type="submit" className="submit-btn" onClick={this.addInforToDataBase}>
               Tạo sản phẩm
             </button>
           </form>

@@ -23,12 +23,12 @@ public class ImageController {
 	@Autowired
 	private ImageService ImageService;
 	@PostMapping("/upload/{ScopeName}/{id}")
-	 public ResponseEntity<?> uploadImages(@PathVariable String ScopeName,@PathVariable String id,@RequestParam HashMap<String,String> deleimages,@RequestParam List<MultipartFile> addimages) {
-        return ResponseEntity.ok(common.ReturnReponse(ImageService.uploadImages(deleimages,addimages,ScopeName,id), "Upload", "image"));
+	 public ResponseEntity<?> uploadImages(@PathVariable String ScopeName,@PathVariable String id,@RequestParam HashMap<String,String> deleimages,@RequestParam List<MultipartFile> addimages,@RequestParam boolean IsMain) {
+        return ResponseEntity.ok(common.ReturnReponse(ImageService.uploadImages(deleimages,addimages,ScopeName,id,IsMain), "Upload", "image"));
     }
 	@PostMapping("/upload1/{ScopeName}/{id}")
-	 public ResponseEntity<?> uploadImages(@PathVariable String ScopeName,@PathVariable String id,@RequestParam List<MultipartFile> addimages) {
-       return ResponseEntity.ok(common.ReturnReponse(ImageService.uploadImages(addimages,ScopeName,id), "Upload", "image"));
+	 public ResponseEntity<?> uploadImages(@PathVariable String ScopeName,@PathVariable String id,@RequestParam List<MultipartFile> addimages,@RequestParam boolean IsMain) {
+       return ResponseEntity.ok(common.ReturnReponse(ImageService.uploadImages(addimages,ScopeName,id,IsMain), "Upload", "image"));
 	}
 	@GetMapping("/Get/{ScopeName}/{id}")
 	public ResponseEntity<?> GetImage(@PathVariable String ScopeName,@PathVariable String id){

@@ -41,7 +41,7 @@ public class UserService {
 			String idcurrent = UserRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(Users.class);
 			if(!addimages.isEmpty()) {
-				List<String> pathAvatar = ImageService.InserImage("upload/user/", addimages, newId, "user");
+				List<String> pathAvatar = ImageService.InserImage("upload/user/", addimages, newId, "user",true);
 				if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
 			}
 			
@@ -61,7 +61,7 @@ public class UserService {
 	@Transactional
 	public boolean UpdateUsers(Users Users,HashMap<String,String> deleimages,List<MultipartFile> addimages) {
 		try {
-			List<String> pathAvatar = ImageService.uploadImages(deleimages, addimages, "user", Users.getIdUser());
+			List<String> pathAvatar = ImageService.uploadImages(deleimages, addimages, "user", Users.getIdUser(),true);
 			if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
 			return UserRepository.UpdateUsers(Users.getIdUser(),Users.getUsername(),Users.getPassword(),Users.isStatus(),Users.getRole().toString(),Users.getFullName(),
 					Users.getAddress(),Users.getBirthDay(),Users.isGender(),Users.getEmail(),Users.getPhoneNumber(),Users.getPathAvatar())>0;
