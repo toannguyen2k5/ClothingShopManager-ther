@@ -119,25 +119,30 @@ class ProductForm extends React.Component {
     const { newSeri, newSeriColor, newSeriSize, newSeriQty, seriEntries } =
       this.state;
     if (newSeri && newSeriColor && newSeriSize && newSeriQty) {
-      this.setState({
-        seriEntries: [
-          ...seriEntries,
-          {
-            seri: newSeri,
-            color: newSeriColor,
-            size: newSeriSize,
-            qty: newSeriQty,
-          },
-        ],
-        newSeri: "",
-        newSeriColor: "",
-        newSeriSize: "",
-        newSeriQty: "",
-        modalOpen: false,
-      });
+      this.setState(
+        {
+          seriEntries: [
+            ...seriEntries,
+            {
+              seri: newSeri,
+              color: newSeriColor,
+              size: newSeriSize,
+              qty: newSeriQty,
+            },
+          ],
+          newSeri: "",
+          newSeriColor: "",
+          newSeriSize: "",
+          newSeriQty: "",
+          modalOpen: false,
+        },
+        () => {
+          console.log("Dữ liệu sau khi cập nhật:", this.state.seriEntries);
+        }
+      );
     }
   };
-
+  addInforToDataBase = () => {};
   openSizeModal = () => {
     this.setState({ sizeModalOpen: true });
   };
@@ -302,13 +307,17 @@ class ProductForm extends React.Component {
               <button type="button" onClick={this.openSizeModal}>
                 Quản lý Size mở rộng
               </button>
+              <button type="button" onClick={this.openSizeModal}>
+                Quản lý Color mở rộng
+              </button>
             </div>
 
             <ul className="seri-list">
               {seriEntries.map((item, idx) => (
                 <li key={idx}>
-                  {item.seri} - {item.color?.value} - {item.size?.value} - SL:{" "}
-                  {item.qty}
+                  SERI: {item.seri} - COLOR: {item.color?.nameColor} - SIZE
+                  {": "}
+                  {item.size?.nameSize} - SL: {item.qty}
                 </li>
               ))}
             </ul>
