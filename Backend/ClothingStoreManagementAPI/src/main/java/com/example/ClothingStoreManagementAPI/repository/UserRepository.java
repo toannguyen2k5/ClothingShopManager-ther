@@ -8,12 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
-
+import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, String> {
+	
+	List<Users> findByRoleNot(Role role);
+	
 	// trả về id người dùng lớn nhất
 	@Query("SELECT MAX(idUser) FROM Users")
 	String SelectMaxId();
