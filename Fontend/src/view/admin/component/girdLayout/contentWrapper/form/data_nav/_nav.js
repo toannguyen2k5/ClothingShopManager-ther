@@ -51,21 +51,14 @@ export const nav = [
           {
             id_sub_nav: "subnav004",
             nav_sub_name: "Danh sách đơn hàng",
-            nav_sub_to: "/admin/manager/order/list",
+            nav_sub_to: "/admin/manager/order/export/list",
             nav_sub_icon: "",
             role_level:5,
           },
           {
             id_sub_nav: "subnav005",
-            nav_sub_name: "Xem chi tiết từng đơn hàng",
-            nav_sub_to: "/admin/manager/order/detail/",
-            nav_sub_icon: "",
-            role_level:5,
-          },
-          {
-            id_sub_nav: "subnav006",
-            nav_sub_name: "Cập nhật trạng thái đơn hàng",
-            nav_sub_to: "/admin/manager/order/update_status/",
+            nav_sub_name: "Tạo mới đơn hàng",
+            nav_sub_to: "/admin/manager/order/export/new/",
             nav_sub_icon: "",
             role_level:5,
           },
@@ -131,7 +124,7 @@ export const nav = [
         nav_name: "Quản trị viên",
         nav_icon: "fa fa-area-chart",
         nav_to: "#",
-        role_level:5,
+        role_level:99,
         nav_sub_arr: [
           {
             id_sub_nav: "subnav013",

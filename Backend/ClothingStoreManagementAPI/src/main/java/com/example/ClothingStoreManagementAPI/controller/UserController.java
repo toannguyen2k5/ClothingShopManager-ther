@@ -62,6 +62,17 @@ public class UserController {
 		return ResponseEntity.ok(common.ReturnReponse(result, "Insert", "Users"));
 	}
 
+	@PutMapping("/{id}/status")
+	public ResponseEntity<?> updateUserStatus(@PathVariable("id") String idUser,
+			@RequestParam("status") boolean status) {
+
+		boolean updated = UsersService.updateUserStatus(idUser, status);
+		if (updated)
+			return ResponseEntity.ok(common.ReturnReponse((status ? "Mở " : "") + "Khóa Tài Khoản Thành Công", null, null));
+		else
+			return ResponseEntity.ok(common.ReturnReponse(null, null, null));
+	}
+
 	@PostMapping("/insertUsers")
 	public ResponseEntity<?> InsertUsers(@RequestBody Users Users, @RequestParam List<MultipartFile> addimages) {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, addimages), "Insert", "Users"));

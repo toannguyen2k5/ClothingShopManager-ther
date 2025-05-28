@@ -29,12 +29,12 @@ export default class AdminManager extends Component {
     };
   }
 
-  getAllAdminsAndStaff = ()=>{
+  getAllAdminsAndStaff = () => {
     fetch(urlapi + "/api/Users/getAllAdminsAndStaff")
       .then((response) => response.json())
       .then((data) => this.setState({ admins: data.data }))
       .catch((error) => console.error(error));
-  }
+  };
 
   componentDidMount() {
     this.getAllAdminsAndStaff();
@@ -84,7 +84,7 @@ export default class AdminManager extends Component {
     try {
       const formData = new FormData();
       formData.append("username", newAdmin.username);
-      formData.append("password", md5("Pass"+newAdmin.phoneNumber+"!"));
+      formData.append("password", md5("Pass" + newAdmin.phoneNumber + "!"));
       formData.append("fullName", newAdmin.fullName);
       formData.append("email", newAdmin.email);
       formData.append("status", newAdmin.status);
@@ -116,12 +116,18 @@ export default class AdminManager extends Component {
     }
   };
 
-  hideAdmin = (id) => {
-    this.setState((prev) => ({
-      admins: prev.admins.map((admin) =>
-        admin.id === id ? { ...admin, status: "Ẩn" } : admin
-      ),
-    }));
+  hideAdmin = (id, status) => {
+    fetch(`${urlapi}/api/Users/${id}/status?status=${!status}`, {
+      method: "PUT",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200")
+          this.getAllAdminsAndStaff();
+      })
+      .catch((error) => {
+        alert("Có lỗi xảy ra khi cập nhật trạng thái.");
+      });
   };
   handleFilterChange = (e) => {
     const { value } = e.target;
@@ -178,15 +184,26 @@ export default class AdminManager extends Component {
       { name: "Địa Chỉ", selector: (row) => row.address },
       {
         name: "Trạng thái",
-        selector: (row) => (row.status ? "Hoạt động" : "Ẩn"),
+        selector: (row) => (row.status ? "Hoạt động" : "Khóa"),
       },
       {
         name: "Hành động",
-        cell: (row) => (
-          <button onClick={() => this.hideAdmin(row.id)} className="btn-hide">
-            Ẩn
-          </button>
-        ),
+        cell: (row) =>
+          row.status ? (
+            <button
+              onClick={() => this.hideAdmin(row.idUser, row.status)}
+              className="btn-hide"
+            >
+              Khóa
+            </button>
+          ) : (
+            <button
+              onClick={() => this.hideAdmin(row.idUser, row.status)}
+              className="btn-hide"
+            >
+              Mở
+            </button>
+          ),
         width: "100px",
       },
     ];
