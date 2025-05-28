@@ -33,7 +33,9 @@ class NavItem extends Component {
                 </h6>
               </li>
             ) : null}
-            {item.nav_arr.map((nav_sub_item, index_nav_sub_item) => (
+            {item.nav_arr.filter(
+              (item_nav) => this.props.state_data?.user_info?.role_level >= item_nav.role_level
+            ).map((nav_sub_item, index_nav_sub_item) => (
               <>
                 <li
                   class={

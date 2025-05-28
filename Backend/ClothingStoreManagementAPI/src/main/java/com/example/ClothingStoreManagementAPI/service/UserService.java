@@ -35,6 +35,11 @@ public class UserService {
 			return null;
 		}
 	}
+	
+	public boolean updateUserStatus(String idUser, boolean status) {
+        return UserRepository.updateStatusById(idUser, status) > 0;
+    }
+	
 	public boolean InsertUsers(Users Users, List<MultipartFile> addimages) {
 		try {
 

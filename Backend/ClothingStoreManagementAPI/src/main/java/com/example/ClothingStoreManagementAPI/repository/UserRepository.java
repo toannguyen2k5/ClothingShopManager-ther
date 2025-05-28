@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
 import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -48,4 +50,11 @@ public interface UserRepository extends JpaRepository<Users, String> {
 	int UpdateUsers(@Param("idUser") String idUser ,@Param("username") String username ,@Param("password") String password ,@Param("status") boolean status ,
 			@Param("role") String role ,@Param("fullName") String fullName ,@Param("address") String address ,@Param("birthDay") LocalDate birthDay ,@Param("gender") boolean gender ,
 			@Param("email") String email ,@Param("phoneNumber") String phoneNumber ,@Param("pathAvatar") String pathAvatar);
+	
+	@Modifying
+    @Transactional
+    @Query("UPDATE Users u SET u.status = :status WHERE u.idUser = :idUser")
+    int updateStatusById(String idUser, boolean status);
+	
+	
 }

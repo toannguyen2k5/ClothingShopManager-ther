@@ -23,6 +23,9 @@ const UpdateProduct = React.lazy(() =>
 const PurchaseSlipManager = React.lazy(() =>
   import("../../view/admin/layout/order/input/new/PurchaseSlipManager")
 );
+const CreateSalesSlip = React.lazy(() =>
+  import("../../view/admin/layout/order/export/new/CreateSalesSlip")
+);
 const PurchaseSlipList = React.lazy(() =>
   import("../../view/admin/layout/order/input/list/PurchaseSlipList")
 );
@@ -140,7 +143,7 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: AdminManager,
-    role_level: 5
+    role_level: 99
   },
 
   {
@@ -155,6 +158,13 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: PurchaseSlipList,
+    role_level: 5
+  },
+  {
+    path: "/admin/manager/order/export/new/",
+    exact: true,
+    name: "Form Search",
+    component: CreateSalesSlip,
     role_level: 5
   },
   {
