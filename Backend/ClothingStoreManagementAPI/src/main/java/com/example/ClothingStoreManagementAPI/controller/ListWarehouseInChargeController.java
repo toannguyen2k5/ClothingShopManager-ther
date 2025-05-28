@@ -13,6 +13,10 @@ public class ListWarehouseInChargeController {
 	private ListWarehouseInChargeService ListWarehouseInChargeService;
 	@Autowired
 	private Common common;
+	@GetMapping("/sellect")
+	public ResponseEntity<?> sellect(@RequestParam String idStaff){
+		return ResponseEntity.ok(common.ReturnReponse(ListWarehouseInChargeService.SellectListWarehouseInCharge(idStaff), "Insert", "ListWarehouseInCharge"));
+	}
 	@PostMapping("/insertListWarehouseInCharge")
 	public ResponseEntity<?> InsertListWarehouseInCharge(@RequestBody ListWarehouseInCharge ListWarehouseInCharge){
 		return ResponseEntity.ok(common.ReturnReponse(ListWarehouseInChargeService.InsertListWarehouseInCharge(ListWarehouseInCharge), "Insert", "ListWarehouseInCharge"));

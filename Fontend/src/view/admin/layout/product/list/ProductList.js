@@ -4,8 +4,7 @@ import { urlapi } from "../../../../../setting/store/const";
 import "./style.css";
 import { define_nav } from "../../../../../setting/store/const";
 
-let mockProducts = [
-];
+let mockProducts = [];
 
 const columns = [
   { name: "ID", selector: (row) => row.id, sortable: true },
@@ -13,12 +12,12 @@ const columns = [
   { name: "Tên SP", selector: (row) => row.ten_san_pham, sortable: true },
   { name: "Style", selector: (row) => row.id_style },
   { name: "Danh Mục", selector: (row) => row.id_danh_muc },
-  { name: "Trạng Thái", selector: (row) => row.trang_thai },
+  { name: "Trạng Thái Bán", selector: (row) => (row.trang_thai ? "✔️" : "❌") },
   { name: "Số Lượng", selector: (row) => row.so_luong },
   {
     name: "Giá Bán",
     selector: (row) => `${row.gia_ban.toLocaleString()}đ`,
-  }
+  },
 ];
 
 class ProductListClass extends Component {
@@ -34,34 +33,36 @@ class ProductListClass extends Component {
   }
 
   componentDidMount() {
-  fetch(`${urlapi}/api/product/sellectAll/all/all/`)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log("Dữ liệu nhận được:", data);
-    if(data.status && data.status == "200"){
-      data.data.map((item,index)=>{
-        mockProducts = [...mockProducts,{
-          id: item.idProduct,
-          id_ncc: item.nameBrand,
-          ten_san_pham: item.nameProduct,
-          id_style: item.nameStyle,
-          id_danh_muc: item.nameCategory,
-          trang_thai: item.status,
-          so_luong: 20,
-          gia_nhap: 80000,
-          gia_ban: item.price,
-        }]
+    fetch(`${urlapi}/api/product/sellectAll/all/all/`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Dữ liệu nhận được:", data);
+        if (data.status && data.status == "200") {
+          data.data.map((item, index) => {
+            mockProducts = [
+              ...mockProducts,
+              {
+                id: item.idProduct,
+                id_ncc: item.nameBrand,
+                ten_san_pham: item.nameProduct,
+                id_style: item.nameStyle,
+                id_danh_muc: item.nameCategory,
+                trang_thai: item.status,
+                so_luong: item.quantity || 0,
+                gia_ban: item.price,
+              },
+            ];
+          });
+          this.setState({
+            allProducts: mockProducts,
+            filteredProducts: mockProducts,
+          });
+        }
+        console.log(data);
       })
-      this.setState({
-        allProducts: mockProducts,
-        filteredProducts: mockProducts,
+      .catch((error) => {
+        console.error("Lỗi khi fetch:", error);
       });
-    }
-    console.log(data);
-  })
-  .catch((error) => {
-    console.error("Lỗi khi fetch:", error);
-  });
   }
 
   handleSearch = (e) => {
@@ -95,12 +96,15 @@ class ProductListClass extends Component {
   };
 
   render() {
-      if (this.props.state_data.current_page.name !== define_nav.admin.listproduct.name)
-            this.props.actions.current_page({
-              name_new: define_nav.admin.listproduct.name,
-              path_new: define_nav.admin.listproduct.path,
-              old_page: this.props.state_data.current_page,
-            });
+    if (
+      this.props.state_data.current_page.name !==
+      define_nav.admin.listproduct.name
+    )
+      this.props.actions.current_page({
+        name_new: define_nav.admin.listproduct.name,
+        path_new: define_nav.admin.listproduct.path,
+        old_page: this.props.state_data.current_page,
+      });
     return (
       <div className="row">
         <div className="flex flex-wrap gap-4 mb-4">
@@ -108,7 +112,7 @@ class ProductListClass extends Component {
             onChange={this.handleStatusFilter}
             value={this.state.filterStatus}
             className="border p-2 rounded form-control-sm"
-            style={{ float: "left"}}
+            style={{ float: "left" }}
           >
             <option value="">Tất cả trạng thái</option>
             <option value="Còn hàng">Còn hàng</option>

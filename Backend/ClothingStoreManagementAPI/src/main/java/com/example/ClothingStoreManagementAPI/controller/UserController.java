@@ -22,7 +22,7 @@ public class UserController {
 	private UserService UsersService;
 	@Autowired
 	private Common common;
-
+	
 	@GetMapping("/SellectByRole")
 	public ResponseEntity<?> SellectByRole(@RequestParam String idRole) {
 		List<Users> Userss = UsersService.SellectByRole(idRole);

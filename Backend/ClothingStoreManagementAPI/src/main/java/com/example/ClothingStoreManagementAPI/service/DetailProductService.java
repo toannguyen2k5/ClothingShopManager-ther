@@ -25,7 +25,17 @@ public class DetailProductService {
 		}
 		return Dictionary;
 	}
-	// tìm kiếm DetailProductDTO dựa trên mã sản phẩm
+	// tìm kiếm mã detai
+	public String SelectIdDetailProduct (String idProduct, String idColor , String idSize) {
+		try {
+			return detailProductRepository.SelectIdDetailProduct(idProduct, idColor, idSize);
+		}
+		catch(Exception e) {
+			System.out.println("SelectDetail, Error : " + e.getMessage());
+			return "";
+		}
+	}
+	// tìm kiếm danh sách DetailProductDTO dựa trên mã sản phẩm
 	public DetailProductDTO SelectDetail(String idProduct) {
 		try {
 			DetailProductDTO result = productRepository.selectDetailProduct(idProduct);
@@ -41,18 +51,18 @@ public class DetailProductService {
 		}
 	}
 	// thêm chi tiết hoặc cập nhật sản phẩm 
-	public boolean InsertDetailProduct(DetailProduct DetailProduct) {
+	public String InsertDetailProduct(DetailProduct DetailProduct) {
 		try {
 			String idcurrent = detailProductRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(DetailProduct.class);
 			DetailProduct.setIdDetail(newId);
 			detailProductRepository.save(DetailProduct); // thêm brand vào csdl
 			detailProductRepository.flush();
-			return detailProductRepository.existsById(newId); // trạng thái tồn tại của object mới
+			return detailProductRepository.existsById(newId) ? newId:""; // trạng thái tồn tại của object mới
 		}
 		catch(Exception e) {
 			System.out.print("InsertDetailProduct, Error : " + e.getMessage());
-			return false;
+			return "";
 		}
 	}
 	@Transactional

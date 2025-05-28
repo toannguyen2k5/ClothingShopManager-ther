@@ -1,16 +1,27 @@
 package com.example.ClothingStoreManagementAPI.service;
 import org.springframework.stereotype.Service;
+import java.util.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.ClothingStoreManagementAPI.repository.ListWarehouseInChargeRepository;
 import com.example.ClothingStoreManagementAPI.model.Entity.ListWarehouseInCharge;
+import com.example.ClothingStoreManagementAPI.model.Entity.Shop;
 @Service
 public class ListWarehouseInChargeService {
 	@Autowired
 	private ListWarehouseInChargeRepository ListWarehouseInChargeRepository;
 	@Autowired
 	private Common common;
+	public List<Shop> SellectListWarehouseInCharge(String idUser) {
+		try {
+			return ListWarehouseInChargeRepository.SellectListWarehouseInCharge(idUser);
+		}
+		catch(Exception e) {
+			System.out.print("InsertListWarehouseInCharge, Error : " + e.getMessage());
+			return null;
+		}
+	}
 	public boolean InsertListWarehouseInCharge(ListWarehouseInCharge ListWarehouseInCharge) {
 		try {
 			String idcurrent = ListWarehouseInChargeRepository.SelectMaxId();

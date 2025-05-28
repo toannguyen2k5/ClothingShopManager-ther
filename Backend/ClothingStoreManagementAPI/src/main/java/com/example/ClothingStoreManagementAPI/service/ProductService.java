@@ -36,19 +36,24 @@ public class ProductService {
 	public List<ProductDTO> SellectAll(int limit , int offset){
 		try {
 			Query query = entityManager.createQuery(
-				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ProductDTO(" +
-				    "p.idProduct, p.nameProduct,b.nameBrand,pc.nameCategory,sup.nameSupplier,s.nameStyle,pm.nameMaterial, pe.price, d.decrease, pi.path, p.status) " +
+				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowProductDTO(" +
+				    "p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
+				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status, SUM(is.quantity)) "+
 				    "FROM Product p " +
-				    "INNER JOIN Brand b ON p.idBrand = b.idBrand "+
+				    "INNER JOIN Brand b ON p.idBrand = b.idBrand " +
 				    "INNER JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
-				    "INNER JOIN ProductCategory pc ON pc.idCategory = p.idCategory "+
-				    "INNER JOIN Style s On s.idStyle = p.idStyle "+
-				    "INNER JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial "+
-				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct " +
+				    "INNER JOIN ProductCategory pc ON pc.idCategory = p.idCategory " +
+				    "INNER JOIN Style s ON s.idStyle = p.idStyle " +
+				    "INNER JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial " +
+				    "LEFT JOIN DetailProduct dp ON dp.idProduct = p.idProduct " +
+				    "LEFT JOIN InventoryShop is ON is.idDetail = dp.idDetail " +
+				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true " +
 				    "LEFT JOIN DiscountEvent d ON d.idProduct = p.idProduct " +
-				    "LEFT JOIN ProductImage pi ON pi.idProduct = p.idProduct AND pi.isMain = true "+
-				    "WHERE p.status = true",
-				    ProductDTO.class
+				    "LEFT JOIN ProductImage pi ON pi.idProduct = p.idProduct AND pi.isMain = true " +
+				    "WHERE p.status = true " +
+				    "GROUP BY p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
+				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status",
+				    ShowProductDTO.class
 				);
 			if (offset > 0) {
                 query.setFirstResult(offset);

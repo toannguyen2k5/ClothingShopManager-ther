@@ -7,17 +7,28 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
+import com.example.ClothingStoreManagementAPI.model.Entity.DetailProduct;
+import com.example.ClothingStoreManagementAPI.model.Entity.InventoryShop;
+import com.example.ClothingStoreManagementAPI.model.Entity.Price;
 import com.example.ClothingStoreManagementAPI.model.Entity.Product;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 @CrossOrigin(origins = "http://localhost:3000") // Cho phép React truy cập
 @RestController
 @RequestMapping("/api/product/")
 public class ProductController {
 	@Autowired
 	private ProductService ProductService ;
+	@Autowired
+	private DetailProductService DetailProductService;
+	@Autowired
+	private InventoryShopService InventoryShopService;
+	@Autowired
+	private PriceService PriceService;
 	@Autowired
 	private Common common;
 	// khi người dùng vào trang web để xem sản phẩm
@@ -61,7 +72,27 @@ public class ProductController {
 		newProduct.setIdSupplier(InsertProductData.getIdSupplier());
 		newProduct.setDescription(InsertProductData.getDescription());
 		newProduct.setStatus(true);
-		return ResponseEntity.ok(common.ReturnReponse(ProductService.InserProduct( newProduct,InsertProductData.getMainImage(),InsertProductData.getSubImages()), "Insert", "product"));
+		String new_id = ProductService.InserProduct( newProduct,InsertProductData.getMainImage(),InsertProductData.getSubImages());
+		Set<Boolean> status = new HashSet<>();
+		status.add(new_id!= "");
+		if(!status.contains(false)) {
+			for(DetailProduct DetailProduct : InsertProductData.getDetailProducts()) {
+				DetailProduct.setIdProduct(new_id);
+				String idDetail = DetailProductService.InsertDetailProduct(DetailProduct);
+				if(idDetail.equals("")) idDetail = DetailProductService.SelectIdDetailProduct(DetailProduct.getIdProduct(), DetailProduct.getIdColor(), DetailProduct.getIdSize());
+				InventoryShop InventoryShop = InsertProductData.getInventoryShops().getFirst();
+				if(InventoryShop != null) {
+					InventoryShop.setIdDetail(idDetail);
+					InventoryShopService.InsertInventory(InventoryShop);
+					status.add(InsertProductData.getInventoryShops().remove(InventoryShop));
+				}
+			}
+			for(Price price :  InsertProductData.getPrices()) {
+				price.setIdProduct(new_id);
+				status.add(PriceService.InsertPrice(price));
+			}
+		}
+		return ResponseEntity.ok(common.ReturnReponse(!status.contains(false), "Insert", "product"));
 	}
 	@PostMapping("insertProductFormSlip")
 	public ResponseEntity<?> InserOrUpdateProduct(@RequestBody Product Product){
