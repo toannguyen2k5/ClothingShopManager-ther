@@ -2725,14 +2725,6 @@ progress {
   cursor: pointer;
 }
 
-.form-control:focus {
-  color: #495057;
-  background-color: transparent;
-  border-color: transparent;
-  outline: 0;
-  box-shadow: none;
-}
-
 .form-control::-webkit-date-and-time-value {
   height: 1.5rem;
 }

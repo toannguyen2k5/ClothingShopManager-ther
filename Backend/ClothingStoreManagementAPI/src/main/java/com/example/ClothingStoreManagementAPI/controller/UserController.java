@@ -14,6 +14,7 @@ import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -23,12 +24,13 @@ public class UserController {
 	private UserService UsersService;
 	@Autowired
 	private Common common;
+
 	@GetMapping("/ShowAllClient")
 	public ResponseEntity<?> ShowClient() {
 		List<ShowUserDTO> Userss = UsersService.ShowAllClient();
 		return ResponseEntity.ok(common.ReturnReponse(Userss, "Sellect", "Users"));
 	}
-	
+
 	@GetMapping("/SellectByRole")
 	public ResponseEntity<?> SellectByRole(@RequestParam String idRole) {
 		List<Users> Userss = UsersService.SellectByRole(idRole);
@@ -74,7 +76,8 @@ public class UserController {
 
 		boolean updated = UsersService.updateUserStatus(idUser, status);
 		if (updated)
-			return ResponseEntity.ok(common.ReturnReponse((status ? "Mở " : "") + "Khóa Tài Khoản Thành Công", null, null));
+			return ResponseEntity
+					.ok(common.ReturnReponse((status ? "Mở " : "") + "Khóa Tài Khoản Thành Công", null, null));
 		else
 			return ResponseEntity.ok(common.ReturnReponse(null, null, null));
 	}
@@ -83,19 +86,28 @@ public class UserController {
 	public ResponseEntity<?> InsertUsers(@RequestBody Users Users, @RequestParam List<MultipartFile> addimages) {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, addimages), "Insert", "Users"));
 	}
+
 	@PostMapping("/insertUser")
 	public ResponseEntity<?> InsertUsers(@RequestBody Users Users) {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, null), "Insert", "Users"));
 	}
+
 	@PostMapping("/UpdateUsers")
 	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users, @RequestParam HashMap<String, String> deleimages,
 			@RequestParam List<MultipartFile> addimages) {
 		return ResponseEntity
 				.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, deleimages, addimages), "Update", "Users"));
 	}
+
 	@PostMapping("/UpdateUser")
 	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users) {
-		return ResponseEntity
-				.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, null, null), "Update", "Users"));
+		return ResponseEntity.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, null, null), "Update", "Users"));
+	}
+
+	@PutMapping("/{id}/getInfo")
+	public ResponseEntity<?> getInfoUser(@PathVariable("id") String idUser) {
+
+		Optional<Users> user = UsersService.getInfoUser(idUser);
+		return ResponseEntity.ok(common.ReturnReponse(user, null, null));
 	}
 }

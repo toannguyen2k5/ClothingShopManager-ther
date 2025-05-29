@@ -107,9 +107,9 @@ export const nav = [
       },
       {
         id_nav: "nav0007",
-        nav_name: "Quản lý kho hàng",
+        nav_name: "Quản lý cửa hàng",
         nav_icon: "fa fa-area-chart",
-        nav_to: "/admin/manager/coupons/inventory/",
+        nav_to: "/admin/manager/shop",
         role_level:5,
         nav_sub_arr: [
         ],

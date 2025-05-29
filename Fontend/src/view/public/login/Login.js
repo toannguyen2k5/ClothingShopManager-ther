@@ -159,11 +159,11 @@ export default class Login extends Component {
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control underlined"
                     name="username"
                     id="username"
-                    placeholder="Your email address"
+                    placeholder="Your email/username"
                     value={this.state.email_dn}
                     onChange={this.enter_email_dn.bind(this)}
                     required=""

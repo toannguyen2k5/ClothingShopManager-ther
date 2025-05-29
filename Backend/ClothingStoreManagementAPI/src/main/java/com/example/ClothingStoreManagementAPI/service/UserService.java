@@ -71,6 +71,10 @@ public class UserService {
         return UserRepository.updateStatusById(idUser, status) > 0;
     }
 	
+	public Optional<Users> getInfoUser(String idUser) {
+        return UserRepository.findById(idUser);
+    }
+	
 	public boolean InsertUsers(Users Users, List<MultipartFile> addimages) {
 		try {
 

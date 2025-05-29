@@ -45,4 +45,9 @@ public class ShopController {
     public ResponseEntity<?> UpdateShop(@RequestBody Shop Shop) {
         return ResponseEntity.ok(common.ReturnReponse(ShopService.UpdateShop(Shop), "Update", "Shop"));
     }
+
+    @PostMapping("/deleteShop")
+    public ResponseEntity<?> deleteShop(@RequestBody Shop Shop) {
+        return ResponseEntity.ok(common.ReturnReponse(ShopService.deleteShop(Shop), "Update", "Shop"));
+    }
 }

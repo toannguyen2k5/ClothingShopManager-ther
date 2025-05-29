@@ -287,7 +287,7 @@ export default class PurchaseSlipManager extends Component {
     fetch(urlapi + "/api/PurchaseSlip/insertPurchaseSlip", req)
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === "200") alert("Thêm Cửa Hàng Thành Công!");
+        if (data.status === "200") alert("Thêm Đơn Hàng Thành Công!");
         console.log("Response từ server:", data);
         // cập nhật state nếu cần
       })
