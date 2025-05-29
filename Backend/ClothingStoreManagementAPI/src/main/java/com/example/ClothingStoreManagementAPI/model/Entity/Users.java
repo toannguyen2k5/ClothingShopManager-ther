@@ -16,10 +16,10 @@ public class Users {
     @Column(name = "idUser", length = 45, nullable = false)
     private String idUser;
     
-    @Column(name = "username", length = 45, nullable = false, unique = true)
+    @Column(name = "username", length = 45, unique = true)
     private String username;
     
-    @Column(name = "password", length = 45, nullable = false)
+    @Column(name = "password", length = 45)
     private String password;
     
     @Column(name = "status", nullable = false)
@@ -39,7 +39,7 @@ public class Users {
     private LocalDate birthDay;
     
     @Column(name = "gender", nullable = false)
-    private boolean gender;
+    private Boolean gender;
     
     @Column(name = "email", length = 45, unique = true)
     private String email;

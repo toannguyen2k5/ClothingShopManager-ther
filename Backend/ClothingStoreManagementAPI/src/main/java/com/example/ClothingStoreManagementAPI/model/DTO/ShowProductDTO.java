@@ -21,4 +21,5 @@ public class ShowProductDTO{
 	private String path;
 	private boolean status;
 	private Long quantity;
+	private String discription;
 }

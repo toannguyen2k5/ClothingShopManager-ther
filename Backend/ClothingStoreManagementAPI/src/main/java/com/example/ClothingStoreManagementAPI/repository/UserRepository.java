@@ -43,12 +43,12 @@ public interface UserRepository extends JpaRepository<Users, String> {
 			+ "WHERE u.role = :role AND l.idShop = :idShop")
 	List<Users> SellectByRoleAndShop(@Param("role") String role ,@Param("idShop") String idShop);
 	// cập nhật thông tin
-	@Query("UPDATE Users u SET u.username = :username,u.password=:password , u.status=:status ,u.role =:role, u.fullName =:fullName , u.address=:address,"
+	@Query("UPDATE Users u SET u.username = :username,u.password=:password , u.status=:status,u.role =:role, u.fullName =:fullName , u.address=:address,"
 			+ "u.birthDay=:birthDay,u.gender =:gender, u.email=:email, u.phoneNumber =:phoneNumber , u.pathAvatar =:pathAvatar\r\n"
 			+ "WHERE u.idUser =:idUser")
 	@Modifying
 	int UpdateUsers(@Param("idUser") String idUser ,@Param("username") String username ,@Param("password") String password ,@Param("status") boolean status ,
-			@Param("role") String role ,@Param("fullName") String fullName ,@Param("address") String address ,@Param("birthDay") LocalDate birthDay ,@Param("gender") boolean gender ,
+			@Param("role") Role role ,@Param("fullName") String fullName ,@Param("address") String address ,@Param("birthDay") LocalDate birthDay ,@Param("gender") boolean gender ,
 			@Param("email") String email ,@Param("phoneNumber") String phoneNumber ,@Param("pathAvatar") String pathAvatar);
 	
 	@Modifying

@@ -102,5 +102,9 @@ public class ProductController {
 	public ResponseEntity<?> UpdateProduct(@RequestBody Product product,@RequestParam HashMap<String,String> deleimages,@RequestParam List<MultipartFile> addimages){
 		if(addimages.size()==1)return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,deleimages,addimages,true), "Update", "product"));
 		else return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,deleimages,addimages,false), "Update", "product"));
-	} 
+	}
+	@PostMapping("updateProductNoImage")
+	public ResponseEntity<?> UpdateProduct(@RequestBody Product product){
+		return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,null,null,true), "Update", "product"));
+	}
 }

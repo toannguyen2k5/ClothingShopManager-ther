@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.ClothingStoreManagementAPI.service.*;
+import com.example.ClothingStoreManagementAPI.model.DTO.ShowUserDTO;
 import com.example.ClothingStoreManagementAPI.model.DTO.UsersRequestDto;
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
 import com.example.ClothingStoreManagementAPI.model.Enum.Role;
@@ -22,6 +23,11 @@ public class UserController {
 	private UserService UsersService;
 	@Autowired
 	private Common common;
+	@GetMapping("/ShowAllClient")
+	public ResponseEntity<?> ShowClient() {
+		List<ShowUserDTO> Userss = UsersService.ShowAllClient();
+		return ResponseEntity.ok(common.ReturnReponse(Userss, "Sellect", "Users"));
+	}
 	
 	@GetMapping("/SellectByRole")
 	public ResponseEntity<?> SellectByRole(@RequestParam String idRole) {
@@ -77,11 +83,19 @@ public class UserController {
 	public ResponseEntity<?> InsertUsers(@RequestBody Users Users, @RequestParam List<MultipartFile> addimages) {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, addimages), "Insert", "Users"));
 	}
-
+	@PostMapping("/insertUser")
+	public ResponseEntity<?> InsertUsers(@RequestBody Users Users) {
+		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, null), "Insert", "Users"));
+	}
 	@PostMapping("/UpdateUsers")
 	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users, @RequestParam HashMap<String, String> deleimages,
 			@RequestParam List<MultipartFile> addimages) {
 		return ResponseEntity
 				.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, deleimages, addimages), "Update", "Users"));
+	}
+	@PostMapping("/UpdateUser")
+	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users) {
+		return ResponseEntity
+				.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, null, null), "Update", "Users"));
 	}
 }

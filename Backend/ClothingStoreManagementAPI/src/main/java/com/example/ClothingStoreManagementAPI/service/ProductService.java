@@ -38,7 +38,7 @@ public class ProductService {
 			Query query = entityManager.createQuery(
 				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowProductDTO(" +
 				    "p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
-				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status, SUM(is.quantity)) "+
+				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status, SUM(is.quantity), p.description) "+
 				    "FROM Product p " +
 				    "INNER JOIN Brand b ON p.idBrand = b.idBrand " +
 				    "INNER JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
@@ -152,7 +152,7 @@ public class ProductService {
 	@Transactional
 	public boolean UpdateProduct (Product Product,HashMap<String,String> deleimages,List<MultipartFile> addimages,boolean IsMain) {
 		try {
-			ImageService.uploadImages(deleimages, addimages, "product", Product.getIdProduct(),IsMain);
+			if(addimages!=null && !addimages.isEmpty())ImageService.uploadImages(deleimages, addimages, "product", Product.getIdProduct(),IsMain);
 			return productRepository.UpdateProduct(Product.getIdProduct(),Product.getNameProduct(),Product.getIdStyle(),Product.getIdMaterial(),
 					Product.getIdBrand(),Product.getIdCategory(),Product.isStatus(),Product.getDescription())>0;
 		}

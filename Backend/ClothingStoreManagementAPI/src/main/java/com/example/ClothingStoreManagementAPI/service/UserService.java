@@ -5,8 +5,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.ClothingStoreManagementAPI.repository.UserRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+
+import com.example.ClothingStoreManagementAPI.model.Entity.Shop;
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
 import com.example.ClothingStoreManagementAPI.model.Enum.Role;
+import com.example.ClothingStoreManagementAPI.model.DTO.*;
 
 import java.util.*;
 @Service
@@ -17,6 +23,31 @@ public class UserService {
 	private Common common;
 	@Autowired
 	private ImageService ImageService;
+	@Autowired
+	private EntityManager entityManager;
+	public List<ShowUserDTO> ShowAllClient(){
+		try {
+			Query query = entityManager.createQuery(
+				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowUserDTO(" +
+				    "u.idUser, u.fullName, u.email, u.phoneNumber, u.address, " +
+				    "u.gender, u.birthDay, u.username, " +
+				    "SUM(CASE WHEN ss.deliveryStatus = true THEN 1 ELSE 0 END), " +
+				    "SUM(CASE WHEN ss.deliveryStatus = false THEN 1 ELSE 0 END), " +
+				    "SUM(CASE WHEN ss.deliveryStatus = true THEN ss.totalBill ELSE 0 END)) " +
+				    "FROM Users u " +
+				    "LEFT JOIN SalesSlip ss ON ss.idClient = u.idUser " +
+				    "WHERE u.role = customer "+
+				    "GROUP BY u.idUser, u.fullName, u.email, u.phoneNumber, u.address, " +
+				    "u.gender, u.birthDay, u.username",
+				    ShowUserDTO.class
+				);
+			return query.getResultList();
+		}
+		catch(Exception e) {
+			System.out.print("SellectProduct, Error : " + e.getMessage());
+			return null;
+		}
+	}
 	public List<Users> SellectByRole(String idRole){
 		try {
 			return UserRepository.SellectByRole(idRole);
@@ -45,7 +76,7 @@ public class UserService {
 
 			String idcurrent = UserRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(Users.class);
-			if(!addimages.isEmpty()) {
+			if(addimages != null && !addimages.isEmpty()) {
 				List<String> pathAvatar = ImageService.InserImage("upload/user/", addimages, newId, "user",true);
 				if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
 			}
@@ -66,10 +97,12 @@ public class UserService {
 	@Transactional
 	public boolean UpdateUsers(Users Users,HashMap<String,String> deleimages,List<MultipartFile> addimages) {
 		try {
-			List<String> pathAvatar = ImageService.uploadImages(deleimages, addimages, "user", Users.getIdUser(),true);
-			if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
-			return UserRepository.UpdateUsers(Users.getIdUser(),Users.getUsername(),Users.getPassword(),Users.isStatus(),Users.getRole().toString(),Users.getFullName(),
-					Users.getAddress(),Users.getBirthDay(),Users.isGender(),Users.getEmail(),Users.getPhoneNumber(),Users.getPathAvatar())>0;
+			if(addimages != null && !addimages.isEmpty()) {
+				List<String> pathAvatar = ImageService.uploadImages(deleimages, addimages, "user", Users.getIdUser(),true);
+				if(pathAvatar!=null) Users.setPathAvatar(pathAvatar.getFirst());
+			}
+			return UserRepository.UpdateUsers(Users.getIdUser(),Users.getUsername(),Users.getPassword(),Users.isStatus(),Users.getRole(),Users.getFullName(),
+					Users.getAddress(),Users.getBirthDay(),Users.getGender(),Users.getEmail(),Users.getPhoneNumber(),Users.getPathAvatar())>0;
 		}
 		catch(Exception e) {
 			System.out.print("UpdateColor, Error : " + e.getMessage());

@@ -37,8 +37,8 @@
   border-radius: 6px;
   font-size: 16px;
 }
-.action-buttons{
-    display: flex;
+.action-buttons {
+  display: flex;
 }
 .action-buttons button {
   margin-right: 5px;
@@ -149,11 +149,11 @@
   opacity: 1;
 }
 .customer-manager .modal-dialog {
-    pointer-events: painted;
-    max-height: 700px !important;
-    height: auto;
-    min-height: 100px !important;
+  pointer-events: painted;
+  max-height: 700px !important;
+  height: auto;
+  min-height: 100px !important;
 }
 .modal-overlay label {
-    margin: 0;
+  margin: 0;
 }
