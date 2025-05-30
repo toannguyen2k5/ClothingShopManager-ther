@@ -17,6 +17,11 @@ public class SalesSlipController {
 	private SalesSlipService SalesSlipService;
 	@Autowired
 	private Common common;
+	@PostMapping("/checkinforvalid")
+	public ResponseEntity<?> checkinforvalid(@RequestBody CheckInforValidData CheckInforValidData){
+		int quantity = SalesSlipService.checkinforvalid(CheckInforValidData);
+		return ResponseEntity.ok(common.ReturnReponse(quantity, "Select", "SalesSlip"));
+	}
 	@GetMapping("/selectByIdClient")
 	public ResponseEntity<?> SelectByIdClient(@RequestParam String IdClient){
 		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SelectSalesSlipByIdClient(IdClient);

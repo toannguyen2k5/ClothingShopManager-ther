@@ -32,6 +32,8 @@ class ModalProduct extends Component {
       nameCategory: row.nameCategory,
       nameMaterial: row.nameMaterial,
       nameStyle: row.nameStyle,
+      price: row.price,
+      decrease: row.decrease,
     });
     this.setState({ show: false });
     if (this.props.onClose) {
@@ -183,24 +185,18 @@ class ModalProduct extends Component {
         sortable: true,
         width: "200px",
       },
-      // {
-      //   name: "Hành Động",
-      //   cell: (row) => (
-      //     <button
-      //       className="bg-yellow-400 text-white px-2 py-1 rounded mr-2"
-      //       // onClick={this.props.updateShop({
-      //       //   idShop: row.idShop,
-      //       //   nameShop: row.nameShop,
-      //       // })}
-      //     >
-      //       <i class="fa-solid fa-square-pen"></i>
-      //     </button>
-      //   ),
-      //   ignoreRowClick: true,
-      //   allowOverflow: true,
-      //   button: true,
-      //   width: "100px",
-      // },
+      {
+        name: "Giá Cả",
+        selector: (row) => row.price,
+        sortable: true,
+        width: "200px",
+      },
+      {
+        name: "Giảm giá",
+        selector: (row) => row.decrease * 100 + "%" || "",
+        sortable: true,
+        width: "200px",
+      },
     ];
   }
 
@@ -224,7 +220,8 @@ class ModalProduct extends Component {
 
   render() {
     const { show } = this.state;
-    console.log(this.state);
+    console.log("data modal product : ", this.state);
+    console.log("data props modal product : ", this.props);
     if (!show) return null;
 
     return (

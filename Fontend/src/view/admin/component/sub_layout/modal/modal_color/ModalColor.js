@@ -18,7 +18,7 @@ class ModalColor extends Component {
   handleRowClick = (row) => {
     console.log("Row clicked:", row);
     this.props.updateColor({
-        idColor: row.idColor,
+      idColor: row.idColor,
       nameColor: row.nameColor,
     });
     this.setState({ show: false });
@@ -168,7 +168,7 @@ class ModalColor extends Component {
                     </button>
                     <input
                       type="text"
-                      placeholder="Tìm kiếm nhà cung cấp..."
+                      placeholder="Tìm kiếm tên màu..."
                       className="col-5 border p-2 rounded form-control-sm"
                       onChange={this.handleSearch}
                       value={this.state.searchText}

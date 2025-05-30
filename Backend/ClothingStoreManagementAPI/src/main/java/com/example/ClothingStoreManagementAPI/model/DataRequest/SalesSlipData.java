@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public class SalesSlipData {
 	private String idCreater;
 	private String idClient;
-	private String idDeliverer;
 	private LocalDate  createDate;
 	private String	deliveryAddress;
 	private int	totalBill;

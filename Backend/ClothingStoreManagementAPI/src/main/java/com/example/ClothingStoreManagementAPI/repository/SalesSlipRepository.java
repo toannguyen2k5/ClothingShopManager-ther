@@ -33,17 +33,11 @@ public interface SalesSlipRepository extends JpaRepository<SalesSlip,String>{
 			+ "INNER JOIN Users u ON u.idUser = s.idClient\r\n"
 			+ "WHERE s.idCreater = :idCreater")
 	List<SalesSlipDTO> SellectSalesSlipByIdCreater(@Param("idCreater") String idCreater);
-	// tìm kiếm đơn hàng bằng mã người giao hàng
-	@Query("SELECT new  com.example.ClothingStoreManagementAPI.model.DTO.SalesSlipDTO(s.idSalesSlip , u.fullName ,u.phoneNumber , s.createDate , s.deliveryStatus)\r\n"
-			+ "FROM SalesSlip s\r\n"
-			+ "INNER JOIN Users u ON u.idUser = s.idClient\r\n"
-			+ "WHERE s.idDeliverer = :idDeliverer")
-	List<SalesSlipDTO> SellectSalesSlipByIdDeliverer(@Param("idDeliverer") String idDeliverer);
 	// cập nhật thông tin đơn hàng
 	@Modifying
-	@Query("UPDATE SalesSlip SET idCreater =:idCreater,idDeliverer=:idDeliverer,idClient=:idClient,createDate=:createDate,deliveryAddress=:deliveryAddress,totalBill=:totalBill,"
+	@Query("UPDATE SalesSlip SET idCreater =:idCreater,idClient=:idClient,createDate=:createDate,deliveryAddress=:deliveryAddress,totalBill=:totalBill,"
 			+ "shippingFee =:shippingFee,deliveryStatus=:deliveryStatus,note=:note,evaluate=:evaluate,refundStatus =:refundStatus,proof=:proof,discountCode=:discountCode,deliveryDate=:deliveryDate WHERE idSalesSlip =:idSalesSlip")
-	int UpdateSalesSlip (@Param("idSalesSlip")String idSalesSlip,@Param("idCreater")String idCreater,@Param("idDeliverer")String idDeliverer,@Param("idClient")String idClient,
+	int UpdateSalesSlip (@Param("idSalesSlip")String idSalesSlip,@Param("idCreater")String idCreater,@Param("idClient")String idClient,
 			@Param("createDate")LocalDate createDate,@Param("deliveryAddress")String deliveryAddress,@Param("totalBill")int totalBill,@Param("shippingFee")int shippingFee,@Param("deliveryStatus")boolean deliveryStatus,
 			@Param("note")String note,@Param("evaluate")Integer evaluate,@Param("refundStatus")Boolean refundStatus,@Param("proof")String proof,@Param("discountCode")String discountCode,
 			@Param("deliveryDate")LocalDate deliveryDate);

@@ -78,7 +78,6 @@ class ModalShop extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // dữ liệu gửi lên server
         nameShop: this.state.shopName,
         address: this.state.adress,
         openingTime: this.state.openingTime,

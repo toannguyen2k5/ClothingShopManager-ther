@@ -32,6 +32,8 @@ public class SalesSlipService {
 	private InventoryShopReponsitory InventoryShopReponsitory;
 	@Autowired
 	private ShoppingCartRepository shoppingCartRepository;
+	@Autowired
+	private DetailProductService DetailProductService;
 	public String SelectMaxId() {
 		try{
 			return SalesSlipRepository.SelectMaxId();
@@ -69,6 +71,21 @@ public class SalesSlipService {
 			return null;
 		}
 	}
+	// check thông tin sản phẩm hợp lệ
+	public int checkinforvalid(CheckInforValidData CheckInforValidData){
+		try {
+			String CheckIdDetail = DetailProductService.SelectIdDetailProduct(CheckInforValidData.getIdProduct(), CheckInforValidData.getIdColor(), CheckInforValidData.getIdSize());
+			if(CheckIdDetail !=""){
+				InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(CheckInforValidData.getIdShop(), CheckIdDetail);
+				if(InventoryShop != null) return InventoryShop.getQuantity();
+				else return 0;
+			}
+			else return 0;
+		}
+		catch(Exception e) {
+			return 0;
+		}
+	}
 	// tạo phiếu
 	public boolean InsertSalesSlip(SalesSlipData salesSlipData, List<ShopDeliveryData> ShopDeliveryDatas){
 		String newIdSalesSlip = "";
@@ -77,7 +94,7 @@ public class SalesSlipService {
 			// thêm thông tin phiếu giao hàng
 			String idcurrent = SalesSlipRepository.SelectMaxId();
 			newIdSalesSlip = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(SalesSlip.class);
-			SalesSlipRepository.save(new SalesSlip (newIdSalesSlip,salesSlipData.getIdCreater(),salesSlipData.getIdDeliverer(),salesSlipData.getIdClient(),
+			SalesSlipRepository.save(new SalesSlip (newIdSalesSlip,salesSlipData.getIdCreater(),salesSlipData.getIdClient(),
 					salesSlipData.getCreateDate(),salesSlipData.getDeliveryAddress(),salesSlipData.getTotalBill(),salesSlipData.getShippingFee(),false,salesSlipData.getNote(),
 					null,null,null,salesSlipData.getDiscountcode(),null)); // thêm brand vào csdl
 			SalesSlipRepository.flush();
@@ -134,7 +151,7 @@ public class SalesSlipService {
 	public boolean UpdateSalesSlip(SalesSlip SalesSlip) {
 		try {
 				if(!SalesSlip.isDeliveryStatus()) {
-					return SalesSlipRepository.UpdateSalesSlip(SalesSlip.getIdSalesSlip(), SalesSlip.getIdCreater(), SalesSlip.getIdDeliverer(), SalesSlip.getIdClient(), SalesSlip.getCreateDate(),
+					return SalesSlipRepository.UpdateSalesSlip(SalesSlip.getIdSalesSlip(), SalesSlip.getIdCreater(), SalesSlip.getIdClient(), SalesSlip.getCreateDate(),
 							SalesSlip.getDeliveryAddress(), SalesSlip.getTotalBill(),SalesSlip.getShippingFee(), SalesSlip.isDeliveryStatus(), SalesSlip.getNote(), SalesSlip.getEvaluate(),SalesSlip.getRefundStatus(), SalesSlip.getProof(),
 							SalesSlip.getDiscountCode(), SalesSlip.getDeliveryDate()) > 0;
 				}

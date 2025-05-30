@@ -6,6 +6,8 @@ import DataTable from "react-data-table-component";
 import ModalShop from "../../../../component/sub_layout/modal/moda_shop/ModalShop";
 import ModalProduct from "../../../../component/sub_layout/modal/modal_product/ModalProduct";
 import ModalColor from "../../../../component/sub_layout/modal/modal_color/ModalColor";
+import ModalSize from "../../../../component/sub_layout/modal/modal_size/ModalSize";
+import ModalClient from "../../../../component/sub_layout/modal/modal_client/ModalClient";
 // import "css/material-dashboard.min.css";
 
 export default class CreateSalesSlip extends Component {
@@ -19,19 +21,21 @@ export default class CreateSalesSlip extends Component {
 
     super(props);
     this.state = {
-      isOpenModalSupplier: false,
+      isOpenModalClient: false,
       isOpenModalShop: false,
       isOpenModalProduct: false,
       isOpenModalColor: false,
+      isOpenModalSize: false,
       searchText: "",
       currentDate: currentDate,
+      data_client_selected: {
+        idClient: "",
+        fullName: "",
+        address: "",
+      },
       data_shop_selected: {
         idShop: "",
         nameShop: "",
-      },
-      data_supplier_selected: {
-        idSupplier: "",
-        nameSupplier: "",
       },
       data_product_selected: {
         idProduct: "",
@@ -44,7 +48,7 @@ export default class CreateSalesSlip extends Component {
         idColor: "",
         size: "",
         quantity: "",
-        unitPrice: "",
+        price: "",
         seri: "",
       },
       //-------------------------------------
@@ -61,6 +65,7 @@ export default class CreateSalesSlip extends Component {
       },
       items: [],
       total: 0,
+      note: "",
       productFilter: "",
       showProductPopup: false,
       responseMessage: "",
@@ -75,8 +80,8 @@ export default class CreateSalesSlip extends Component {
       { name: "Size", selector: (row) => row.size },
       { name: "Số Lượng", selector: (row) => row.quantity },
       {
-        name: "Giá Nhập",
-        selector: (row) => `${row.unitPrice.toLocaleString()}đ`,
+        name: "Giá Bán",
+        selector: (row) => `${row.price.toLocaleString()}đ`,
       },
       {
         name: "Hành Động",
@@ -107,13 +112,10 @@ export default class CreateSalesSlip extends Component {
       newListItem.splice(index, 1);
     }
     const total = newListItem
-      .map((item) => item.quantity * item.unitPrice)
+      .map((item) => item.quantity * item.price)
       .reduce((sum, value) => sum + value, 0);
     console.log(newListItem);
     this.setState({ ...this.state, items: newListItem, total: total });
-  };
-  updateSupplier = (data) => {
-    this.setState({ ...this.state, data_supplier_selected: data });
   };
 
   updateShopOrder = (data) => {
@@ -125,7 +127,25 @@ export default class CreateSalesSlip extends Component {
       data_product_selected: { ...prev.data_product_selected, ...data },
     }));
   };
-
+  updateClient = (data) => {
+    this.setState((prev) => ({
+      data_client_selected: {
+        ...prev.data_client_selected,
+        idClient: data.idClient,
+        fullName: data.fullName,
+        address: data.address,
+      },
+    }));
+  };
+  updateSize = (data) => {
+    this.setState((prev) => ({
+      data_product_selected: {
+        ...prev.data_product_selected,
+        idSize: data.idSize,
+        size: data.nameSize,
+      },
+    }));
+  };
   updateColor = (data) => {
     this.setState((prev) => ({
       data_product_selected: {
@@ -149,11 +169,14 @@ export default class CreateSalesSlip extends Component {
     );
     this.setState({ searchText: value, listproduct: filtered });
   };
-  handleOpenModalSupplier = () => {
-    this.setState({ ...this.state, isOpenModalSupplier: true });
-  };
   handleOpenModalColor = () => {
     this.setState({ ...this.state, isOpenModalColor: true });
+  };
+  handleOpenModalSize = () => {
+    this.setState({ ...this.state, isOpenModalSize: true });
+  };
+  handleOpenModalClient = () => {
+    this.setState({ ...this.state, isOpenModalClient: true });
   };
   handleOpenModalShop = () => {
     this.setState({ ...this.state, isOpenModalShop: true });
@@ -189,48 +212,82 @@ export default class CreateSalesSlip extends Component {
 
   addItem = () => {
     const { items, data_shop_selected, data_product_selected } = this.state;
-    if (!data_shop_selected.idShop || !data_product_selected.idProduct) {
-      alert("Chọn cửa hàng và sản phẩm trước khi thêm");
+    if (
+      !data_shop_selected.idShop ||
+      !data_product_selected.idProduct ||
+      !data_product_selected.color ||
+      !data_product_selected.size
+    ) {
+      alert(
+        "Chọn cửa hàng và sản phẩm(tên sản phẩm , màu sắc , size) trước khi thêm"
+      );
       return;
     }
-    const newItem = {
-      idShop: this.state.data_shop_selected.idShop,
-      nameShop: this.state.data_shop_selected.nameShop,
-      idProduct: this.state.data_product_selected.idProduct,
-      nameCategory: this.state.data_product_selected.nameCategory,
-      nameProduct: this.state.data_product_selected.nameProduct,
-      color: this.state.data_product_selected.color,
-      idColor: this.state.data_product_selected.idColor,
-      size: this.state.data_product_selected.size,
-      quantity: this.state.data_product_selected.quantity,
-      unitPrice: this.state.data_product_selected.unitPrice,
-      seri: this.state.data_product_selected.seri,
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idProduct: this.state.data_product_selected.idProduct,
+        idShop: this.state.data_shop_selected.idShop,
+        idColor: this.state.data_product_selected.idColor,
+        idSize: this.state.data_product_selected.idSize,
+      }),
     };
-    const existingIndex = items.findIndex(
-      (item) =>
-        item.idShop === newItem.idShop &&
-        item.idProduct === newItem.idProduct &&
-        item.idColor === newItem.idColor &&
-        item.size === newItem.size &&
-        item.seri === newItem.seri
-    );
+    fetch(urlapi + "/api/SalesSlip/checkinforvalid", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") {
+          if (
+            data.data >= this.state.data_product_selected.quantity &&
+            data.data != 0
+          ) {
+            const newItem = {
+              idShop: this.state.data_shop_selected.idShop,
+              nameShop: this.state.data_shop_selected.nameShop,
+              idProduct: this.state.data_product_selected.idProduct,
+              nameCategory: this.state.data_product_selected.nameCategory,
+              nameProduct: this.state.data_product_selected.nameProduct,
+              color: this.state.data_product_selected.color,
+              idColor: this.state.data_product_selected.idColor,
+              size: this.state.data_product_selected.size,
+              quantity: this.state.data_product_selected.quantity,
+              price: this.state.data_product_selected.price,
+              seri: this.state.data_product_selected.seri,
+              idDetail: data.data,
+            };
+            const existingIndex = items.findIndex(
+              (item) =>
+                item.idShop === newItem.idShop &&
+                item.idProduct === newItem.idProduct &&
+                item.idColor === newItem.idColor &&
+                item.size === newItem.size &&
+                item.seri === newItem.seri
+            );
 
-    let newListItem;
+            let newListItem;
 
-    if (existingIndex !== -1) {
-      // Nếu đã tồn tại => thay thế
-      newListItem = [...items];
-      newListItem[existingIndex] = newItem;
-    } else {
-      // Nếu chưa có => thêm mới
-      newListItem = [...items, newItem];
-    }
-    const total = newListItem
-      .map((item) => item.quantity * item.unitPrice)
-      .reduce((sum, value) => sum + value, 0);
+            if (existingIndex !== -1) {
+              // Nếu đã tồn tại => thay thế
+              newListItem = [...items];
+              newListItem[existingIndex] = newItem;
+            } else {
+              // Nếu chưa có => thêm mới
+              newListItem = [...items, newItem];
+            }
+            const total = newListItem
+              .map((item) => item.quantity * item.price)
+              .reduce((sum, value) => sum + value, 0);
 
-    console.log("Total:", total); // Output: Total: 150
-    this.setState({ items: newListItem, total: total });
+            console.log("Total:", total); // Output: Total: 150
+            this.setState({ items: newListItem, total: total });
+          } else alert("số lượng hàng tồn không đủ !");
+        } else alert("thông tin sản phẩm không hợp lệ");
+        console.log("Response từ server:", data);
+        // cập nhật state nếu cần
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
   };
 
   removeItem = (idx) =>
@@ -251,7 +308,7 @@ export default class CreateSalesSlip extends Component {
         nameColor: item.idColor,
         nameSize: item.size,
         quantity: item.quantity,
-        price: item.unitPrice,
+        price: item.price,
         seri: item.seri,
       };
       console.log(existingShop);
@@ -270,21 +327,19 @@ export default class CreateSalesSlip extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        purchaseSlip: {
-          idPurchaseSlip: null,
-          idCreater: this.props.state_data.user_info.id_user,
-          idSupplier: this.state.data_supplier_selected.idSupplier,
-          dayCreate: this.state.currentDate,
-          totalBill: this.state.total,
-          approveStatus: true,
-          statusUpdateDate: null,
-          idStatusEditor: null,
-          statusReceive: false,
-        },
+        idCreater: this.props.state_data.user_info.id_user,
+        idClient: this.state.data_client_selected.idClient,
+        createDate: this.state.currentDate,
+        deliveryAddress: this.data_client_selected.address,
+        totalBill: this.state.total,
+        approveStatus: true,
+        shippingFee: null,
+        note: null,
+        discountcode: null,
         shopReceiveData: groupedData,
       }),
     };
-    fetch(urlapi + "/api/PurchaseSlip/insertPurchaseSlip", req)
+    fetch(urlapi + "/api/SalesSlip/insertSalesSlip", req)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "200") alert("Thêm Cửa Hàng Thành Công!");
@@ -379,7 +434,44 @@ export default class CreateSalesSlip extends Component {
                   />
                 </div>
               </div>
-            </div><div class="form-group col-5">
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="totalBill" class="col-sm-3 col-form-label">
+                  Tiền Ship
+                </label>
+                <div class="col-sm-7">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control form-control-sm"
+                    id="totalBill"
+                    value={this.state.total.toLocaleString() + " đ"}
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="statusReceive" class="col-sm-4 col-form-label">
+                  Hình thức nhận hàng
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control form-control-sm"
+                    id="statusReceive"
+                    value="Chưa Phê Duyệt"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-5">
               <div className="row">
                 <label for="totalBill" class="col-sm-3 col-form-label">
                   Tổng Tiền
@@ -397,9 +489,86 @@ export default class CreateSalesSlip extends Component {
               </div>
             </div>
           </div>
-          <div className="row mb-3">
-            
+          <div className="row mb-2">
+            <label for="color" class="col-sm-2 col-form-label">
+              Tên khách hàng
+            </label>
+            <div class="col-sm-8">
+              <div className="row form-inline">
+                <div className="col-10">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="color"
+                    id="color"
+                    value={this.state.data_client_selected.fullName}
+                    readOnly
+                    disabled
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-outline-info col-2"
+                  onClick={this.handleOpenModalClient}
+                >
+                  <i class="bi bi-search"></i>
+                </button>
+                <ModalClient
+                  isOpen={this.state.isOpenModalClient}
+                  onClose={() => this.setState({ isOpenModalClient: false })}
+                  updateClient={(data) => this.updateClient(data)}
+                />
+              </div>
+            </div>
           </div>
+          <div className="row mb-2">
+            <label for="color" class="col-sm-2 col-form-label">
+              Địa chỉ giao hàng
+            </label>
+            <div class="col-sm-8">
+              <div className="row form-inline">
+                <div className="col-10">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="color"
+                    id="color"
+                    value={this.state.data_client_selected.address}
+                    onChange={(e) => {
+                      this.setState((prev) => ({
+                        data_client_selected: {
+                          ...prev.data_client_selected,
+                          address: e.target.value,
+                        },
+                      }));
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <label for="color" class="col-sm-2 col-form-label">
+              Ghi chú
+            </label>
+            <div class="col-sm-8">
+              <div className="row form-inline">
+                <div className="col-10">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="color"
+                    id="color"
+                    value={this.state.note}
+                    onChange={(e) => {
+                      this.setState({ note: e.target.value });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3"></div>
         </div>
         {/** thông tin sản phẩm */}
         <div className="row">
@@ -458,11 +627,16 @@ export default class CreateSalesSlip extends Component {
                     <button
                       type="button"
                       class="btn btn-outline-info col-2"
-                      onClick={this.handleOpenModalProduct}
+                      onClick={() => {
+                        if (this.state.data_shop_selected.idShop) {
+                          this.handleOpenModalProduct();
+                        } else alert("bạn chưa chọn cửa hàng !");
+                      }}
                     >
                       <i class="bi bi-search"></i>
                     </button>
                     <ModalProduct
+                      idShop={this.state.data_shop_selected.idShop}
                       isOpen={this.state.isOpenModalProduct}
                       onClose={() =>
                         this.setState({ isOpenModalProduct: false })
@@ -569,16 +743,16 @@ export default class CreateSalesSlip extends Component {
               <div class="form-group col-6">
                 <div className="row">
                   <label for="Price" class="col-sm-3 col-form-label">
-                    Giá Nhập
+                    Giá Bán
                   </label>
                   <div class="col-sm-7">
                     <input
                       type="money"
                       class="form-control form-control-sm"
                       id="Price"
-                      name="unitPrice"
+                      name="price"
                       onChange={this.handleItemChange}
-                      value={this.state.data_product_selected.unitPrice}
+                      value={this.state.data_product_selected.price}
                       min={0}
                     />
                   </div>
@@ -627,36 +801,35 @@ export default class CreateSalesSlip extends Component {
                   <label for="size" class="col-sm-2 col-form-label">
                     Size
                   </label>
-                  <div class="col-sm-9">
-                    <input
-                      type="text"
-                      readonly
-                      class="form-control form-control-sm"
-                      id="size"
-                      name="size"
-                      onChange={this.handleItemChange}
-                      value={this.state.data_product_selected.size}
-                    />
+                  <div class="col-sm-8">
+                    <div className="row form-inline">
+                      <div className="col-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="color"
+                          id="color"
+                          value={this.state.data_product_selected.size}
+                          readOnly
+                          disabled
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-outline-info col-2"
+                        onClick={this.handleOpenModalSize}
+                      >
+                        <i class="bi bi-search"></i>
+                      </button>
+                      <ModalSize
+                        isOpen={this.state.isOpenModalSize}
+                        onClose={() =>
+                          this.setState({ isOpenModalSize: false })
+                        }
+                        updateColor={(data) => this.updateSize(data)}
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row mb-3">
-            <div class="form-group col-5">
-              <div className="row">
-                <label for="seri" class="col-sm-3 col-form-label">
-                  Số Seri
-                </label>
-                <div class="col-sm-6">
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    id="seri"
-                    name="seri"
-                    onChange={this.handleItemChange}
-                    value={this.state.data_product_selected.seri}
-                  />
                 </div>
               </div>
             </div>
@@ -674,7 +847,7 @@ export default class CreateSalesSlip extends Component {
                     id="totalPrice"
                     value={(
                       this.state.data_product_selected.quantity *
-                      this.state.data_product_selected.unitPrice
+                      this.state.data_product_selected.price
                     ).toLocaleString()}
                     min={0}
                     readOnly

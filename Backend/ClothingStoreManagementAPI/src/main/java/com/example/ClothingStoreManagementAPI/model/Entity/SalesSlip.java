@@ -18,9 +18,6 @@ public class SalesSlip {
     @Column(name = "idCreater", length = 45,nullable = false)
     private String idCreater;
 
-    @Column(name = "idDeliverer", length = 45,nullable = false)
-    private String idDeliverer;
-
     @Column(name = "idClient", length = 45,nullable = false)
     private String idClient;
 
