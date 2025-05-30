@@ -52,4 +52,22 @@ public class ImageController {
 	        return ResponseEntity.badRequest().build();
 	    }
 	}
+	@GetMapping("upload/{ScopeName}/{filename:.+}")
+	public ResponseEntity<Resource> getFile(@PathVariable String ScopeName,@PathVariable String filename) throws IOException {
+	    try {
+	    	Path filePath = Paths.get("upload/"+ScopeName).resolve(filename).normalize();
+	        Resource resource = new UrlResource(filePath.toUri());
+	        if (!resource.exists()) {
+	            return ResponseEntity.notFound().build();
+	        }
+
+	        String contentType = Files.probeContentType(filePath);
+	        return ResponseEntity.ok()
+	                .contentType(MediaType.parseMediaType(contentType != null ? contentType : "application/octet-stream"))
+	                .body(resource);
+
+	    } catch (MalformedURLException e) {
+	        return ResponseEntity.badRequest().build();
+	    }
+	}
 }

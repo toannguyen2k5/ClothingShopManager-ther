@@ -91,6 +91,10 @@ export const define_nav = {
       name: "Billing",
       path: "/admin/billing",
     },
+    shop: {
+      name: "Quản Lý Cửa Hàng",
+      path: "/admin/manager/shop",
+    },
   },
 };
 

@@ -7,9 +7,9 @@ import { define_nav } from "../../../../../setting/store/const";
 let mockProducts = [];
 
 const columns = [
-  { name: "ID", selector: (row) => row.id, sortable: true },
-  { name: "tên ncc", selector: (row) => row.id_ncc },
-  { name: "Tên SP", selector: (row) => row.ten_san_pham, sortable: true },
+  { name: "STT", selector: (row, index) => row.index, sortable: true },
+  { name: "Thương Hiệu", selector: (row) => row.id_ncc },
+  { name: "Tên Sản Phẩm", selector: (row) => row.ten_san_pham, sortable: true },
   { name: "Style", selector: (row) => row.id_style },
   { name: "Danh Mục", selector: (row) => row.id_danh_muc },
   { name: "Trạng Thái Bán", selector: (row) => (row.trang_thai ? "✔️" : "❌") },
@@ -42,6 +42,7 @@ class ProductListClass extends Component {
             mockProducts = [
               ...mockProducts,
               {
+                index: index + 1,
                 id: item.idProduct,
                 id_ncc: item.nameBrand,
                 ten_san_pham: item.nameProduct,
@@ -49,7 +50,7 @@ class ProductListClass extends Component {
                 id_danh_muc: item.nameCategory,
                 trang_thai: item.status,
                 so_luong: item.quantity || 0,
-                gia_ban: item.price,
+                gia_ban: item.price||0,
               },
             ];
           });

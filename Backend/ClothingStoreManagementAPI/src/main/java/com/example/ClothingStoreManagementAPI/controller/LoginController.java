@@ -29,7 +29,7 @@ public class LoginController {
         if (user!=null) {
         	if(user.isStatus()) return ResponseEntity.ok(new HashMap<String, Object>() {{
         	    put("status","200");
-        	    put("data", new UserLoginDTO(user.getIdUser(),user.getFullName(),user.getRole(),user.getRole().getLevel(),user.getEmail(),user.getAddress()));
+        	    put("data", new UserLoginDTO(user.getIdUser(),user.getFullName(),user.getRole(),user.getRole().getLevel(),user.getEmail(),user.getPathAvatar()));
         	}});
         	else return ResponseEntity.ok(new HashMap<String, String>() {{
         	    put("status","201");

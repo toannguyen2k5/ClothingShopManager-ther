@@ -24,7 +24,7 @@ class Account extends Component {
             }}
           >
             <img
-              src={`${urlapi}/image/admin/${this.props.state_data.user_info.avatar}`}
+              src={`${urlapi}/api/Image/${this.props.state_data.user_info.avatar}`}
               style={{ width: "40px", height: "auto" }}
             />&nbsp;
             <span className="d-sm-inline d-none">

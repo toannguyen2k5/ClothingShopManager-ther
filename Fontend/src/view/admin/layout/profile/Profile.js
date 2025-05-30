@@ -1,7 +1,68 @@
 import React, { Component } from "react";
-import { define_nav } from "../../../../setting/store/const";
+import { define_nav, urlapi } from "../../../../setting/store/const";
+import LeaveCalendar from "./LeaveCalendar";
+import UpdateAccountModal from "./UpdateAccountModal";
 
 class Profile extends Component {
+  constructor() {
+    super();
+    this.state = {
+      infoUser: {
+        address: null,
+        birthDay: null,
+        email: null,
+        fullName: null,
+        gender: true,
+        idUser: null,
+        password: null,
+        pathAvatar: null,
+        phoneNumber: null,
+        role: null,
+        status: true,
+        username: null,
+      },
+      modalIsOpen: false,
+    };
+  }
+  updateShop = (data) => {
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...data,
+      }),
+    };
+    fetch(urlapi + "/api/Users/UpdateUser", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") alert("Cập Nhật Tài Khoản Thành Công!");
+        // cập nhật state nếu cần
+        this.setState({ isActionAdd: true, message: data.message });
+        this.getListShop();
+        this.clearShopInfo();
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
+  };
+  setModalIsOpen = () => {
+    this.setState({ modalIsOpen: true });
+  };
+  getInfoUser = (id) => {
+    fetch(`${urlapi}/api/Users/${id}/getInfo`, {
+      method: "PUT",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ infoUser: data.data });
+      })
+      .catch((error) => {});
+  };
+  componentDidMount() {
+    // this.props.
+    this.getInfoUser(this.props.state_data.user_info.id_user);
+    console.log(this.props);
+  }
   render() {
     if (
       this.props.state_data.current_page.name !== define_nav.admin.profile.name
@@ -11,6 +72,7 @@ class Profile extends Component {
         path_new: define_nav.admin.profile.path,
         old_page: this.props.state_data.current_page,
       });
+    console.log(this.state.infoUser);
     return (
       <div class="container-fluid px-2 px-md-4">
         <div
@@ -23,216 +85,42 @@ class Profile extends Component {
           <span class="mask  bg-gradient-primary  opacity-6"></span>
         </div>
         <div class="card card-body mx-3 mx-md-4 mt-n6">
-          <div class="row gx-4 mb-2">
-            <div class="col-auto">
-              <div class="avatar avatar-xl position-relative">
-                <img
-                  src="../assets/img/bruce-mars.jpg"
-                  alt="profile_image"
-                  class="w-100 border-radius-lg shadow-sm"
-                />
-              </div>
-            </div>
-            <div class="col-auto my-auto">
-              <div class="h-100">
-                <h5 class="mb-1">Richard Davis</h5>
-                <p class="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-              <div class="nav-wrapper position-relative end-0">
-                <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <a
-                      class="nav-link mb-0 px-0 py-1 active "
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      <i class="material-icons text-lg position-relative">
-                        home
-                      </i>
-                      <span class="ms-1">App</span>
-                    </a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a
-                      class="nav-link mb-0 px-0 py-1  active "
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      <i class="material-icons text-lg position-relative">
-                        email
-                      </i>
-                      <span class="ms-1">Messages</span>
-                    </a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a
-                      class="nav-link mb-0 px-0 py-1  active "
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      <i class="material-icons text-lg position-relative">
-                        settings
-                      </i>
-                      <span class="ms-1">Settings</span>
-                    </a>
-                  </li>
-                  <div
-                    class="moving-tab position-absolute nav-link"
-                    style={{
-                      padding: "0px",
-                      width: "83px",
-                      transform: "translate3d(0px, 0px, 0px)",
-                      transition: "all 0.5s ease 0s",
-                    }}
-                    aria-selected="false"
-                    tabIndex="-1"
-                    role="tab"
-                  >
-                    <a
-                      class="nav-link mb-0 px-0 py-1 active "
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      -
-                    </a>
-                  </div>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <div class="row gx-4 mb-2"></div>
           <div class="row">
             <div class="row">
               <div class="col-12 col-xl-4">
                 <div class="card card-plain h-100">
                   <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Platform Settings</h6>
-                  </div>
-                  <div class="card-body p-3">
-                    <h6 class="text-uppercase text-body text-xs font-weight-bolder">
-                      Account
-                    </h6>
-                    <ul class="list-group">
-                      <li class="list-group-item border-0 px-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault"
-                            defaultChecked=""
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault"
-                          >
-                            Email me when someone follows me
-                          </label>
-                        </div>
-                      </li>
-                      <li class="list-group-item border-0 px-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault1"
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault1"
-                          >
-                            Email me when someone answers on my post
-                          </label>
-                        </div>
-                      </li>
-                      <li class="list-group-item border-0 px-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault2"
-                            defaultChecked=""
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault2"
-                          >
-                            Email me when someone mentions me
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                    <h6 class="text-uppercase text-body text-xs font-weight-bolder mt-4">
-                      Application
-                    </h6>
-                    <ul class="list-group">
-                      <li class="list-group-item border-0 px-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault3"
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault3"
-                          >
-                            New launches and projects
-                          </label>
-                        </div>
-                      </li>
-                      <li class="list-group-item border-0 px-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault4"
-                            defaultChecked=""
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault4"
-                          >
-                            Monthly product updates
-                          </label>
-                        </div>
-                      </li>
-                      <li class="list-group-item border-0 px-0 pb-0">
-                        <div class="form-check form-switch ps-0">
-                          <input
-                            class="form-check-input ms-auto"
-                            type="checkbox"
-                            id="flexSwitchCheckDefault5"
-                          />
-                          <label
-                            class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                            htmlFor="flexSwitchCheckDefault5"
-                          >
-                            Subscribe to newsletter
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-xl-4">
-                <div class="card card-plain h-100">
-                  <div class="card-header pb-0 p-3">
+                    <div class="col-auto">
+                      <div class="avatar avatar-xl position-relative">
+                        <img
+                          src={`${urlapi}/api/Image/${this.state.infoUser.pathAvatar}`}
+                          alt="profile_image"
+                          class="w-100 border-radius-lg shadow-sm"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-auto my-auto">
+                      <div class="h-100">
+                        <h5 class="mb-1">{this.state.infoUser.username}</h5>
+                        <p class="mb-0 font-weight-normal text-sm">
+                          {this.state.infoUser.role === "admin"
+                            ? "Quản trị viên"
+                            : this.state.infoUser.role === "manager"
+                            ? "Quản lý"
+                            : this.state.infoUser.role === "staff"
+                            ? "Nhân viên"
+                            : "Không xác định"}
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
                     <div class="row">
                       <div class="col-md-8 d-flex align-items-center">
                         <h6 class="mb-0">Profile Information</h6>
                       </div>
                       <div class="col-md-4 text-end">
-                        <a href="javascript:;">
+                        <a onClick={this.setModalIsOpen}>
                           <i
                             class="fas fa-user-edit text-secondary text-sm"
                             data-bs-toggle="tooltip"
@@ -242,491 +130,48 @@ class Profile extends Component {
                           ></i>
                           <span class="sr-only">Edit Profile</span>
                         </a>
+                        <UpdateAccountModal
+                          isOpen={this.state.modalIsOpen}
+                          onClose={() => this.setState({ modalIsOpen: false })}
+                          userData={this.state.infoUser}
+                          onUpdate={(updatedData) => {
+                            // Gọi API cập nhật tài khoản ở đây
+                            this.updateShop(updatedData);
+                            this.getInfoUser(this.props.state_data.user_info.id_user);
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
                   <div class="card-body p-3">
-                    <p class="text-sm">
-                      Hi, I’m Alec Thompson, Decisions: If you can’t decide, the
-                      answer is no. If two equally difficult paths, choose the
-                      one more painful in the short term (pain avoidance is
-                      creating an illusion of equality).
-                    </p>
-                    <hr class="horizontal gray-light my-4" />
                     <ul class="list-group">
                       <li class="list-group-item border-0 ps-0 pt-0 text-sm">
                         <strong class="text-dark">Full Name:</strong> &nbsp;
-                        Alec M. Thompson
+                        {this.state.infoUser.fullName}
                       </li>
                       <li class="list-group-item border-0 ps-0 text-sm">
-                        <strong class="text-dark">Mobile:</strong> &nbsp; (44)
-                        123 1234 123
+                        <strong class="text-dark">Mobile:</strong> &nbsp;
+                        {this.state.infoUser.phoneNumber}
                       </li>
                       <li class="list-group-item border-0 ps-0 text-sm">
                         <strong class="text-dark">Email:</strong> &nbsp;
-                        alecthompson@mail.com
+                        {this.state.infoUser.email}
                       </li>
                       <li class="list-group-item border-0 ps-0 text-sm">
-                        <strong class="text-dark">Location:</strong> &nbsp; USA
-                      </li>
-                      <li class="list-group-item border-0 ps-0 pb-0">
-                        <strong class="text-dark text-sm">Social:</strong>{" "}
-                        &nbsp;
-                        <a
-                          class="btn btn-facebook btn-simple mb-0 ps-1 pe-2 py-0"
-                          href="javascript:;"
-                        >
-                          <i
-                            class="fab fa-facebook fa-lg"
-                            aria-hidden="true"
-                          ></i>
-                        </a>
-                        <a
-                          class="btn btn-twitter btn-simple mb-0 ps-1 pe-2 py-0"
-                          href="javascript:;"
-                        >
-                          <i
-                            class="fab fa-twitter fa-lg"
-                            aria-hidden="true"
-                          ></i>
-                        </a>
-                        <a
-                          class="btn btn-instagram btn-simple mb-0 ps-1 pe-2 py-0"
-                          href="javascript:;"
-                        >
-                          <i
-                            class="fab fa-instagram fa-lg"
-                            aria-hidden="true"
-                          ></i>
-                        </a>
+                        <strong class="text-dark">Location:</strong> &nbsp;{" "}
+                        {this.state.infoUser.address}
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-xl-4">
+              <div class="col-12 col-xl-8">
                 <div class="card card-plain h-100">
                   <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Conversations</h6>
+                    <h6 class="mb-0">Leave Plans</h6>
                   </div>
                   <div class="card-body p-3">
-                    <ul class="list-group">
-                      <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
-                        <div class="avatar me-3">
-                          <img
-                            src="../assets/img/kal-visuals-square.jpg"
-                            alt="kal"
-                            class="border-radius-lg shadow"
-                          />
-                        </div>
-                        <div class="d-flex align-items-start flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Sophie B.</h6>
-                          <p class="mb-0 text-xs">
-                            Hi! I need more information..
-                          </p>
-                        </div>
-                        <a
-                          class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                          href="javascript:;"
-                        >
-                          Reply
-                        </a>
-                      </li>
-                      <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                        <div class="avatar me-3">
-                          <img
-                            src="../assets/img/marie.jpg"
-                            alt="kal"
-                            class="border-radius-lg shadow"
-                          />
-                        </div>
-                        <div class="d-flex align-items-start flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Anne Marie</h6>
-                          <p class="mb-0 text-xs">Awesome work, can you..</p>
-                        </div>
-                        <a
-                          class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                          href="javascript:;"
-                        >
-                          Reply
-                        </a>
-                      </li>
-                      <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                        <div class="avatar me-3">
-                          <img
-                            src="../assets/img/ivana-square.jpg"
-                            alt="kal"
-                            class="border-radius-lg shadow"
-                          />
-                        </div>
-                        <div class="d-flex align-items-start flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Ivanna</h6>
-                          <p class="mb-0 text-xs">About files I can..</p>
-                        </div>
-                        <a
-                          class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                          href="javascript:;"
-                        >
-                          Reply
-                        </a>
-                      </li>
-                      <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                        <div class="avatar me-3">
-                          <img
-                            src="../assets/img/team-4.jpg"
-                            alt="kal"
-                            class="border-radius-lg shadow"
-                          />
-                        </div>
-                        <div class="d-flex align-items-start flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Peterson</h6>
-                          <p class="mb-0 text-xs">Have a great afternoon..</p>
-                        </div>
-                        <a
-                          class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                          href="javascript:;"
-                        >
-                          Reply
-                        </a>
-                      </li>
-                      <li class="list-group-item border-0 d-flex align-items-center px-0">
-                        <div class="avatar me-3">
-                          <img
-                            src="../assets/img/team-3.jpg"
-                            alt="kal"
-                            class="border-radius-lg shadow"
-                          />
-                        </div>
-                        <div class="d-flex align-items-start flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">Nick Daniel</h6>
-                          <p class="mb-0 text-xs">
-                            Hi! I need more information..
-                          </p>
-                        </div>
-                        <a
-                          class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                          href="javascript:;"
-                        >
-                          Reply
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mt-4">
-                <div class="mb-5 ps-3">
-                  <h6 class="mb-1">Projects</h6>
-                  <p class="text-sm">Architects design houses</p>
-                </div>
-                <div class="row">
-                  <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                    <div class="card card-blog card-plain">
-                      <div class="card-header p-0 mt-n4 mx-3">
-                        <a class="d-block shadow-xl border-radius-xl">
-                          <img
-                            src="../assets/img/home-decor-1.jpg"
-                            alt="img-blur-shadow"
-                            class="img-fluid shadow border-radius-xl"
-                          />
-                        </a>
-                      </div>
-                      <div class="card-body p-3">
-                        <p class="mb-0 text-sm">Project #2</p>
-                        <a href="javascript:;">
-                          <h5>Modern</h5>
-                        </a>
-                        <p class="mb-4 text-sm">
-                          As Uber works through a huge amount of internal
-                          management turmoil.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary btn-sm mb-0"
-                          >
-                            View Project
-                          </button>
-                          <div class="avatar-group mt-2">
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-1.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-2.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-3.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-4.jpg"
-                              />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                    <div class="card card-blog card-plain">
-                      <div class="card-header p-0 mt-n4 mx-3">
-                        <a class="d-block shadow-xl border-radius-xl">
-                          <img
-                            src="../assets/img/home-decor-2.jpg"
-                            alt="img-blur-shadow"
-                            class="img-fluid shadow border-radius-lg"
-                          />
-                        </a>
-                      </div>
-                      <div class="card-body p-3">
-                        <p class="mb-0 text-sm">Project #1</p>
-                        <a href="javascript:;">
-                          <h5>Scandinavian</h5>
-                        </a>
-                        <p class="mb-4 text-sm">
-                          Music is something that every person has his or her
-                          own specific opinion about.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary btn-sm mb-0"
-                          >
-                            View Project
-                          </button>
-                          <div class="avatar-group mt-2">
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-3.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-4.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-1.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-2.jpg"
-                              />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                    <div class="card card-blog card-plain">
-                      <div class="card-header p-0 mt-n4 mx-3">
-                        <a class="d-block shadow-xl border-radius-xl">
-                          <img
-                            src="../assets/img/home-decor-3.jpg"
-                            alt="img-blur-shadow"
-                            class="img-fluid shadow border-radius-xl"
-                          />
-                        </a>
-                      </div>
-                      <div class="card-body p-3">
-                        <p class="mb-0 text-sm">Project #3</p>
-                        <a href="javascript:;">
-                          <h5>Minimalist</h5>
-                        </a>
-                        <p class="mb-4 text-sm">
-                          Different people have different taste, and various
-                          types of music.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary btn-sm mb-0"
-                          >
-                            View Project
-                          </button>
-                          <div class="avatar-group mt-2">
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-4.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-3.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-2.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-1.jpg"
-                              />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                    <div class="card card-blog card-plain">
-                      <div class="card-header p-0 mt-n4 mx-3">
-                        <a class="d-block shadow-xl border-radius-xl">
-                          <img
-                            src="https://images.unsplash.com/photo-1606744824163-985d376605aa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
-                            alt="img-blur-shadow"
-                            class="img-fluid shadow border-radius-xl"
-                          />
-                        </a>
-                      </div>
-                      <div class="card-body p-3">
-                        <p class="mb-0 text-sm">Project #4</p>
-                        <a href="javascript:;">
-                          <h5>Gothic</h5>
-                        </a>
-                        <p class="mb-4 text-sm">
-                          Why would anyone pick blue over pink? Pink is
-                          obviously a better color.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary btn-sm mb-0"
-                          >
-                            View Project
-                          </button>
-                          <div class="avatar-group mt-2">
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-4.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-3.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-2.jpg"
-                              />
-                            </a>
-                            <a
-                              href="javascript:;"
-                              class="avatar avatar-xs rounded-circle"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                            >
-                              <img
-                                alt="Image placeholder"
-                                src="../assets/img/team-1.jpg"
-                              />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <LeaveCalendar {...this.props} />
                   </div>
                 </div>
               </div>

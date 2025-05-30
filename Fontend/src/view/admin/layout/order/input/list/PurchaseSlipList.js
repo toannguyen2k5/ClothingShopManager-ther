@@ -55,6 +55,7 @@ export default class PurchaseSlipList extends Component {
   }
 
   handleEditSlip = (slip) => {
+    this.setState({ showModal: true});
     console.log('Edit slip', slip);
   }
 

@@ -132,7 +132,7 @@ export const routes_admin = [
     role_level: 5
   },
   {
-    path: "/admin/manager/coupons/inventory/",
+    path: "/admin/manager/shop",
     exact: true,
     name: "Form Search",
     component: ProductInventory,
