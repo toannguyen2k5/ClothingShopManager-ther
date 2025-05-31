@@ -2,7 +2,7 @@ import React from "react";
 import "./css.scss"; // Import SCSS vào React
 const ItemProductV2 = ({ product }) => {
   return (
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 mg-bottom-15 pd-right-0 d-flex-column">
+    <div className="col-lg-3 col-md-3 col-sm-4 col-xs-6 mg-bottom-15 pd-right-0 d-flex-column">
       <div className="product-card">
         <div className="image-wrapper">
           <a href={`/shop/detail_product/${product.id}/`}>

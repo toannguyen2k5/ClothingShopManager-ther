@@ -5,29 +5,29 @@ export default class Footer extends Component {
   render() {
     return (
       <section>
-      <footer class="mg-0 pd-bt-50-mb ">
-        <div class="top-ft-wanda">
-          <div class="container">
-            <div class="d-flex row">
-              <div class="col-md-3 col-sm-6 col-xs-12 infomation mg-bottom-15">
-                <div class="title-footer">
-                  <div class="h4">Giới thiệu</div>
+      <footer className="mg-0 pd-bt-50-mb ">
+        <div className="top-ft-wanda">
+          <div className="container">
+            <div className="d-flex row">
+              <div className="col-md-3 col-sm-6 col-xs-12 infomation mg-bottom-15">
+                <div className="title-footer">
+                  <div className="h4">Giới thiệu</div>
                 </div>
-                <div class="infomation-wanda info_one">
+                <div className="infomation-wanda info_one">
                   <p>Chuỗi Phân Phối Thời Trang Chuẩn Hiệu</p>
                   <ul>
                     <li>
-                      <i class="fa fa-mobile-phone" aria-hidden="true"></i>
+                      <i className="fa fa-mobile-phone" aria-hidden="true"></i>
                       <a rel="nofollow" href="tel:02871006789">
                         02871006789
                       </a>
                     </li>
                     <li>
-                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                      <i className="fa fa-clock-o" aria-hidden="true"></i>
                       <a rel="nofollow">Giờ mở cửa : 08:30 - 22:00</a>
                     </li>
                     <li>
-                      <i class="fa fa-headphones" aria-hidden="true"></i>
+                      <i className="fa fa-headphones" aria-hidden="true"></i>
                       <a rel="nofollow">
                         Nhân viên tư vấn phản hồi tin nhắn đến 24:00 (Mỗi ngày)
                       </a>
@@ -36,24 +36,24 @@ export default class Footer extends Component {
                 </div>
               </div>
 
-              <div class="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
-                <div class="title-footer">
-                  <div class="h4">CHÍNH SÁCH</div>
+              <div className="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
+                <div className="title-footer">
+                  <div className="h4">CHÍNH SÁCH</div>
                 </div>
-                <div class="footer-link-wanda infomation-wanda footer-click">
+                <div className="footer-link-wanda infomation-wanda footer-click">
                   <ul>
                     <li>
                       <a href="/pages/huong-dan-dat-hang">Hướng dẫn đặt hàng</a>
                     </li>
                     <li>
-                      <div class="footer-flex clicked">
-                        <div class="location_flex">
+                      <div className="footer-flex clicked">
+                        <div className="location_flex">
                           <p>Chính sách</p>
                         </div>
 
-                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                        <i className="fa fa-chevron-down" aria-hidden="true"></i>
                       </div>
-                      <div class="footer-link-wanda submenu">
+                      <div className="footer-link-wanda submenu">
                         <ul>
                           <li>
                             <a href="/pages/chinh-sach-sinh-nhat">
@@ -86,33 +86,33 @@ export default class Footer extends Component {
                   </ul>
                 </div>
               </div>
-              <div class="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
-                <div class="title-footer title-store">
-                  <div class="h4">
+              <div className="col-md-3 col-sm-6 col-xs-12 tablink mg-bottom-15">
+                <div className="title-footer title-store">
+                  <div className="h4">
                     <a href="/pages/lien-he">
                       ĐỊA CHỈ CỬA HÀNG (21 CH)
                     </a>
                   </div>
                 </div>
-                <div class="footer_store">
-                  <div class="footer-link-wanda submenu">
-                    <div class="location-container">
-                      <div class="location_flex">
+                <div className="footer_store">
+                  <div className="footer-link-wanda submenu">
+                    <div className="location-container">
+                      <div className="location_flex">
                         <img
-                          class=" ls-is-cached lazyloaded"
+                          className=" ls-is-cached lazyloaded"
                           loading="lazy"
                           height="25px"
                           width="25px"
                           src="https://file.hstatic.net/1000253775/file/location_a1e4d2d625914daa90748f218350e7b7.svg"
                         />
-                        <p class="title-ch">HÀ NỘI (2 CH)</p>
+                        <p className="title-ch">HÀ NỘI (2 CH)</p>
                       </div>
                       <p>
                         Số 26 phố Lê Đại Hành, Phường Lê Đại Hành, Quận Hai Bà
                         Trưng, TP Hà Nội
                       </p>
                     </div>
-                    <div class="btn-view-store">
+                    <div className="btn-view-store">
                       <a href="/pages/lien-he">
                         XEM TẤT CẢ CỬA HÀNG
                       </a>
@@ -120,13 +120,13 @@ export default class Footer extends Component {
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="title-footer">
-                  <div class="payment-methold">
-                    <div class="h4">PHƯƠNG THỨC THANH TOÁN</div>
-                    <div class="footer-payment">
+              <div className="col-md-3 col-sm-6 col-xs-12">
+                <div className="title-footer">
+                  <div className="payment-methold">
+                    <div className="h4">PHƯƠNG THỨC THANH TOÁN</div>
+                    <div className="footer-payment">
                       <img
-                        class=" ls-is-cached lazyloaded"
+                        className=" ls-is-cached lazyloaded"
                         loading="lazy"
                         src="https://file.hstatic.net/1000253775/file/shoppy_new_18600e8ad9f64537b7e31d009457e215.jpg"
                         width="50px"
@@ -134,7 +134,7 @@ export default class Footer extends Component {
                         alt="Image Spay"
                       />
                       <img
-                        class=" ls-is-cached lazyloaded"
+                        className=" ls-is-cached lazyloaded"
                         loading="lazy"
                         src="https://file.hstatic.net/1000253775/file/vnpay_new_ec21c03b2f4c49689d180c8a485c8d5b.jpg"
                         width="50px"
@@ -142,7 +142,7 @@ export default class Footer extends Component {
                         alt="Image VNPay"
                       />
                       <img
-                        class=" ls-is-cached lazyloaded"
+                        className=" ls-is-cached lazyloaded"
                         loading="lazy"
                         src="https://file.hstatic.net/1000253775/file/cod_new_2316cf8e29bd4a858810a3d7b9eb39e4.jpg"
                         width="50px"
@@ -155,11 +155,11 @@ export default class Footer extends Component {
                 </div>
               </div>
             </div>
-            <div class="copyright-wanda">
-              <div class="container">
-                <div class="row ">
-                  <div class="col-md-12 text-center">
-                    <div class="text-copyright mb-0">
+            <div className="copyright-wanda">
+              <div className="container">
+                <div className="row ">
+                  <div className="col-md-12 text-center">
+                    <div className="text-copyright mb-0">
                       <span>BẢN QUYỀN THUỘC VỀ Team</span>
                     </div>
                   </div>

@@ -67,17 +67,6 @@ export default class Nav extends Component {
             <NavItem nav={nav} {...this.props} />
           </ul>
         </div>
-        <div className="sidenav-footer position-absolute w-100 bottom-0 ">
-          <div className="mx-3">
-            <a
-              className="btn bg-gradient-primary mt-4 w-100"
-              href="/admin/setting/"
-              type="button"
-            >
-              <i className="fa fa-cog me-sm-1" aria-hidden="true"></i> Setting
-            </a>
-          </div>
-        </div>
       </aside>
     );
   }

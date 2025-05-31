@@ -521,14 +521,14 @@ class ProductForm extends React.Component {
                   <button
                     onClick={this.addSeriEntry}
                     type="button"
-                    class="btn btn-outline-success btn-sm"
+                    className="btn btn-outline-success btn-sm"
                   >
                     Thêm
                   </button>
                   <button
                     onClick={() => this.setState({ modalOpen: false })}
                     type="button"
-                    class="btn btn-outline-danger btn-sm"
+                    className="btn btn-outline-danger btn-sm"
                   >
                     Hủy
                   </button>

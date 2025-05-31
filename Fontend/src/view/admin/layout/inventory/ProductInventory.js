@@ -80,10 +80,10 @@ class ProductInventory extends React.Component {
               className="edit-btn"
               onClick={() => this.updateShopInfo(row)}
             >
-              <i class="bi bi-pencil"></i>
+              <i className="bi bi-pencil"></i>
             </button>{" "}
             <button className="delete-btn" onClick={() => this.deleteShop(row)}>
-              <i class="bi bi-trash"></i>
+              <i className="bi bi-trash"></i>
             </button>
           </div>
         ),
@@ -225,15 +225,15 @@ class ProductInventory extends React.Component {
         <div>
           <h4>Thông Tin Cửa Hàng</h4>
           <div className="row">
-            <div class="form-group">
+            <div className="form-group">
               <div className="row">
-                <label for="shopName" class="col-sm-3 col-form-label">
+                <label for="shopName" className="col-sm-3 col-form-label">
                   Tên Cửa Hàng
                 </label>
-                <div class="col-sm">
+                <div className="col-sm">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     onChange={this.changShopName}
                     id="shopName"
                     value={this.state.shopName}
@@ -241,14 +241,14 @@ class ProductInventory extends React.Component {
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <div className="row">
-                <label for="adress" class="col-sm-3 col-form-label">
+                <label for="adress" className="col-sm-3 col-form-label">
                   Địa Chỉ
                 </label>
-                <div class="col-sm">
+                <div className="col-sm">
                   <textarea
-                    class="form-control  form-control-sm"
+                    className="form-control  form-control-sm"
                     id="adress"
                     onChange={this.changAdress}
                     rows="2"
@@ -257,15 +257,15 @@ class ProductInventory extends React.Component {
                 </div>
               </div>
             </div>
-            <div class="form-group mt-2">
+            <div className="form-group mt-2">
               <div className="row">
-                <label for="openingTime" class="col-sm-3 col-form-label">
+                <label for="openingTime" className="col-sm-3 col-form-label">
                   Giờ Mở Cửa
                 </label>
-                <div class="col-2">
+                <div className="col-2">
                   <input
                     type="time"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     onChange={this.changOpeningTime}
                     id="openingTime"
                     value={this.state.openingTime}
@@ -273,15 +273,15 @@ class ProductInventory extends React.Component {
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <div className="row">
-                <label for="closeTime" class="col-sm-3 col-form-label">
+                <label for="closeTime" className="col-sm-3 col-form-label">
                   Giờ Đóng Cửa
                 </label>
-                <div class="col-2">
+                <div className="col-2">
                   <input
                     type="time"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     onChange={this.changCloseTime}
                     id="closeTime"
                     value={this.state.closeTime}
@@ -289,10 +289,10 @@ class ProductInventory extends React.Component {
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <div className="row">
                 <div className="col-sm-3"></div>
-                <div class="col-sm">
+                <div className="col-sm">
                   <button
                     className="btn btn-primary"
                     onClick={

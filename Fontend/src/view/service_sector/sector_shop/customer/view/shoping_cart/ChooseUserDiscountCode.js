@@ -30,11 +30,11 @@ class ChooseUserDiscountCode extends Component {
   render() {
     return (
       <>
-        <label for="note" class="note-label">
+        <label for="note" className="note-label">
           Mã giảm giá
         </label>
-        <div class="store_ship">
-          <div class="title_ship"></div>
+        <div className="store_ship">
+          <div className="title_ship"></div>
           <div id="tab-content">
             <div id="tabaddress1" className="tab-pane fade in active">
               <div className="select_option-address">

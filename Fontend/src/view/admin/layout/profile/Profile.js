@@ -74,36 +74,36 @@ class Profile extends Component {
       });
     console.log(this.state.infoUser);
     return (
-      <div class="container-fluid px-2 px-md-4">
+      <div className="container-fluid px-2 px-md-4">
         <div
-          class="page-header min-height-300 border-radius-xl mt-4"
+          className="page-header min-height-300 border-radius-xl mt-4"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80')",
           }}
         >
-          <span class="mask  bg-gradient-primary  opacity-6"></span>
+          <span className="mask  bg-gradient-primary  opacity-6"></span>
         </div>
-        <div class="card card-body mx-3 mx-md-4 mt-n6">
-          <div class="row gx-4 mb-2"></div>
-          <div class="row">
-            <div class="row">
-              <div class="col-12 col-xl-4">
-                <div class="card card-plain h-100">
-                  <div class="card-header pb-0 p-3">
-                    <div class="col-auto">
-                      <div class="avatar avatar-xl position-relative">
+        <div className="card card-body mx-3 mx-md-4 mt-n6">
+          <div className="row gx-4 mb-2"></div>
+          <div className="row">
+            <div className="row">
+              <div className="col-12 col-xl-4">
+                <div className="card card-plain h-100">
+                  <div className="card-header pb-0 p-3">
+                    <div className="col-auto">
+                      <div className="avatar avatar-xl position-relative">
                         <img
                           src={`${urlapi}/api/Image/${this.state.infoUser.pathAvatar}`}
                           alt="profile_image"
-                          class="w-100 border-radius-lg shadow-sm"
+                          className="w-100 border-radius-lg shadow-sm"
                         />
                       </div>
                     </div>
-                    <div class="col-auto my-auto">
-                      <div class="h-100">
-                        <h5 class="mb-1">{this.state.infoUser.username}</h5>
-                        <p class="mb-0 font-weight-normal text-sm">
+                    <div className="col-auto my-auto">
+                      <div className="h-100">
+                        <h5 className="mb-1">{this.state.infoUser.username}</h5>
+                        <p className="mb-0 font-weight-normal text-sm">
                           {this.state.infoUser.role === "admin"
                             ? "Quản trị viên"
                             : this.state.infoUser.role === "manager"
@@ -115,20 +115,20 @@ class Profile extends Component {
                       </div>
                     </div>
                     <hr />
-                    <div class="row">
-                      <div class="col-md-8 d-flex align-items-center">
-                        <h6 class="mb-0">Profile Information</h6>
+                    <div className="row">
+                      <div className="col-md-8 d-flex align-items-center">
+                        <h6 className="mb-0">Profile Information</h6>
                       </div>
-                      <div class="col-md-4 text-end">
+                      <div className="col-md-4 text-end">
                         <a onClick={this.setModalIsOpen}>
                           <i
-                            class="fas fa-user-edit text-secondary text-sm"
+                            className="fas fa-user-edit text-secondary text-sm"
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"
                             aria-hidden="true"
                             aria-label="Edit Profile"
                           ></i>
-                          <span class="sr-only">Edit Profile</span>
+                          <span className="sr-only">Edit Profile</span>
                         </a>
                         <UpdateAccountModal
                           isOpen={this.state.modalIsOpen}
@@ -143,34 +143,34 @@ class Profile extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="card-body p-3">
-                    <ul class="list-group">
-                      <li class="list-group-item border-0 ps-0 pt-0 text-sm">
-                        <strong class="text-dark">Full Name:</strong> &nbsp;
+                  <div className="card-body p-3">
+                    <ul className="list-group">
+                      <li className="list-group-item border-0 ps-0 pt-0 text-sm">
+                        <strong className="text-dark">Full Name:</strong> &nbsp;
                         {this.state.infoUser.fullName}
                       </li>
-                      <li class="list-group-item border-0 ps-0 text-sm">
-                        <strong class="text-dark">Mobile:</strong> &nbsp;
+                      <li className="list-group-item border-0 ps-0 text-sm">
+                        <strong className="text-dark">Mobile:</strong> &nbsp;
                         {this.state.infoUser.phoneNumber}
                       </li>
-                      <li class="list-group-item border-0 ps-0 text-sm">
-                        <strong class="text-dark">Email:</strong> &nbsp;
+                      <li className="list-group-item border-0 ps-0 text-sm">
+                        <strong className="text-dark">Email:</strong> &nbsp;
                         {this.state.infoUser.email}
                       </li>
-                      <li class="list-group-item border-0 ps-0 text-sm">
-                        <strong class="text-dark">Location:</strong> &nbsp;{" "}
+                      <li className="list-group-item border-0 ps-0 text-sm">
+                        <strong className="text-dark">Location:</strong> &nbsp;{" "}
                         {this.state.infoUser.address}
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-xl-8">
-                <div class="card card-plain h-100">
-                  <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Leave Plans</h6>
+              <div className="col-12 col-xl-8">
+                <div className="card card-plain h-100">
+                  <div className="card-header pb-0 p-3">
+                    <h6 className="mb-0">Leave Plans</h6>
                   </div>
-                  <div class="card-body p-3">
+                  <div className="card-body p-3">
                     <LeaveCalendar {...this.props} />
                   </div>
                 </div>

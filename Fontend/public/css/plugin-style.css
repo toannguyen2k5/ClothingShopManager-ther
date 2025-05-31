@@ -1903,3 +1903,8 @@ footer .top-ft-wanda ul li a:hover {
    color: white;
    text-align: center;
 } */
+
+.container{
+  padding-left: 10%;
+  padding-right: 10%;
+}

@@ -83,13 +83,13 @@ export default class PurchaseSlipManager extends Component {
         cell: (row, index) => (
           <>
             <button className="bg-yellow-400 text-white px-2 py-1 rounded mr-2">
-              <i class="fa-solid fa-square-pen"></i>
+              <i className="fa-solid fa-square-pen"></i>
             </button>
             <button
               className="bg-red-500 text-white px-2 py-1 rounded"
               onClick={() => this.deleteProduct(index)}
             >
-              <i class="fa-solid fa-trash-can"></i>
+              <i className="fa-solid fa-trash-can"></i>
             </button>
           </>
         ),
@@ -326,18 +326,17 @@ export default class PurchaseSlipManager extends Component {
         ></link>
         {/* thông tin đơn hàng*/}
         <div className="row">
-          <h2>Thông Tin Đơn Hàng</h2>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="dayCreate" class="col-sm-3 col-form-label">
+                <label for="dayCreate" className="col-sm-3 col-form-label">
                   Ngày Tạo Hóa Đơn
                 </label>
-                <div class="col-sm-7">
+                <div className="col-sm-7">
                   <input
                     type="date"
                     readonly
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="dayCreate"
                     value={this.state.currentDate}
                     disabled
@@ -345,15 +344,15 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idCreater" class="col-sm-3 col-form-label">
+                <label for="idCreater" className="col-sm-3 col-form-label">
                   Người Tạo Hóa Đơn
                 </label>
-                <div class="col-sm-7">
+                <div className="col-sm-7">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="idCreater"
                     value={this.props.state_data.user_info.full_name}
                     disabled
@@ -363,17 +362,17 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-2">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idSupplier " class="col-sm-3 col-form-label">
+                <label for="idSupplier " className="col-sm-3 col-form-label">
                   Nhà Cung Cấp
                 </label>
-                <div class="col-sm-7">
+                <div className="col-sm-7">
                   <div className="row form-inline">
                     <div className="col-10">
                       <input
                         type="text"
-                        class="form-control form-control-sm"
+                        className="form-control form-control-sm"
                         id="idSupplier "
                         value={this.state.data_supplier_selected.nameSupplier}
                         disabled
@@ -381,10 +380,10 @@ export default class PurchaseSlipManager extends Component {
                     </div>
                     <button
                       type="button"
-                      class="btn btn-outline-info col-2"
+                      className="btn btn-outline-info col-2"
                       onClick={this.handleOpenModalSupplier}
                     >
-                      <i class="bi bi-search"></i>
+                      <i className="bi bi-search"></i>
                     </button>
                     <ModalSupplier
                       isOpen={this.state.isOpenModalSupplier}
@@ -397,16 +396,16 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="statusReceive" class="col-sm-4 col-form-label">
+                <label for="statusReceive" className="col-sm-4 col-form-label">
                   Trạng Thái Đơn Hàng
                 </label>
-                <div class="col-sm-6">
+                <div className="col-sm-6">
                   <input
                     type="text"
                     readonly
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="statusReceive"
                     value="Chưa Phê Duyệt"
                     disabled
@@ -416,16 +415,16 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="totalBill" class="col-sm-3 col-form-label">
+                <label for="totalBill" className="col-sm-3 col-form-label">
                   Tổng Tiền
                 </label>
-                <div class="col-sm-7">
+                <div className="col-sm-7">
                   <input
                     type="text"
                     readonly
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="totalBill"
                     value={this.state.total.toLocaleString() + " đ"}
                     disabled
@@ -439,17 +438,17 @@ export default class PurchaseSlipManager extends Component {
         <div className="row">
           <h2>Thông Tin Sản Phẩm</h2>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idShop" class="col-sm-3 col-form-label">
+                <label for="idShop" className="col-sm-3 col-form-label">
                   Cửa Hàng
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <div className="row form-inline">
                     <div className="col-10">
                       <input
                         type="text"
-                        class="form-control form-control-sm"
+                        className="form-control form-control-sm"
                         id="idShop"
                         value={this.state.data_shop_selected.nameShop}
                         readOnly
@@ -458,10 +457,10 @@ export default class PurchaseSlipManager extends Component {
                     </div>
                     <button
                       type="button"
-                      class="btn btn-outline-info col-2"
+                      className="btn btn-outline-info col-2"
                       onClick={this.handleOpenModalShop}
                     >
-                      <i class="bi bi-search"></i>
+                      <i className="bi bi-search"></i>
                     </button>
                     <ModalShop
                       isOpen={this.state.isOpenModalShop}
@@ -472,17 +471,17 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idProduct" class="col-sm-3 col-form-label">
+                <label for="idProduct" className="col-sm-3 col-form-label">
                   Sản Phẩm
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <div className="row form-inline">
                     <div className="col-10">
                       <input
                         type="text"
-                        class="form-control form-control-sm"
+                        className="form-control form-control-sm"
                         id="idProduct"
                         value={this.state.data_product_selected.nameProduct}
                         readOnly
@@ -491,10 +490,10 @@ export default class PurchaseSlipManager extends Component {
                     </div>
                     <button
                       type="button"
-                      class="btn btn-outline-info col-2"
+                      className="btn btn-outline-info col-2"
                       onClick={this.handleOpenModalProduct}
                     >
-                      <i class="bi bi-search"></i>
+                      <i className="bi bi-search"></i>
                     </button>
                     <ModalProduct
                       isOpen={this.state.isOpenModalProduct}
@@ -509,15 +508,15 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idCategoty" class="col-sm-3 col-form-label">
+                <label for="idCategoty" className="col-sm-3 col-form-label">
                   Thương Hiệu
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="idCategoty"
                     value={this.state.data_product_selected.nameBrand}
                     readOnly
@@ -526,15 +525,15 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idCategoty" class="col-sm-3 col-form-label">
+                <label for="idCategoty" className="col-sm-3 col-form-label">
                   Danh Mục
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="idCategoty"
                     value={this.state.data_product_selected.nameCategory}
                     readOnly
@@ -545,15 +544,15 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idCategoty" class="col-sm-3 col-form-label">
+                <label for="idCategoty" className="col-sm-3 col-form-label">
                   Chất Liệu
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="idCategoty"
                     value={this.state.data_product_selected.nameMaterial}
                     readOnly
@@ -562,15 +561,15 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="idCategoty" class="col-sm-3 col-form-label">
+                <label for="idCategoty" className="col-sm-3 col-form-label">
                   Style
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="idCategoty"
                     value={this.state.data_product_selected.nameStyle}
                     readOnly
@@ -581,16 +580,16 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="row col-6">
-              <div class="form-group col-6">
+            <div className="row col-6 form-group-input">
+              <div className="form-group col-6 form-group-input">
                 <div className="row">
-                  <label for="Quantity" class="col-sm-5 col-form-label">
+                  <label for="Quantity" className="col-sm-5 col-form-label">
                     Số Lượng
                   </label>
-                  <div class="col-sm-6">
+                  <div className="col-sm-6">
                     <input
                       type="number"
-                      class="form-control form-control-sm"
+                      className="form-control form-control-sm"
                       id="Quantity"
                       name="quantity"
                       onChange={this.handleItemChange}
@@ -600,15 +599,15 @@ export default class PurchaseSlipManager extends Component {
                   </div>
                 </div>
               </div>
-              <div class="form-group col-6">
+              <div className="form-group col-6 form-group-input">
                 <div className="row">
-                  <label for="Price" class="col-sm-3 col-form-label">
+                  <label for="Price" className="col-sm-3 col-form-label">
                     Giá Nhập
                   </label>
-                  <div class="col-sm-7">
+                  <div className="col-sm-7">
                     <input
                       type="money"
-                      class="form-control form-control-sm"
+                      className="form-control form-control-sm"
                       id="Price"
                       name="unitPrice"
                       onChange={this.handleItemChange}
@@ -619,18 +618,18 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
-            <div className="row col-6">
-              <div class="form-group col-6">
+            <div className="row col-6 form-group-input">
+              <div className="form-group col-6 form-group-input">
                 <div className="row">
-                  <label for="color" class="col-sm-2 col-form-label">
+                  <label for="color" className="col-sm-2 col-form-label">
                     Màu
                   </label>
-                  <div class="col-sm-8">
+                  <div className="col-sm-8">
                     <div className="row form-inline">
                       <div className="col-10">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           name="color"
                           id="color"
                           value={this.state.data_product_selected.color}
@@ -640,10 +639,10 @@ export default class PurchaseSlipManager extends Component {
                       </div>
                       <button
                         type="button"
-                        class="btn btn-outline-info col-2"
+                        className="btn btn-outline-info col-2"
                         onClick={this.handleOpenModalColor}
                       >
-                        <i class="bi bi-search"></i>
+                        <i className="bi bi-search"></i>
                       </button>
                       <ModalColor
                         isOpen={this.state.isOpenModalColor}
@@ -656,16 +655,16 @@ export default class PurchaseSlipManager extends Component {
                   </div>
                 </div>
               </div>
-              <div class="form-group col-6">
+              <div className="form-group col-6 form-group-input">
                 <div className="row">
-                  <label for="size" class="col-sm-2 col-form-label">
+                  <label for="size" className="col-sm-2 col-form-label">
                     Size
                   </label>
-                  <div class="col-sm-9">
+                  <div className="col-sm-9">
                     <input
                       type="text"
                       readonly
-                      class="form-control form-control-sm"
+                      className="form-control form-control-sm"
                       id="size"
                       name="size"
                       onChange={this.handleItemChange}
@@ -677,15 +676,15 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="seri" class="col-sm-3 col-form-label">
+                <label for="seri" className="col-sm-3 col-form-label">
                   Số Seri
                 </label>
-                <div class="col-sm-6">
+                <div className="col-sm-6">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="seri"
                     name="seri"
                     onChange={this.handleItemChange}
@@ -696,15 +695,15 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="totalPrice" class="col-sm-3 col-form-label">
+                <label for="totalPrice" className="col-sm-3 col-form-label">
                   Tổng Giá Trị
                 </label>
-                <div class="col-sm-6">
+                <div className="col-sm-6">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     id="totalPrice"
                     value={(
                       this.state.data_product_selected.quantity *
@@ -719,10 +718,10 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <div class="col-sm-4">
+            <div className="col-sm-4">
               <button
                 type="button"
-                class="btn btn-outline-success"
+                className="btn btn-outline-success"
                 onClick={this.addItem}
               >
                 Thêm sản phẩm

@@ -10,7 +10,7 @@ class MainPhoto extends Component {
       <div>
         {this.props.images.map((image, index) => (
           <div
-            class="item item-owl slick-slide slick-active"
+            className="item item-owl slick-slide slick-active"
             style={{ width: " 118px" }}
             tabIndex="0"
             data-slick-index={index}
@@ -18,14 +18,14 @@ class MainPhoto extends Component {
           >
             <a
               href="javascript:void(0)"
-              class="product__thumbnail"
+              className="product__thumbnail"
               data-image={urlapi + "/api/Image/product/" + image.path}
               data-index={index}
               tabIndex="0"
             >
               <img
                 alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
-                class="lazyload-cus dt-width-100"
+                className="lazyload-cus dt-width-100"
                 loading="lazy"
                 src={urlapi + "/api/Image/product/" + image.path}
                 width="100"

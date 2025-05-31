@@ -12,13 +12,13 @@ class FilterAddress extends Component {
 
   render() {
     return (
-      <div class="cate-main-filter">
-        <div class="margin-filter">
-          <div class="box-sortby">
-            <div class="box-sort">
-              <div class="title-sort">Đang Xem Tại: </div>
-              <div class="sort-select">
-                <select class="form-select" aria-label="Default select example">
+      <div className="cate-main-filter">
+        <div className="margin-filter">
+          <div className="box-sortby">
+            <div className="box-sort">
+              <div className="title-sort">Đang Xem Tại: </div>
+              <div className="sort-select">
+                <select className="form-select" aria-label="Default select example">
                   <option selected>Open this select menu</option>
                   <option defaultValue="1">One</option>
                   <option defaultValue="2">Two</option>
@@ -26,7 +26,7 @@ class FilterAddress extends Component {
                 </select>
               </div>
             </div>
-            <div class="clearfix"></div>
+            <div className="clearfix"></div>
           </div>
         </div>
       </div>

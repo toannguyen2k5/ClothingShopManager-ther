@@ -45,28 +45,28 @@ class DetailProduct extends Component {
     }
     return (
       <>
-        <section id="product-template" class="product-page">
-          <div class="container container--medium">
-            <div class="row d-flex">
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 order-mb-1 gallery-product-template">
-                <div class="bg-while d-flex-wrap d-flex sticky-gallery">
+        <section id="product-template" className="product-page">
+          <div className="container container--medium">
+            <div className="row d-flex">
+              <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 order-mb-1 gallery-product-template">
+                <div className="bg-while d-flex-wrap d-flex sticky-gallery">
                   <div
                     id="sl-product-thumb"
-                    class="product-thumb"
+                    className="product-thumb"
                     data-widththumb="false"
                   >
                     <div
                       id="slider-thumb"
-                      class="slider-mobile d-flex-slick slick-initialized slick-slider"
+                      className="slider-mobile d-flex-slick slick-initialized slick-slider"
                       data-lg="6"
                       data-md="5"
                       data-sm="5"
                       data-xs="5"
                       data-vertical="false"
                     >
-                      <div class="slick-list draggable">
+                      <div className="slick-list draggable">
                         <div
-                          class="slick-track"
+                          className="slick-track"
                           style={{
                             opacity: "1",
                             width: "1298px",
@@ -81,20 +81,20 @@ class DetailProduct extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="bg-while slider-new">
+                  <div className="bg-while slider-new">
                     <div
                       id="gallery-thumb"
-                      class="product-gallery d-flex-slick slick-initialized slick-slider"
+                      className="product-gallery d-flex-slick slick-initialized slick-slider"
                       data-allin="1"
                       data-widthgallery="false"
                     >
-                      <div class="slick-list draggable">
+                      <div className="slick-list draggable">
                         <div
-                          class="slick-track"
+                          className="slick-track"
                           style={{ opacity: " 1", width: " 6380px" }}
                         >
                           <div
-                            class="item item-owl slider_img slick-slide slick-current slick-active"
+                            className="item item-owl slider_img slick-slide slick-current slick-active"
                             data-slick-index="0"
                             aria-hidden="false"
                             style={{
@@ -116,7 +116,7 @@ class DetailProduct extends Component {
                                   )?.path || "#"
                               }
                               data-fancybox="gallery"
-                              class="product__thumbnail"
+                              className="product__thumbnail"
                               data-pos="1"
                               tabIndex="0"
                             >
@@ -125,7 +125,7 @@ class DetailProduct extends Component {
                                   this.state.product?.nameProduct ||
                                   "name product"
                                 }
-                                class="product-image-feature dt-width-100 ls-is-cached lazyloaded"
+                                className="product-image-feature dt-width-100 ls-is-cached lazyloaded"
                                 loading="lazy"
                                 src={
                                   urlapi +
@@ -150,21 +150,21 @@ class DetailProduct extends Component {
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 order-mb-2">
-                <div class="bg-while">
-                  <div class="product-content">
-                    <div class="pro-content-head clearfix">
-                      <div class="head-product-title">
-                        <h1 data-available="Còn hàng" class="green">
+              <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 order-mb-2">
+                <div className="bg-while">
+                  <div className="product-content">
+                    <div className="pro-content-head clearfix">
+                      <div className="head-product-title">
+                        <h1 data-available="Còn hàng" className="green">
                           {this.state.product?.nameProduct || "name product"}
                         </h1>
                       </div>
-                      <div class="d-flex product-info">
-                        <div class="product-info__l d-flex">
-                          <div class="pro-type">
+                      <div className="d-flex product-info">
+                        <div className="product-info__l d-flex">
+                          <div className="pro-type">
                             <span>Loại: </span>
                             <a
-                              class="title"
+                              className="title"
                               rel="nofollow"
                               href="/collections/types?q=ao-ni-sweatshirt"
                             >
@@ -174,10 +174,10 @@ class DetailProduct extends Component {
                                 "name style - name category"}
                             </a>
                           </div>
-                          <span class="line-info">|</span>
-                          <div class="pro-sku ProductSku">
+                          <span className="line-info">|</span>
+                          <div className="pro-sku ProductSku">
                             <span>MSP:</span>
-                            <span class="sku-number title">
+                            <span className="sku-number title">
                               {this.state.product?.idProduct || "idProduct"}
                             </span>
                           </div>
@@ -185,14 +185,14 @@ class DetailProduct extends Component {
                       </div>
 
                       <div id="pro-price">
-                        <span class="price-now">
+                        <span className="price-now">
                           {this.state.product.price *
                             ((this.state.product.discountEvent &&
                               1 - this.state.product.discountEvent.decrease) ||
                               1)}
                           ₫
                         </span>
-                        <span class="price-compare">
+                        <span className="price-compare">
                           <del>
                             {this.state.product.discountEvent &&
                               this.state.product.price}
@@ -202,9 +202,9 @@ class DetailProduct extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="coupon-product clear">
-                    <div class="product-promotion">
-                      <h3 class="product-promotion__heading">
+                  <div className="coupon-product clear">
+                    <div className="product-promotion">
+                      <h3 className="product-promotion__heading">
                         <img
                           src="https://file.hstatic.net/1000253775/file/gift_new-removebg-preview_fce03d3cd9d24d0cb0be33ac068e41fc.png"
                           alt="Áo Hoodie Don"
@@ -213,14 +213,14 @@ class DetailProduct extends Component {
                           anyone=""
                           width="22"
                           height="22"
-                          class="mr-2"
+                          className="mr-2"
                         />{" "}
                         KHUYẾN MÃI SẢN PHẨM
                       </h3>
-                      <div class="product_coupon_new">
-                        <ul class="product-promotion__box">
+                      <div className="product_coupon_new">
+                        <ul className="product-promotion__box">
                           <li>
-                            <span class="big-bold">
+                            <span className="big-bold">
                               <strong>CHI TIẾT KHUYẾN MÃI</strong>
                             </span>
                           </li>
@@ -228,10 +228,10 @@ class DetailProduct extends Component {
                       </div>
                       {this.state.product.discountEvent && (
                         <>
-                          <div class="product_coupon_new">
-                            <ul class="product-promotion__box">
+                          <div className="product_coupon_new">
+                            <ul className="product-promotion__box">
                               <li>
-                                <span class="big-bold">
+                                <span className="big-bold">
                                   <img
                                     src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                     style={{ width: "20px", height: "20px" }}
@@ -242,10 +242,10 @@ class DetailProduct extends Component {
                               </li>
                             </ul>
                           </div>
-                          <div class="product_coupon_new">
-                            <ul class="product-promotion__box">
+                          <div className="product_coupon_new">
+                            <ul className="product-promotion__box">
                               <li>
-                                <span class="big-bold">
+                                <span className="big-bold">
                                   <img
                                     src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                     style={{ width: "20px", height: "20px" }}
@@ -260,10 +260,10 @@ class DetailProduct extends Component {
                             </ul>
                           </div>
 
-                          <div class="product_coupon_new">
-                            <ul class="product-promotion__box">
+                          <div className="product_coupon_new">
+                            <ul className="product-promotion__box">
                               <li>
-                                <span class="big-bold">
+                                <span className="big-bold">
                                   <img
                                     src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                     style={{ width: "20px", height: "20px" }}
@@ -277,10 +277,10 @@ class DetailProduct extends Component {
                               </li>
                             </ul>
                           </div>
-                          <div class="product_coupon_new">
-                            <ul class="product-promotion__box">
+                          <div className="product_coupon_new">
+                            <ul className="product-promotion__box">
                               <li>
-                                <span class="big-bold">
+                                <span className="big-bold">
                                   <img
                                     src="https://file.hstatic.net/1000253775/file/icon-04.png"
                                     style={{ width: "20px", height: "20px" }}
@@ -295,10 +295,10 @@ class DetailProduct extends Component {
                       )}
                       {!this.state.product.discountEvent && (
                         <>
-                          <div class="product_coupon_new">
-                            <ul class="product-promotion__box">
+                          <div className="product_coupon_new">
+                            <ul className="product-promotion__box">
                               <li>
-                                <span class="big-bold">
+                                <span className="big-bold">
                                   Mô Tả : Xin lỗi quý khách , hiện tại mặt hàng
                                   này không được giảm giá
                                 </span>
@@ -315,12 +315,12 @@ class DetailProduct extends Component {
                     {...this.props}
                   />
                 </div>
-                <div class="product-single__policy">
-                  <div class="product-policy">
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                <div className="product-single__policy">
+                  <div className="product-policy">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -328,14 +328,14 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Đổi trả tận nhà trong vòng 15 ngày
                       </span>
                     </div>
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -343,14 +343,14 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Freeship mọi đơn hàng
                       </span>
                     </div>
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -358,14 +358,14 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Bảo hành trong vòng 30 ngày
                       </span>
                     </div>
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -373,14 +373,14 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Hotline 0934.234.6789 hỗ trợ từ 8h30-24h
                       </span>
                     </div>
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -388,14 +388,14 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Giao hàng toàn quốc
                       </span>
                     </div>
-                    <div class="product-policy__item">
-                      <div class="product-policy__icon">
+                    <div className="product-policy__item">
+                      <div className="product-policy__icon">
                         <img
-                          class="ls-is-cached lazyloaded"
+                          className="ls-is-cached lazyloaded"
                           loading="lazy"
                           width="45"
                           height="45"
@@ -403,7 +403,7 @@ class DetailProduct extends Component {
                           alt=""
                         />
                       </div>
-                      <span class="product-policy__title">
+                      <span className="product-policy__title">
                         Có cộng dồn <br />
                         ưu đãi KHTT
                       </span>
@@ -411,14 +411,14 @@ class DetailProduct extends Component {
                   </div>
                 </div>
               </div>
-              <div class="col-md-12 col-sm-12 col-xs-12 order-mb-3 mg-top-30 mg-top-15-mb">
-                <div class="bg-while">
-                  <div class="product-description-tab">
-                    <div class="scroll-nav-tab hidden-xs">
-                      <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
+              <div className="col-md-12 col-sm-12 col-xs-12 order-mb-3 mg-top-30 mg-top-15-mb">
+                <div className="bg-while">
+                  <div className="product-description-tab">
+                    <div className="scroll-nav-tab hidden-xs">
+                      <ul className="nav nav-tabs" role="tablist">
+                        <li role="presentation" className="active">
                           <a
-                            class="show"
+                            className="show"
                             href="javascript:void(0)"
                             data-href="#pro-tab-1"
                             data-toggle="tab"
@@ -431,12 +431,12 @@ class DetailProduct extends Component {
                       </ul>
                     </div>
                     <div
-                      class="tab-pane active content-entry add-height-img"
+                      className="tab-pane active content-entry add-height-img"
                       id="pro-tab-1"
                       role="tabpanel"
                     >
-                      <div class="tab-mobile visible-xs">Mô tả</div>
-                      <div class="more-description">
+                      <div className="tab-mobile visible-xs">Mô tả</div>
+                      <div className="more-description">
                         <p>
                           <span style={{ fontSize: "20px" }}>
                             <strong>

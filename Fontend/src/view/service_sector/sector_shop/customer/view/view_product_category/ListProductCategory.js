@@ -45,30 +45,30 @@ class Home extends Component {
             />
           </section>
 
-          <section id="collection-template" class="collection-page">
-            <div class="collection-body">
-              <div class="container">
+          <section id="collection-template" className="collection-page">
+            <div className="collection-body">
+              <div className="container">
                 <Banner
                   src={"https://file.hstatic.net/1000253775/file/diachi_dk.jpg"}
                   alt={"dddddd"}
                 />
-                <div class="row d-flex">
-                  <div class="col-md-12 col-sm-12 col-xs-12 main-colection">
+                <div className="row d-flex">
+                  <div className="col-md-12 col-sm-12 col-xs-12 main-colection">
                     <FilterProduct />
 
-                    <div class="result-filter-tag hidden">
-                      <ul class="result-filter-full">
-                        <li class="clear-all">
+                    <div className="result-filter-tag hidden">
+                      <ul className="result-filter-full">
+                        <li className="clear-all">
                           {" "}
-                          Xóa hết <i class="fa fa-times" aria-hidden="true"></i>
+                          Xóa hết <i className="fa fa-times" aria-hidden="true"></i>
                         </li>
                       </ul>
                     </div>
                     <ProductList list_product={this.state.list_product} />
 
-                    <div class="collection-view-content">
+                    <div className="collection-view-content">
                       <button
-                        class="btn-collectionview"
+                        className="btn-collectionview"
                         //style="display: block;"
                       >
                         Xem thêm

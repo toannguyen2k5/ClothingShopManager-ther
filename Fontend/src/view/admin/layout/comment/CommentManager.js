@@ -80,8 +80,8 @@ export default class CommentManager extends Component {
         name: 'Hành động',
         cell: row => (
           <div className="action-buttons">
-            <button onClick={() => this.openReplyModal(row)} className="edit-btn" title="Trả lời"><i class="bi bi-reply"></i></button>
-            <button onClick={() => this.hideComment(row.id)} className="delete-btn" title="Ẩn bình luận"><i class="bi bi-eye-slash-fill"></i></button>
+            <button onClick={() => this.openReplyModal(row)} className="edit-btn" title="Trả lời"><i className="bi bi-reply"></i></button>
+            <button onClick={() => this.hideComment(row.id)} className="delete-btn" title="Ẩn bình luận"><i className="bi bi-eye-slash-fill"></i></button>
           </div>
         ),
         ignoreRowClick: true,

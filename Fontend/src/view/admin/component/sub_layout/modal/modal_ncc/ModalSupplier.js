@@ -191,7 +191,7 @@ class ModalSupplier extends Component {
                       onClick={() => this.setState({ isShowList: false })}
                       style={{ width: "100px" }}
                     >
-                      [<i class="fa-solid fa-plus"></i>]&nbsp;Add
+                      [<i className="fa-solid fa-plus"></i>]&nbsp;Add
                     </button>
                     <input
                       type="text"
@@ -219,15 +219,15 @@ class ModalSupplier extends Component {
               )}
               {!this.state.isShowList && (
                 <div className="row">
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="nameSupplier" class="col-sm-2 col-form-label">
+                      <label for="nameSupplier" className="col-sm-2 col-form-label">
                         Tên Nhà Cung Cấp
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="nameSupplier"
                           id="nameSupplier"
@@ -236,15 +236,15 @@ class ModalSupplier extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="contactName" class="col-sm-2 col-form-label">
+                      <label for="contactName" className="col-sm-2 col-form-label">
                         Người Liên Hệ
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="contactName"
                           id="contactName"
@@ -253,15 +253,15 @@ class ModalSupplier extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="phoneNumber" class="col-sm-2 col-form-label">
+                      <label for="phoneNumber" className="col-sm-2 col-form-label">
                         Số Điện Thoại
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="phoneNumber"
                           id="phoneNumber"
@@ -270,15 +270,15 @@ class ModalSupplier extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="email" class="col-sm-2 col-form-label">
+                      <label for="email" className="col-sm-2 col-form-label">
                         Email
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="email"
                           id="email"
@@ -287,14 +287,14 @@ class ModalSupplier extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="address" class="col-sm-2 col-form-label">
+                      <label for="address" className="col-sm-2 col-form-label">
                         Địa Chỉ
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <textarea
-                          class="form-control  form-control-sm"
+                          className="form-control  form-control-sm"
                           id="address"
                           onChange={this.handleChange}
                           name="address"

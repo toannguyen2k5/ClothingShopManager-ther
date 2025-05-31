@@ -50,21 +50,21 @@ class ViewInfoBuyProduct extends Component {
     console.log("state :", this.state);
     return (
       <>
-        <div class="select-swatch-detail">
+        <div className="select-swatch-detail">
           <form
             id="add-item-form"
             action="/cart/add"
             method="post"
-            class="variants clearfix"
+            className="variants clearfix"
           >
-            <div class="row">
+            <div className="row">
               <div
-                class="select-swatch clearfix col-xs-12 col-md-12 col-sm-12"
+                className="select-swatch clearfix col-xs-12 col-md-12 col-sm-12"
                 style={{ display: "flex" }}
               >
                 <div
                   id="variant-swatch-0"
-                  class="swatch clearfix type-image"
+                  className="swatch clearfix type-image"
                   data-option="option1"
                   data-option-index="0"
                   style={{ padding: "20px" }}
@@ -101,7 +101,7 @@ class ViewInfoBuyProduct extends Component {
                 </div>
                 <div
                   id="variant-swatch-0"
-                  class="swatch clearfix type-image"
+                  className="swatch clearfix type-image"
                   data-option="option1"
                   data-option-index="0"
                   style={{ padding: "20px" }}
@@ -144,9 +144,9 @@ class ViewInfoBuyProduct extends Component {
             </div>
           </form>
         </div>
-        <div class="row quantity">
-          <div class="col-xs-12 selector-actions d-flex d-flex-center pd-top-10 button-swatch-detail-8">
-            <div class="quantity-area">
+        <div className="row quantity">
+          <div className="col-xs-12 selector-actions d-flex d-flex-center pd-top-10 button-swatch-detail-8">
+            <div className="quantity-area">
               <input
                 type="button"
                 defaultValue="–"
@@ -154,7 +154,7 @@ class ViewInfoBuyProduct extends Component {
                   this.state.quantity > 1 &&
                     this.setState({ quantity: this.state.quantity - 1 });
                 }}
-                class="qty-btn qtyminus"
+                className="qty-btn qtyminus"
               />
               <input
                 readOnly=""
@@ -163,7 +163,7 @@ class ViewInfoBuyProduct extends Component {
                 name="quantity"
                 value={this.state.quantity}
                 min="1"
-                class="quantity-selector"
+                className="quantity-selector"
               />
               <input
                 type="button"
@@ -171,7 +171,7 @@ class ViewInfoBuyProduct extends Component {
                 onClick={() => {
                   this.setState({ quantity: this.state.quantity + 1 });
                 }}
-                class="qty-btn qtyplus"
+                className="qty-btn qtyplus"
               />
             </div>
             <div className="wrap-addcart">
@@ -214,7 +214,7 @@ class ViewInfoBuyProduct extends Component {
               </div>
             </div>
           </div>
-          <div class="service-product"></div>
+          <div className="service-product"></div>
         </div>
       </>
     );

@@ -1,7 +1,5 @@
 /* CSS for Category Manager */
 .category-navbar {
-  border: 1px solid #ccc;
-  background: #fafafa;
   border-radius: 6px;
   margin: 2rem auto;
   font-family: Arial, sans-serif;
@@ -18,8 +16,16 @@
   float: none;
 }
 
-.navbar-nav .nav-item {
-  margin-right: 1rem;
+.row:has(.category-navbar) {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.category-navbar .add-category-form input {
+  border: 1px solid #000;
+  padding: auto;
+  padding-left: 10px;
+  background: #f1f1f1;
 }
 
 .navbar-nav .dropdown-toggle::after {
