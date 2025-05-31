@@ -12,15 +12,31 @@ class Home extends Component {
     this.state = {
       id_category: new URLSearchParams(this.props.location.search).get("code"),
       runGetListProduct: true,
-      list_product: [],
       sort_product: "default",
       data_list: {},
+      products: [],
+      quantity: 0,
     };
     document.title = "Demo";
-    // fetch(urlapi + "/get_list_post/")
-    //   .then((response) => response.json())
-    //   .then((data) => this.setState({ data_list: data }))
-    //   .catch((error) => console.error(error));
+  }
+  GetProducts() {
+    fetch(urlapi + `/api/product/sellectAll/${this.state.quantity}/20/`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          console.log("data : ", data);
+          const list_product = [...this.state.products, ...data.data];
+          this.setState({
+            products: [...this.state.products, ...data.data],
+            quantity: list_product?.length,
+          });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+  componentDidMount() {
+    this.GetProducts();
   }
 
   render() {
@@ -44,7 +60,7 @@ class Home extends Component {
                 /> */}
                 <div className="row d-flex">
                   <div className="col-md-12 col-sm-12 col-xs-12 main-colection">
-                    <ListProduct />
+                    <ListProduct list_product={this.state.products} {...this.props}/>
                   </div>
                 </div>
               </div>

@@ -8,3 +8,5 @@ export const no_change = "NO CHANGE";
 export const set_code_build_state = "SET CODE BUILD STATE";
 export const change_show_sector = "CHANGE SHOW SECTOR";
 export const chang_state_data = "CHANGE STATE DATA";
+export const add_product_to_cart = "ADD PRODUCT TO CART";
+export const remove_product_to_cart = "REMOVE PRODUCT TO CART";

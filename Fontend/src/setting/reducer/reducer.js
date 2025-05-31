@@ -10,12 +10,13 @@ const initialState = {
     time: null,
     ip_adress: null,
     role: null,
-    role_level:0
+    role_level: 0,
   },
   sector: {
     name_current: define_name_sector.main.home,
   },
   data: [],
+  data_cart: [],
   code: false,
   data_page: {},
   current_page: {
@@ -178,6 +179,36 @@ export const changeState = (state = initialState, action) => {
       buildcode(new_state);
       return new_state;
     }
+
+    case types.add_product_to_cart: {
+      let data_cart = [];
+    
+      // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+      const existingItem = state.data_cart.find(
+        (item) => item.idProduct === action.data.idProduct
+      );
+    
+      if (existingItem) {
+        // Nếu đã có: tăng số lượng
+        data_cart = state.data_cart.map((item) =>
+          item.idProduct === action.data.idProduct
+            ? { ...item, quantity: item.quantity + action.data.quantity }
+            : item
+        );
+      } else {
+        // Nếu chưa có: thêm mới
+        data_cart = [...state.data_cart, { ...action.data, quantity: action.data.quantity }];
+      }
+    
+      const new_state = {
+        ...state,
+        data_cart: data_cart,
+      };
+    
+      buildcode(new_state); // Nếu bạn cần xử lý gì thêm ở đây
+      return new_state;
+    }
+    
     default:
       return state;
   }

@@ -40,11 +40,11 @@ public class ProductService {
 				    "p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
 				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status, SUM(is.quantity), p.description) "+
 				    "FROM Product p " +
-				    "INNER JOIN Brand b ON p.idBrand = b.idBrand " +
-				    "INNER JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
-				    "INNER JOIN ProductCategory pc ON pc.idCategory = p.idCategory " +
-				    "INNER JOIN Style s ON s.idStyle = p.idStyle " +
-				    "INNER JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial " +
+				    "LEFT JOIN Brand b ON p.idBrand = b.idBrand " +
+				    "LEFT JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
+				    "LEFT JOIN ProductCategory pc ON pc.idCategory = p.idCategory " +
+				    "LEFT JOIN Style s ON s.idStyle = p.idStyle " +
+				    "LEFT JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial " +
 				    "LEFT JOIN DetailProduct dp ON dp.idProduct = p.idProduct " +
 				    "LEFT JOIN InventoryShop is ON is.idDetail = dp.idDetail " +
 				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true " +

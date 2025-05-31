@@ -116,3 +116,10 @@ export function change_state_data(data_page) {
     data_page,
   };
 }
+
+export function add_product_to_cart(data) {
+  return {
+    type: types.add_product_to_cart,
+    data,
+  };
+}
