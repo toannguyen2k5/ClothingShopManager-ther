@@ -196,6 +196,7 @@ export default class CreateSalesSlip extends Component {
       if (!idShops || idShops.length === 0) {
         this.setState({
           shippingFee: 0,
+          total: 0,
         });
         return;
       }
@@ -257,25 +258,36 @@ export default class CreateSalesSlip extends Component {
       )
         .then((response) => response.json())
         .then((data) => {
+          let total = items
+            .map((item) => item.quantity * item.price)
+            .reduce((sum, value) => sum + value, 0);
           if (data.status && data.status == "200") {
+            total += data.data;
             this.setState({
               deliveryMethod: "deliver",
               shippingFee: data.data,
+              total: total,
             });
           } else
             this.setState({
               deliveryMethod: "receive",
               shippingFee: 0,
+              total: total,
             });
           console.log("tiền ship :", data);
           console.log("items : ", items);
         })
         .catch((error) => console.error(error));
-    } else
+    } else {
+      let total = this.state.items
+        .map((item) => item.quantity * item.price)
+        .reduce((sum, value) => sum + value, 0);
       this.setState({
         deliveryMethod: "receive",
         shippingFee: 0,
+        total: total,
       });
+    }
   };
   handleOpenModalColor = () => {
     this.setState({ ...this.state, isOpenModalColor: true });
