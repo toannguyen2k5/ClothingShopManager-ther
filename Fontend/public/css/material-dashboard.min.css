@@ -24169,6 +24169,9 @@ input {
     border: 1px solid #a3a3a3 !important;
     height: 40px;
 }
+.navbar-nav.navbar-nav-account.justify-content-end{
+    width: 100%;
+}
 @supports (-ms-overflow-style: none) {
   .ps {
     overflow: auto !important;
