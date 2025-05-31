@@ -10,6 +10,7 @@ import java.util.*;
 public class DetailSalesSlipService {
 	@Autowired
 	private DetailSalesSlipRepository DetailSalesSlipRepository;
+	@Autowired
 	private Common common;
 	public String SelectMaxId() {
 		try{

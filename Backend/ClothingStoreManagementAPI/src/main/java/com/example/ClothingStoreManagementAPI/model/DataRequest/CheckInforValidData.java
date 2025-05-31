@@ -14,4 +14,5 @@ public class CheckInforValidData {
 	private String idShop;
 	private String idColor;
 	private String idSize;
+	private int quantity;
 }

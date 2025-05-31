@@ -19,8 +19,8 @@ public class SalesSlipController {
 	private Common common;
 	@PostMapping("/checkinforvalid")
 	public ResponseEntity<?> checkinforvalid(@RequestBody CheckInforValidData CheckInforValidData){
-		int quantity = SalesSlipService.checkinforvalid(CheckInforValidData);
-		return ResponseEntity.ok(common.ReturnReponse(quantity, "Select", "SalesSlip"));
+		String idDetail = SalesSlipService.checkinforvalid(CheckInforValidData);
+		return ResponseEntity.ok(common.ReturnReponse(idDetail, "Select", "SalesSlip"));
 	}
 	@GetMapping("/selectByIdClient")
 	public ResponseEntity<?> SelectByIdClient(@RequestParam String IdClient){
@@ -38,8 +38,8 @@ public class SalesSlipController {
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Select", "SalesSlip"));
 	}
 	@PostMapping("/insertSalesSlip")
-	public ResponseEntity<?> InsertSalesSlip(@RequestBody SaleSlipFullData SaleSlipFullData){
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.InsertSalesSlip(SaleSlipFullData.getSalesSlipData(), SaleSlipFullData.getShopDeliveryData()), "Insert", "SalesSlip"));
+	public ResponseEntity<?> InsertSalesSlip(@RequestBody SaleSlipFullData saleSlipFullData){
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.InsertSalesSlip(saleSlipFullData.getSalesSlipData(), saleSlipFullData.getShopDeliveryData()), "Insert", "SalesSlip"));
 	}
 	@PostMapping("/updateInfor")
 	public ResponseEntity<?> UpdateSalesSlip(@RequestBody SalesSlip SalesSlip){

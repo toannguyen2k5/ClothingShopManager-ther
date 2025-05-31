@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./CreateSalesSlip.css";
 import { define_nav, urlapi } from "../../../../../../setting/store/const";
-import ModalSupplier from "../../../../component/sub_layout/modal/modal_ncc/ModalSupplier";
+import ChooseAddress from "../../../../../service_sector/sector_shop/customer/view/shoping_cart/ChooseAddress";
 import DataTable from "react-data-table-component";
 import ModalShop from "../../../../component/sub_layout/modal/moda_shop/ModalShop";
 import ModalProduct from "../../../../component/sub_layout/modal/modal_product/ModalProduct";
@@ -47,7 +47,7 @@ export default class CreateSalesSlip extends Component {
         color: "",
         idColor: "",
         size: "",
-        quantity: "",
+        quantity: 0,
         price: "",
         seri: "",
       },
@@ -67,8 +67,11 @@ export default class CreateSalesSlip extends Component {
       total: 0,
       note: "",
       productFilter: "",
+      listproduct: [],
       showProductPopup: false,
       responseMessage: "",
+      deliveryMethod: "choose",
+      shippingFee: 0,
     };
     this.columns = [
       { name: "STT", selector: (row, index) => index + 1 },
@@ -87,14 +90,13 @@ export default class CreateSalesSlip extends Component {
         name: "Hành Động",
         cell: (row, index) => (
           <>
-            <button className="bg-yellow-400 text-white px-2 py-1 rounded mr-2">
-              <i class="fa-solid fa-square-pen"></i>
-            </button>
             <button
               className="bg-red-500 text-white px-2 py-1 rounded"
-              onClick={() => this.deleteProduct(index)}
+              onClick={() => {
+                this.deleteProduct(index);
+              }}
             >
-              <i class="fa-solid fa-trash-can"></i>
+              <i class="fa-solid fa-trash-can" style={{ color: "red" }}></i>
             </button>
           </>
         ),
@@ -106,18 +108,32 @@ export default class CreateSalesSlip extends Component {
   }
   deleteProduct = (index) => {
     let newListItem = [...this.state.items];
+    let newListProduct = [...this.state.listproduct];
 
     if (index !== -1) {
       // Nếu đã tồn tại => thay thế
-      newListItem.splice(index, 1);
+      let idx = newListItem.indexOf(newListProduct[index]);
+      newListItem.splice(idx, 1);
+      newListProduct.splice(index, 1);
     }
-    const total = newListItem
+
+    let total = newListItem
       .map((item) => item.quantity * item.price)
       .reduce((sum, value) => sum + value, 0);
+    total += this.state.shippingFee;
     console.log(newListItem);
-    this.setState({ ...this.state, items: newListItem, total: total });
+    this.setState(
+      {
+        ...this.state,
+        listproduct: newListProduct,
+        total: total,
+        items: newListItem,
+      },
+      () => {
+        this.changeShipFree();
+      }
+    );
   };
-
   updateShopOrder = (data) => {
     this.setState({ ...this.state, data_shop_selected: data });
   };
@@ -157,17 +173,109 @@ export default class CreateSalesSlip extends Component {
   };
   handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
-    const { listproduct } = this.state;
+    const { items } = this.state;
 
-    const filtered = listproduct.filter(
+    const filtered = items.filter(
       (p) =>
-        p.productName.toLowerCase().includes(value) ||
-        p.shopName.toLowerCase().includes(value) ||
-        p.categoryName.toLowerCase().includes(value) ||
+        p.nameProduct.toLowerCase().includes(value) ||
+        p.nameShop.toLowerCase().includes(value) ||
+        p.nameCategory.toLowerCase().includes(value) ||
         p.color.toLowerCase().includes(value) ||
-        p.sizeProduct.toLowerCase().includes(value)
+        p.size.toLowerCase().includes(value)
     );
     this.setState({ searchText: value, listproduct: filtered });
+  };
+  changeShipFree = () => {
+    if (this.state.deliveryMethod === "deliver") {
+      const { items } = this.state;
+      const addressReceive = this.state.data_client_selected.address;
+      let idShops = [];
+      items.map((item) => {
+        if (!idShops.includes(item.idShop)) idShops.push(item.idShop);
+      });
+      if (!idShops || idShops.length === 0) {
+        this.setState({
+          shippingFee: 0,
+        });
+        return;
+      }
+      const queryString = new URLSearchParams();
+      queryString.append("addressReceive", addressReceive);
+      idShops.forEach((id) => queryString.append("idShops", id));
+      fetch(
+        urlapi +
+          `/api/SalesSlip/calculateShippingFee?${queryString.toString()}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status && data.status == "200") {
+            let total = items
+              .map((item) => item.quantity * item.price)
+              .reduce((sum, value) => sum + value, 0);
+            total += data.data;
+            this.setState({
+              shippingFee: data.data,
+              total: total,
+            });
+          }
+          console.log("tiền ship :", data);
+        })
+        .catch((error) => console.error(error));
+    }
+  };
+  handledeliveryMethod = (e) => {
+    if (e.target.value === "deliver") {
+      const { items } = this.state;
+      const addressReceive = this.state.data_client_selected.address;
+      let idShops = [];
+      items.map((item) => {
+        if (!idShops.includes(item.idShop)) idShops.push(item.idShop);
+      });
+      if (!this.state.data_client_selected.address) {
+        alert("⚠️ bạn cần chọn khách hàng xong mới chọn được mục này !");
+        return;
+      }
+      if (!idShops || idShops.length === 0) {
+        this.setState({
+          deliveryMethod: "deliver",
+          shippingFee: 0,
+        });
+        return;
+      }
+      const queryString = new URLSearchParams();
+      queryString.append("addressReceive", addressReceive);
+      idShops.forEach((id) => queryString.append("idShops", id));
+      fetch(
+        urlapi +
+          `/api/SalesSlip/calculateShippingFee?${queryString.toString()}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status && data.status == "200") {
+            this.setState({
+              deliveryMethod: "deliver",
+              shippingFee: data.data,
+            });
+          } else
+            this.setState({
+              deliveryMethod: "receive",
+              shippingFee: 0,
+            });
+          console.log("tiền ship :", data);
+          console.log("items : ", items);
+        })
+        .catch((error) => console.error(error));
+    } else
+      this.setState({
+        deliveryMethod: "receive",
+        shippingFee: 0,
+      });
   };
   handleOpenModalColor = () => {
     this.setState({ ...this.state, isOpenModalColor: true });
@@ -212,17 +320,27 @@ export default class CreateSalesSlip extends Component {
 
   addItem = () => {
     const { items, data_shop_selected, data_product_selected } = this.state;
-    if (
-      !data_shop_selected.idShop ||
-      !data_product_selected.idProduct ||
-      !data_product_selected.color ||
-      !data_product_selected.size
-    ) {
-      alert(
-        "Chọn cửa hàng và sản phẩm(tên sản phẩm , màu sắc , size) trước khi thêm"
-      );
+    if (!data_shop_selected.idShop) {
+      alert("⚠️ Bạn chưa chọn Thông tin cửa hàng !");
       return;
     }
+    if (!data_product_selected.idProduct) {
+      alert("⚠️ Bạn chưa chọn Thông tin sản phẩm !");
+      return;
+    }
+    if (!data_product_selected.color) {
+      alert("⚠️ Bạn chưa chọn màu sắc tương ứng !");
+      return;
+    }
+    if (!data_product_selected.size) {
+      alert("⚠️ Bạn chưa chọn size tương ứng !");
+      return;
+    }
+    if (!data_product_selected.quantity) {
+      alert("⚠️ Bạn chưa nhập số lượng muốn mua !");
+      return;
+    }
+
     const req = {
       method: "POST",
       headers: {
@@ -233,16 +351,14 @@ export default class CreateSalesSlip extends Component {
         idShop: this.state.data_shop_selected.idShop,
         idColor: this.state.data_product_selected.idColor,
         idSize: this.state.data_product_selected.idSize,
+        quantity: this.state.data_product_selected.quantity,
       }),
     };
     fetch(urlapi + "/api/SalesSlip/checkinforvalid", req)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "200") {
-          if (
-            data.data >= this.state.data_product_selected.quantity &&
-            data.data != 0
-          ) {
+          if (data.data && data.data != "") {
             const newItem = {
               idShop: this.state.data_shop_selected.idShop,
               nameShop: this.state.data_shop_selected.nameShop,
@@ -281,7 +397,16 @@ export default class CreateSalesSlip extends Component {
               .reduce((sum, value) => sum + value, 0);
 
             console.log("Total:", total); // Output: Total: 150
-            this.setState({ items: newListItem, total: total });
+            this.setState(
+              {
+                items: newListItem,
+                total: total,
+                listproduct: newListItem,
+              },
+              () => {
+                this.changeShipFree();
+              }
+            );
           } else alert("số lượng hàng tồn không đủ !");
         } else alert("thông tin sản phẩm không hợp lệ");
         console.log("Response từ server:", data);
@@ -304,22 +429,20 @@ export default class CreateSalesSlip extends Component {
       );
 
       const product = {
-        idProduct: item.idProduct,
-        nameColor: item.idColor,
-        nameSize: item.size,
-        quantity: item.quantity,
+        idDetail: item.idDetail,
+        quantity: parseInt(item.quantity, 10),
         price: item.price,
-        seri: item.seri,
       };
-      console.log(existingShop);
+      console.log("existingShop : ", existingShop);
       if (existingShop) {
-        existingShop.shoppingCartDatas.push(product);
+        groupedData.shoppingCartData.push(product);
       } else {
         groupedData.push({
           idShop: item.idShop,
-          shoppingCartDatas: [product],
+          shoppingCartData: [product],
         });
       }
+      console.log("groupedData : ", groupedData);
     });
     const req = {
       method: "POST",
@@ -327,23 +450,26 @@ export default class CreateSalesSlip extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        idCreater: this.props.state_data.user_info.id_user,
-        idClient: this.state.data_client_selected.idClient,
-        createDate: this.state.currentDate,
-        deliveryAddress: this.data_client_selected.address,
-        totalBill: this.state.total,
-        approveStatus: true,
-        shippingFee: null,
-        note: null,
-        discountcode: null,
-        shopReceiveData: groupedData,
+        salesSlipData: {
+          idCreater: this.props.state_data.user_info.id_user,
+          idClient: this.state.data_client_selected.idClient,
+          createDate: this.state.currentDate,
+          deliveryAddress: this.state.data_client_selected.address,
+          totalBill: this.state.total,
+          shippingFee: this.state.shippingFee,
+          note: this.state.note,
+          discountcode: null,
+        },
+        shopDeliveryData: groupedData,
       }),
     };
     fetch(urlapi + "/api/SalesSlip/insertSalesSlip", req)
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === "200") alert("Thêm Cửa Hàng Thành Công!");
-        console.log("Response từ server:", data);
+        if (data.status && data.status === "200")
+          alert("Tạo phiếu thành công !");
+        else alert("Tạo phiếu thất bại!");
+        console.log("Response tạo phiếu từ server:", data);
         // cập nhật state nếu cần
       })
       .catch((error) => console.error("Lỗi POST:", error));
@@ -446,43 +572,7 @@ export default class CreateSalesSlip extends Component {
                     readonly
                     class="form-control form-control-sm"
                     id="totalBill"
-                    value={this.state.total.toLocaleString() + " đ"}
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row mb-2">
-            <div class="form-group col-5">
-              <div className="row">
-                <label for="statusReceive" class="col-sm-4 col-form-label">
-                  Hình thức nhận hàng
-                </label>
-                <div class="col-sm-6">
-                  <input
-                    type="text"
-                    readonly
-                    class="form-control form-control-sm"
-                    id="statusReceive"
-                    value="Chưa Phê Duyệt"
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-5">
-              <div className="row">
-                <label for="totalBill" class="col-sm-3 col-form-label">
-                  Tổng Tiền
-                </label>
-                <div class="col-sm-7">
-                  <input
-                    type="text"
-                    readonly
-                    class="form-control form-control-sm"
-                    id="totalBill"
-                    value={this.state.total.toLocaleString() + " đ"}
+                    value={this.state.shippingFee.toLocaleString() + " đ"}
                     disabled
                   />
                 </div>
@@ -522,6 +612,43 @@ export default class CreateSalesSlip extends Component {
             </div>
           </div>
           <div className="row mb-2">
+            <div className="row mb-3">
+              <label for="color" class="col-sm-2 col-form-label">
+                Chọn địa chỉ giao hàng
+              </label>
+              <ChooseAddress {...this.props} />
+            </div>
+            <div className="row mb-2">
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <input
+                  type="button"
+                  value="Tạo địa chỉ"
+                  style={{
+                    height: "38px",
+                    width: "100px",
+                  }}
+                  onClick={() => {
+                    this.setState(
+                      (prevState) => ({
+                        data_client_selected: {
+                          ...prevState.data_client_selected,
+                          address:
+                            this.props.state_data.data_page.data
+                              ?.detailaddress +
+                            ", " +
+                            this.props.state_data.data_page.data?.district +
+                            ", " +
+                            this.props.state_data.data_page.data?.province,
+                        },
+                      }),
+                      () => {
+                        this.changeShipFree();
+                      }
+                    );
+                  }}
+                />
+              </div>
+            </div>
             <label for="color" class="col-sm-2 col-form-label">
               Địa chỉ giao hàng
             </label>
@@ -542,6 +669,8 @@ export default class CreateSalesSlip extends Component {
                         },
                       }));
                     }}
+                    disabled
+                    readOnly
                   />
                 </div>
               </div>
@@ -563,6 +692,43 @@ export default class CreateSalesSlip extends Component {
                     onChange={(e) => {
                       this.setState({ note: e.target.value });
                     }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="statusReceive" class="col-sm-4 col-form-label">
+                  Hình thức nhận hàng
+                </label>
+                <select
+                  id="fruit-select"
+                  className="form-select"
+                  style={{ width: "200px" }}
+                  value={this.state.deliveryMethod}
+                  onChange={this.handledeliveryMethod}
+                >
+                  <option value="choose">---Choose---</option>
+                  <option value="receive">Nhận tại quầy</option>
+                  <option value="deliver">Giao hàng</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-5">
+              <div className="row">
+                <label for="totalBill" class="col-sm-3 col-form-label">
+                  Tổng Tiền
+                </label>
+                <div class="col-sm-7">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control form-control-sm"
+                    id="totalBill"
+                    value={this.state.total.toLocaleString() + " đ"}
+                    disabled
                   />
                 </div>
               </div>
@@ -627,11 +793,7 @@ export default class CreateSalesSlip extends Component {
                     <button
                       type="button"
                       class="btn btn-outline-info col-2"
-                      onClick={() => {
-                        if (this.state.data_shop_selected.idShop) {
-                          this.handleOpenModalProduct();
-                        } else alert("bạn chưa chọn cửa hàng !");
-                      }}
+                      onClick={this.handleOpenModalProduct}
                     >
                       <i class="bi bi-search"></i>
                     </button>
@@ -885,7 +1047,7 @@ export default class CreateSalesSlip extends Component {
           <div className="row">
             <DataTable
               columns={this.columns}
-              data={this.state.items}
+              data={this.state.listproduct}
               pagination
               paginationPerPage={5}
               highlightOnHover

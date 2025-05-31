@@ -72,22 +72,24 @@ public class SalesSlipService {
 		}
 	}
 	// check thông tin sản phẩm hợp lệ
-	public int checkinforvalid(CheckInforValidData CheckInforValidData){
+	public String checkinforvalid(CheckInforValidData CheckInforValidData){
 		try {
 			String CheckIdDetail = DetailProductService.SelectIdDetailProduct(CheckInforValidData.getIdProduct(), CheckInforValidData.getIdColor(), CheckInforValidData.getIdSize());
 			if(CheckIdDetail !=""){
 				InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(CheckInforValidData.getIdShop(), CheckIdDetail);
-				if(InventoryShop != null) return InventoryShop.getQuantity();
-				else return 0;
+				if(InventoryShop != null && InventoryShop.getQuantity() >= CheckInforValidData.getQuantity()) {
+					return 	CheckIdDetail;
+				}
+				else return "";
 			}
-			else return 0;
+			else return "";
 		}
 		catch(Exception e) {
-			return 0;
+			return "";
 		}
 	}
 	// tạo phiếu
-	public boolean InsertSalesSlip(SalesSlipData salesSlipData, List<ShopDeliveryData> ShopDeliveryDatas){
+	public boolean InsertSalesSlip(SalesSlipData salesSlipData, List<ShopDeliveryData> shopDeliveryDatas){
 		String newIdSalesSlip = "";
 		Stack<String> idListShops = new Stack<String>();
 		try {
@@ -102,10 +104,11 @@ public class SalesSlipService {
 			statusCreate.add(SalesSlipRepository.existsById(newIdSalesSlip));
 			if(!statusCreate.contains(false)){
 				// tạo phiếu thành công
-				for(ShopDeliveryData ShopDeliveryData : ShopDeliveryDatas) {
-					statusCreate.add(ListOfDeliveryStoresService.InsertListOfDeliveryStores(new ListOfDeliveryStores(null,newIdSalesSlip,ShopDeliveryData.getIdShop(),false)));
+				for(ShopDeliveryData ShopDeliveryData : shopDeliveryDatas) {
+					String newidList = ListOfDeliveryStoresService.InsertListOfDeliveryStores(new ListOfDeliveryStores(null,newIdSalesSlip,ShopDeliveryData.getIdShop(),false));
+					statusCreate.add(!newidList.equals(""));
 					if(!statusCreate.contains(false)) {
-						idListShops.push(ShopDeliveryData.getIdShop());
+						idListShops.push(newidList);
 						for(CartData ShoppingCartData : ShopDeliveryData.getShoppingCartData()) {
 							statusCreate.add(DetailSalesSlipService.InsertDetailSalesSlip(new DetailSalesSlip(null,idListShops.peek(),ShoppingCartData.getIdDetail(),
 									ShoppingCartData.getQuantity(),ShoppingCartData.getPrice())));
@@ -127,7 +130,7 @@ public class SalesSlipService {
 				return false;
 			}
 			else {
-				for(ShopDeliveryData ShopDeliveryData : ShopDeliveryDatas) {
+				for(ShopDeliveryData ShopDeliveryData : shopDeliveryDatas) {
 					for(CartData ShoppingCartData : ShopDeliveryData.getShoppingCartData()) {
 						ShoppingCart shoppingCart= shoppingCartRepository.SelectShoppingCart(ShoppingCartData.getIdDetail(), salesSlipData.getIdClient());
 						if(shoppingCart!=null)shoppingCartRepository.deleteById(shoppingCart.getIdShoppingCart());
@@ -180,9 +183,10 @@ public class SalesSlipService {
 				if(!statusCreate.contains(false)){
 					// tạo phiếu thành công
 					for(ShopDeliveryData ShopDeliveryData : ShopDeliveryDatas ) {
-						statusCreate.add(ListOfDeliveryStoresService.InsertListOfDeliveryStores(new ListOfDeliveryStores(null,SalesSlip.getIdSalesSlip(),ShopDeliveryData.getIdShop(),false)));
+						String newidList = ListOfDeliveryStoresService.InsertListOfDeliveryStores(new ListOfDeliveryStores(null,SalesSlip.getIdSalesSlip(),ShopDeliveryData.getIdShop(),false));
+						statusCreate.add(!newidList.equals(""));
 						if(!statusCreate.contains(false)) {
-							idListShops.push(ShopDeliveryData.getIdShop());
+							idListShops.push(newidList);
 							for(CartData ShoppingCartData : ShopDeliveryData.getShoppingCartData()) {
 								statusCreate.add(DetailSalesSlipService.InsertDetailSalesSlip(new DetailSalesSlip(null,idListShops.peek(),ShoppingCartData.getIdDetail(),
 										ShoppingCartData.getQuantity(),ShoppingCartData.getPrice())));
@@ -240,40 +244,47 @@ public class SalesSlipService {
 		}
 	}
 	private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        double lat1Rad = Math.toRadians(lat1);
-        double lon1Rad = Math.toRadians(lon1);
-        double lat2Rad = Math.toRadians(lat2);
-        double lon2Rad = Math.toRadians(lon2);
+		System.out.println(Math.abs(lat2 - lat1));
+        if(Math.abs(lat2 - lat1) < 1) {
+        	double deltaLat = Math.abs(lon2 - lon1);
+            double northSouthDistance = deltaLat * 111.32;  // km
+            return northSouthDistance;
+        }
+        else {
+        	double lat1Rad = Math.toRadians(lat1);
+            double lon1Rad = Math.toRadians(lon1);
+            double lat2Rad = Math.toRadians(lat2);
+            double lon2Rad = Math.toRadians(lon2);
 
-        double dLat = lat2Rad - lat1Rad;
-        double dLon = lon2Rad - lon1Rad;
+            double dLat = lat2Rad - lat1Rad;
+            double dLon = lon2Rad - lon1Rad;
+            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                     + Math.cos(lat1Rad) * Math.cos(lat2Rad)
+                     * Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                 + Math.cos(lat1Rad) * Math.cos(lat2Rad)
-                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return 6371 * c;
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return 6371 * c;
+        }
     }
-    public double ShippingFee(String addressReceive , List<String> idShops) {
+    public Long ShippingFee(String addressReceive , List<String> idShops) {
     	double Distance = 0;
     	String[] Strings = addressReceive.split(",");
-    	District DistrictReceive = DistrictRepository.FindDistrict(Strings[Strings.length-2], Strings[Strings.length-1]);
+    	District DistrictReceive = DistrictRepository.findDistrictByNameAndProvince(Strings[Strings.length-2].trim(), Strings[Strings.length-1].trim());
 		Map<String,District> NameProvinceAndDistrict = new HashMap<>();
 		List<District> Districts = new ArrayList<>();
     	for(String idShop : idShops) {
     		String[] addressShop = ShopRepository.findById(idShop).get().getAddress().split(",");
-    		District DistrictShop = DistrictRepository.FindDistrict(addressShop[addressShop.length-2], addressShop[addressShop.length-1]);
+    		District DistrictShop = DistrictRepository.findDistrictByNameAndProvince(addressShop[addressShop.length-2].trim(), addressShop[addressShop.length-1].trim());
     		Districts.add(DistrictShop);
-    		if(NameProvinceAndDistrict.containsKey(addressShop[addressShop.length-1])) {
+    		if(NameProvinceAndDistrict.containsKey(addressShop[addressShop.length-1].trim())) {
     			// kiểm tra xem cái nào gần hơn
     			if(calculateDistance(DistrictReceive.getLatitude(),DistrictReceive.getLongitude(),DistrictShop.getLatitude(),DistrictShop.getLongitude()) <
-    					calculateDistance(DistrictReceive.getLatitude(),DistrictReceive.getLongitude(),NameProvinceAndDistrict.get(addressShop[addressShop.length-1]).getLatitude(),
-    							NameProvinceAndDistrict.get(addressShop[addressShop.length-1]).getLongitude())) {
-    				NameProvinceAndDistrict.put(addressShop[addressShop.length-1], DistrictShop);
+    					calculateDistance(DistrictReceive.getLatitude(),DistrictReceive.getLongitude(),NameProvinceAndDistrict.get(addressShop[addressShop.length-1].trim()).getLatitude(),
+    							NameProvinceAndDistrict.get(addressShop[addressShop.length-1].trim()).getLongitude())) {
+    				NameProvinceAndDistrict.put(addressShop[addressShop.length-1].trim(), DistrictShop);
     			}
     		}
-    		else NameProvinceAndDistrict.put(addressShop[addressShop.length-1], DistrictShop);
+    		else NameProvinceAndDistrict.put(addressShop[addressShop.length-1].trim(), DistrictShop);
     	}
     	for(District District : Districts) {
     		String NameProvince = ProvinceRepository.SellectNameProvince(District.getIdProvince());
@@ -281,10 +292,15 @@ public class SalesSlipService {
     				NameProvinceAndDistrict.get(NameProvince).getLongitude());
     	}
     	for(Map.Entry<String,District> entry : NameProvinceAndDistrict.entrySet()) {
-    		Distance += calculateDistance(DistrictReceive.getLatitude(),DistrictReceive.getLongitude(),entry.getValue().getLatitude(),
+    		double a = calculateDistance(DistrictReceive.getLatitude(),DistrictReceive.getLongitude(),entry.getValue().getLatitude(),
     				entry.getValue().getLongitude());
+    		System.out.println(entry.getKey() + " : " + a);
+    		Distance += a;
     	}
-    	return Distance*150 + 10000; // phí theo km + phí cơ bản
+    	if(Distance>= 0 && Distance <= 100 ) return  Math.round(Distance*150 + 10000);
+    	else if(Distance> 100 && Distance <= 500 ) return  Math.round(Distance*120 + 10000);
+    	else return  Math.round(Distance*90 + 10000);
+    	
     }
     // xem tất cả chi tiết phiếu hoàn trả
     public List<DetailedRefundSlip> ShowDetailedRefundSlips (String idSalesSlip) {

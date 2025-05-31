@@ -29,18 +29,19 @@ public class ListOfDeliveryStoresService {
 			return null;
 		}
 	}
-	public boolean InsertListOfDeliveryStores(ListOfDeliveryStores ListOfDeliveryStores) {
+	public String InsertListOfDeliveryStores(ListOfDeliveryStores ListOfDeliveryStores) {
 		try {
 			String idcurrent = ListOfDeliveryStoresRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(ListOfDeliveryStores.class);
 			ListOfDeliveryStores.setIdList(newId);
 			ListOfDeliveryStoresRepository.save(ListOfDeliveryStores); // thêm brand vào csdl
 			ListOfDeliveryStoresRepository.flush();
-			return ListOfDeliveryStoresRepository.existsById(newId); // trạng thái tồn tại của object mới
+			if(ListOfDeliveryStoresRepository.existsById(newId)) return newId;
+			else return "";// trạng thái tồn tại của object mới
 		}
 		catch(Exception e) {
 			System.out.print("InsertListOfDeliveryStores, Error : " + e.getMessage());
-			return false;
+			return "";
 		}
 	}
 	@Transactional

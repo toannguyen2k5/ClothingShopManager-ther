@@ -7,5 +7,5 @@ import lombok.*;
 @Setter
 public class ShopDeliveryData {
 	private String idShop;
-	private List<CartData> ShoppingCartData;
+	private List<CartData> shoppingCartData;
 }
