@@ -164,7 +164,7 @@ class ModalColor extends Component {
                       onClick={() => this.setState({ isShowList: false })}
                       style={{ width: "100px" }}
                     >
-                      [<i class="fa-solid fa-plus"></i>]&nbsp;Add
+                      [<i className="fa-solid fa-plus"></i>]&nbsp;Add
                     </button>
                     <input
                       type="text"
@@ -192,15 +192,15 @@ class ModalColor extends Component {
               )}
               {!this.state.isShowList && (
                 <div className="row">
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="nameColor" class="col-sm-2 col-form-label">
+                      <label for="nameColor" className="col-sm-2 col-form-label">
                         Tên Màu
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="nameColor"
                           id="nameColor"
@@ -209,15 +209,15 @@ class ModalColor extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="description" class="col-sm-2 col-form-label">
+                      <label for="description" className="col-sm-2 col-form-label">
                         Mô Tả
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.handleChange}
                           name="description"
                           id="description"

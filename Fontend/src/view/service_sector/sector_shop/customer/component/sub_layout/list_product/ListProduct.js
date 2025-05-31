@@ -38,7 +38,7 @@ class ListProduct extends Component {
     return (
       <>
         <div
-          class="content-product-list product-list filter d-flex row-left-list "
+          className="content-product-list product-list filter d-flex row-left-list "
           data-count="95"
         >
           {this.state.products.map((item, index) => (
@@ -54,8 +54,8 @@ class ListProduct extends Component {
             />
           ))}
         </div>
-        <div class="collection-view-content">
-          <button class="btn-collectionview" onClick={() => this.GetProducts()}>
+        <div className="collection-view-content">
+          <button className="btn-collectionview" onClick={() => this.GetProducts()}>
             Xem thêm
           </button>
         </div>

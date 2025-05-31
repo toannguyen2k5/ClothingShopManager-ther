@@ -134,7 +134,7 @@ export default class Login extends Component {
   }
   render() {
     console.log(this.props.state_data);
-    if (this.state.requestHome) return <Redirect to="/home" />;
+    if (this.state.requestHome) return <Redirect to="/" />;
     if (!this.state.isCheckLogin) this.getRole();
     return (
       <div className="auth">

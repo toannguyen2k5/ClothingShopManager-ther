@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AreaChart from "../views_canvasjs/area charts/Area Chart";
+import BarChart from "../views_canvasjs/column charts/Bar Chart";
 
 class CardStatisticalChart extends Component {
   constructor(props) {
@@ -55,20 +56,9 @@ class CardStatisticalChart extends Component {
                 <div
                   className={`bg-gradient-${item.color_bg} shadow-${item.color_bg} border-radius-lg py-3 pe-1`}
                 >
-                  <div className="chart d-flex justify-content-center">
-                    <AreaChart />
-                    {/* <canvas
-                      id="chart-line"
-                      className="chart-canvas"
-                      height="170"
-                      style={{
-                        display: "block",
-                        boxSizing: "border-box",
-                        height: "170px",
-                        width: "466px",
-                      }}
-                      width="466"
-                    ></canvas> */}
+                  <div className="chart d-flex justify-content-center align-items-center" >
+                    <BarChart />
+                    
                   </div>
                 </div>
               </div>

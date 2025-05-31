@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { define_nav } from "../../../../setting/store/const";
+import { define_nav, url_layout } from "../../../../setting/store/const";
 import CardStatistical from "../../component/sub_layout/card_statistical/CardStatistical";
 import CardStatisticalChart from "../../component/sub_layout/card_statistical_chart/CardStatisticalChart";
 

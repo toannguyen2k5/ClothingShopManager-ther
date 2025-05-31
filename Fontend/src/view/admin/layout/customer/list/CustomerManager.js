@@ -365,7 +365,7 @@ class CustomerManager extends Component {
                     }}
                   />
                 </label>
-                <div class="row">
+                <div className="row">
                   <label>
                     Số điện thoại:
                     <input

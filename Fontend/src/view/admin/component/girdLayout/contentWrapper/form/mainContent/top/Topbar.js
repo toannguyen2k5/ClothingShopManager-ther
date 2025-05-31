@@ -10,16 +10,29 @@ export default class Topbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSidebar: true,
+      isShowSlideBar: false,
+      isShowAccount: false,
+      isShowNotifications: false,
     };
   }
-  noShow() {
-    this.setState({
-      showSidebar: !this.state.showSidebar,
-    });
-  }
-  
+  showDropdown = (isShowSlideBar, isShowAccount, isShowNotifications) => {
+    if (
+      this.state.isShowAccount != isShowAccount &&
+      this.state.isShowAccount != isShowAccount &&
+      this.state.isShowAccount != isShowAccount
+    )
+      this.setState({
+        isShowSlideBar: isShowSlideBar,
+        isShowAccount: isShowAccount,
+        isShowNotifications: isShowNotifications,
+      });
+  };
+
   render() {
+    if (this.state.isShowSlideBar) {
+      $("#sidenav-main").addClass("sidenav-show-important");
+      $("#iconSidenav").addClass("sidenav-show-important");
+    }
     return (
       <nav
         className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
@@ -32,29 +45,26 @@ export default class Topbar extends Component {
             className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
             id="navbar"
           >
-            <div className="ms-md-auto pe-md-3 d-flex align-items-center">
-              <div className="input-group input-group-outline">
-                <label className="form-label">Type here...</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  onfocus="focused(this)"
-                  onfocusout="defocused(this)"
-                />
-              </div>
-            </div>
             <ul className="navbar-nav navbar-nav-account  justify-content-end">
               <li className="nav-item dropdown d-flex align-items-center">
-                <Account {...this.props} />
+                <Account
+                  {...this.props}
+                  status={this.state.isShowAccount}
+                  onClick={this.showDropdown}
+                />
               </li>
               <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
                 <a
                   className="nav-link text-body p-0"
                   id="iconNavbarSidenav"
                   onClick={() => {
-                    $("#sidenav-main").addClass("sidenav-show-important");
-                    $("#iconSidenav").addClass("sidenav-show-important");
-                    
+                    this.setState({
+                      isShowSlideBar: !$("#sidenav-main").hasClass(
+                        "idenav-show-important"
+                      ),
+                      isShowAccount: false,
+                      isShowNotifications: false,
+                    });
                   }}
                 >
                   <div className="sidenav-toggler-inner">
@@ -73,7 +83,15 @@ export default class Topbar extends Component {
                 </a>
               </li>
               <li className="nav-item dropdown pe-2 d-flex align-items-center">
-                <Notifications {...this.props} />
+                <Notifications
+                  {...this.props}
+                  status={this.state.isShowNotifications}
+                  onClick={this.showDropdown(
+                    false,
+                    false,
+                    !this.state.isShowNotifications
+                  )}
+                />
               </li>
             </ul>
           </div>

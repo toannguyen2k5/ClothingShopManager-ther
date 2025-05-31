@@ -1,6 +1,6 @@
 export const urlapi = "http://localhost:8080";
-export const urllaypoy = "http://localhost:3000";
-export const nameWebsite = "Shop Quần Áo Online";
+export const url_layout = "http://localhost:3000";
+export const nameWebsite = "Quản Lý Shop";
 export const rePassword =
   /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 

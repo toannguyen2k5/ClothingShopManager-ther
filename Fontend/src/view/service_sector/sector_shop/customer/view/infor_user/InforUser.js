@@ -19,17 +19,17 @@ class InforUser extends Component {
       case "address":
         return (
           <>
-            <div class="col-xs-12 col-sm-9 col-md-9 accounts-right">
-              <div class="row">
-                <div class="col-xs-12" id="customer_sidebar">
-                  <div class="accounts style-bg">
-                    <div class="accounts_title">
+            <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
+              <div className="row">
+                <div className="col-xs-12" id="customer_sidebar">
+                  <div className="accounts style-bg">
+                    <div className="accounts_title">
                       <h2>Địa chỉ</h2>
                     </div>
                     <ChooseAddress />
-                    <div class="account_col">
-                      <div class="account_main col_main_submit">
-                        <button id="submit_info" class="updateAccount">
+                    <div className="account_col">
+                      <div className="account_main col_main_submit">
+                        <button id="submit_info" className="updateAccount">
                           <span>Cập nhật</span>
                         </button>
                       </div>
@@ -45,29 +45,29 @@ class InforUser extends Component {
       case "reset":
         return (
           <>
-            <div class="col-xs-12 col-sm-9 col-md-9 accounts-right">
-              <div class="row">
-                <div class="col-xs-12" id="customer_sidebar">
-                  <div class="accounts style-bg">
-                    <div class="accounts_title">
+            <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
+              <div className="row">
+                <div className="col-xs-12" id="customer_sidebar">
+                  <div className="accounts style-bg">
+                    <div className="accounts_title">
                       <h2>Đổi mật khẩu</h2>
                     </div>
-                    <div class="account_col">
-                      <div class="account_main">
+                    <div className="account_col">
+                      <div className="account_main">
                         <strong>Email </strong>
                         <input
                           required=""
                           type="email"
                           placeholder="Địa chỉ email"
-                          class="text"
+                          className="text"
                           size="30"
                           style={{ width: "850px" }}
                         />
                       </div>
                     </div>
-                    <div class="account_col">
-                      <div class="account_main col_main_submit">
-                        <button id="submit_info" class="updateAccount">
+                    <div className="account_col">
+                      <div className="account_main col_main_submit">
+                        <button id="submit_info" className="updateAccount">
                           <span>Reset</span>
                         </button>
                       </div>
@@ -85,9 +85,9 @@ class InforUser extends Component {
   render() {
     return (
       <>
-        <div class="layout-info-account">
-          <div class="container">
-            <div class="title-login-account text-center">
+        <div className="layout-info-account">
+          <div className="container">
+            <div className="title-login-account text-center">
               <img
                 width="30"
                 height="30"
@@ -96,20 +96,20 @@ class InforUser extends Component {
               />
               <h1>Tài khoản của bạn</h1>
             </div>
-            <div class="row d-flex">
-              <div class="col-xs-12 col-sm-3 col-md-3 sidebar-account accounts-left">
-                <div class="AccountSidebar hidden-xs">
-                  <div class="title_account">
-                    <div class="content_account">
-                      <h2 class="name_account">Hi,</h2>
+            <div className="row d-flex">
+              <div className="col-xs-12 col-sm-3 col-md-3 sidebar-account accounts-left">
+                <div className="AccountSidebar hidden-xs">
+                  <div className="title_account">
+                    <div className="content_account">
+                      <h2 className="name_account">Hi,</h2>
                       <p></p>
                     </div>
                   </div>
-                  <div class="AccountContent">
-                    <div class="AccountList">
-                      <ul class="list-unstyled">
+                  <div className="AccountContent">
+                    <div className="AccountList">
+                      <ul className="list-unstyled">
                         <li
-                          class="current"
+                          className="current"
                           onClick={() => {
                             this.setState({ selectedMenu: "profile" });
                           }}
@@ -117,7 +117,7 @@ class InforUser extends Component {
                         >
                           <a>
                             <span>
-                              <i class="fas fa-user"></i>
+                              <i className="fas fa-user"></i>
                             </span>
                             <span> Hồ sơ của tôi </span>
                           </a>
@@ -130,7 +130,7 @@ class InforUser extends Component {
                         >
                           <a>
                             <span>
-                              <i class="fas fa-file-invoice"></i>
+                              <i className="fas fa-file-invoice"></i>
                             </span>
                             <span> Đơn hàng của tôi </span>
                           </a>
@@ -144,7 +144,7 @@ class InforUser extends Component {
                           <a>
                             <span>
                               {" "}
-                              <i class="fas fa-map-marker-alt"></i>
+                              <i className="fas fa-map-marker-alt"></i>
                             </span>
                             <span> Sổ địa chỉ</span>
                           </a>
@@ -157,15 +157,15 @@ class InforUser extends Component {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <a class="btn-voucher">
+                          <a className="btn-voucher">
                             <span>
                               {" "}
-                              <i class="fas fa-tags"></i>
+                              <i className="fas fa-tags"></i>
                             </span>
                             <span> Vouchers</span>
                           </a>
                           <img
-                            class=""
+                            className=""
                             src="https://file.hstatic.net/1000253775/file/vouvher__tag-02_2b4bab40f8cf476daf4d0ddc6ea1d8c6_medium.png"
                             alt="Tag Sale Img"
                           />
@@ -179,7 +179,7 @@ class InforUser extends Component {
                         >
                           <a>
                             <span>
-                              <i class="fas fa-lock"></i>
+                              <i className="fas fa-lock"></i>
                             </span>
                             <span>Đổi mật khẩu</span>
                           </a>

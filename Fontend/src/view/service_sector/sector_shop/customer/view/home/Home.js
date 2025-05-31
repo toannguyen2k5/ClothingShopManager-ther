@@ -28,22 +28,22 @@ class Home extends Component {
     return (
       <>
         <main>
-          <section id="home-slider-home" class="mg-top-15 mg-0-mb">
-            <div class="container pd-0-mb">
+          <section id="home-slider-home" className="mg-top-15 mg-0-mb">
+            <div className="container pd-0-mb">
               {/*
              <SliderImage />*/}
             </div>
           </section>
 
-          <section id="collection-template" class="collection-page">
-            <div class="collection-body">
-              <div class="container">
+          <section id="collection-template" className="collection-page">
+            <div className="collection-body">
+              <div className="container">
                 {/*<Banner
                   src={"https://file.hstatic.net/1000253775/file/diachi_dk.jpg"}
                   alt={"dddddd"}
                 /> */}
-                <div class="row d-flex">
-                  <div class="col-md-12 col-sm-12 col-xs-12 main-colection">
+                <div className="row d-flex">
+                  <div className="col-md-12 col-sm-12 col-xs-12 main-colection">
                     <ListProduct />
                   </div>
                 </div>

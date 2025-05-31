@@ -264,7 +264,7 @@ class ModalProduct extends Component {
                       onClick={() => this.setState({ isShowList: false })}
                       style={{ width: "100px" }}
                     >
-                      [<i class="fa-solid fa-plus"></i>]&nbsp;Add
+                      [<i className="fa-solid fa-plus"></i>]&nbsp;Add
                     </button>
                     <input
                       type="text"

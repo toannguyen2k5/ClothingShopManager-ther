@@ -106,7 +106,7 @@ class UpdateAccountModal extends Component {
       >
         <h2>Cập nhật tài khoản</h2>
         <form onSubmit={this.handleSubmit}>
-          <div class="form-group">
+          <div className="form-group">
             <label for="fullName">Họ và tên:</label>
             <input
               type="text"
@@ -117,7 +117,7 @@ class UpdateAccountModal extends Component {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="email">Email:</label>
             <input
               type="email"
@@ -128,7 +128,7 @@ class UpdateAccountModal extends Component {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="phone">Số điện thoại:</label>
             <input
               type="text"
@@ -139,7 +139,7 @@ class UpdateAccountModal extends Component {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="address">Địa chỉ:</label>
             <input
               type="text"
@@ -150,7 +150,7 @@ class UpdateAccountModal extends Component {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="birthDay">Ngày sinh:</label>
             <input
               type="date"
@@ -161,7 +161,7 @@ class UpdateAccountModal extends Component {
             />
           </div>
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="gender">Giới tính:</label>
             <select
               id="gender"
@@ -179,7 +179,7 @@ class UpdateAccountModal extends Component {
           <label>Tài khoản (không thể chỉnh sửa):</label>
           <input name="username" value={formData.username || ""} readOnly />
 
-          <div class="form-group">
+          <div className="form-group">
             <label for="oldPassword">Mật khẩu cũ:</label>
             <input
               id="oldPassword"
@@ -195,7 +195,7 @@ class UpdateAccountModal extends Component {
               {errors.oldPassword}
             </div>
           )}
-          <div class="form-group">
+          <div className="form-group">
             <label for="oldPassword">Mật khẩu mới:</label>
             <input
               id="oldPassword"

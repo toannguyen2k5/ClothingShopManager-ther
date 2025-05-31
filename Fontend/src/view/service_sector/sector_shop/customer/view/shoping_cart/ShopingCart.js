@@ -18,10 +18,10 @@ class ShopingCart extends Component {
     return (
       <>
         <main>
-          <div class="breadcrumb-shop">
-            <div class="container">
+          <div className="breadcrumb-shop">
+            <div className="container">
               <ol
-                class="breadcrumb breadcrumb-arrows"
+                className="breadcrumb breadcrumb-arrows"
                 itemscope=""
                 itemtype="http://schema.org/BreadcrumbList"
               >
@@ -37,7 +37,7 @@ class ShopingCart extends Component {
                 </li>
 
                 <li
-                  class="active"
+                  className="active"
                   itemprop="itemListElement"
                   itemscope=""
                   itemtype="http://schema.org/ListItem"
@@ -51,32 +51,32 @@ class ShopingCart extends Component {
             </div>
           </div>
 
-          <section id="cart-template" class="cart-page">
-            <div class="container">
+          <section id="cart-template" className="cart-page">
+            <div className="container">
               <form action="/cart" method="post" enctype="multipart/form-data">
-                <div class="d-flex row-left-list">
-                  <div class="col-xs-12 col-lg-7 col-md-12 col-sm-12 mg-top-15 pd-right-0">
-                    <div class="bg-while">
-                      <div class="cart-title">
+                <div className="d-flex row-left-list">
+                  <div className="col-xs-12 col-lg-7 col-md-12 col-sm-12 mg-top-15 pd-right-0">
+                    <div className="bg-while">
+                      <div className="cart-title">
                         <h2>Giỏ hàng:</h2>
-                        <span class="cart-count">
-                          <span class="cart-counter">
+                        <span className="cart-count">
+                          <span className="cart-counter">
                             {this.props?.state_data?.data_page?.data
                               ?.quantity || 0}{" "}
                           </span>
-                          <span class="cart-item-title">Sản phẩm</span>
+                          <span className="cart-item-title">Sản phẩm</span>
                         </span>
                       </div>
 
-                      <div class="flashsale__progressbar">
+                      <div className="flashsale__progressbar">
                         <div
-                          class="flashsale___percent"
+                          className="flashsale___percent"
                           style={{ width: "100%" }}
                         ></div>
                       </div>
-                      <div class="cart-sale"></div>
+                      <div className="cart-sale"></div>
 
-                      <div class="item-wrap" id="cart-page-result">
+                      <div className="item-wrap" id="cart-page-result">
                         <ShopingCartItem
                           total={this.callBack}
                           idUser="User0001"
@@ -85,21 +85,21 @@ class ShopingCart extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-12 col-lg-5 col-md-12 col-sm-12 mg-top-15 pd-right-0">
-                    <div class="combo-content">
-                      <div class="cart-sale-marvel"></div>
+                  <div className="col-xs-12 col-lg-5 col-md-12 col-sm-12 mg-top-15 pd-right-0">
+                    <div className="combo-content">
+                      <div className="cart-sale-marvel"></div>
                     </div>
 
-                    <div class="bg-while sidebar-checkout">
-                      <div class="sidebar-order-wrap">
-                        <div class="order_title">
+                    <div className="bg-while sidebar-checkout">
+                      <div className="sidebar-order-wrap">
+                        <div className="order_title">
                           <h4>Tổng giá trị đơn hàng</h4>
                         </div>
-                        <div class="order_total">
+                        <div className="order_total">
                           <p>
                             Tạm tính:
                             <span
-                              class="total-price total-price-cart"
+                              className="total-price total-price-cart"
                               style={{ color: "#000" }}
                             >
                               {(
@@ -111,7 +111,7 @@ class ShopingCart extends Component {
                           </p>
                           <p>
                             Giá giảm:
-                            <span class="total-price-sale">
+                            <span className="total-price-sale">
                               -{" "}
                               {(
                                 (this.props?.state_data?.data_page?.data
@@ -124,7 +124,7 @@ class ShopingCart extends Component {
                           </p>
                           <p>
                             Tổng tiền:
-                            <span id="total-price-new" class="total-price">
+                            <span id="total-price-new" className="total-price">
                               {(
                                 this.props?.state_data?.data_page?.data
                                   ?.total_Bill_After_DisCode || 0
@@ -133,8 +133,8 @@ class ShopingCart extends Component {
                             </span>
                           </p>
                         </div>
-                        <div class="store_ship">
-                          <div class="title_ship">
+                        <div className="store_ship">
+                          <div className="title_ship">
                             <h1>
                               <img
                                 src="https://file.hstatic.net/1000360022/file/fast-delivery_322f7fa602ff423a9f3adce662e8ad4d.png"
@@ -147,12 +147,12 @@ class ShopingCart extends Component {
                           </div>
                           <ChooseAddress {...this.props} />
                         </div>
-                        <div class="checkout-buttons clearfix">
-                          <label for="note" class="note-label">
+                        <div className="checkout-buttons clearfix">
+                          <label for="note" className="note-label">
                             Ghi chú
                           </label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             id="note"
                             name="note"
                             rows="4"
@@ -175,17 +175,17 @@ class ShopingCart extends Component {
                             {...this.props}
                           />
                         </div>
-                        <div class="order_action">
+                        <div className="order_action">
                           <button
-                            class="btncart-checkout text-center"
+                            className="btncart-checkout text-center"
                             name="checkout"
                             type="submit"
                           >
                             Giao Hàng Ngay
                           </button>
-                          <p class="link-continue text-center">
+                          <p className="link-continue text-center">
                             <a href="/collections/all">
-                              <i class="fa fa-reply"></i> Tiếp tục mua hàng
+                              <i className="fa fa-reply"></i> Tiếp tục mua hàng
                             </a>
                           </p>
                         </div>

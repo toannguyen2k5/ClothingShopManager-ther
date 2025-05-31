@@ -180,7 +180,7 @@ class ModalShop extends Component {
                       onClick={() => this.setState({ isShowList: false })}
                       style={{ width: "100px" }}
                     >
-                      [<i class="fa-solid fa-plus"></i>]&nbsp;Add
+                      [<i className="fa-solid fa-plus"></i>]&nbsp;Add
                     </button>
                     <input
                       type="text"
@@ -208,15 +208,15 @@ class ModalShop extends Component {
               )}
               {!this.state.isShowList && (
                 <div className="row">
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="shopName" class="col-sm-2 col-form-label">
+                      <label for="shopName" className="col-sm-2 col-form-label">
                         Tên Cửa Hàng
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <input
                           type="text"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.changShopName}
                           id="shopName"
                           value={this.state.shopName}
@@ -224,14 +224,14 @@ class ModalShop extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="adress" class="col-sm-2 col-form-label">
+                      <label for="adress" className="col-sm-2 col-form-label">
                         Địa Chỉ
                       </label>
-                      <div class="col-sm">
+                      <div className="col-sm">
                         <textarea
-                          class="form-control  form-control-sm"
+                          className="form-control  form-control-sm"
                           id="adress"
                           onChange={this.changAdress}
                           rows="3"
@@ -239,15 +239,15 @@ class ModalShop extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="openingTime" class="col-sm-2 col-form-label">
+                      <label for="openingTime" className="col-sm-2 col-form-label">
                         Giờ Mở Cửa
                       </label>
-                      <div class="col-sm-3">
+                      <div className="col-sm-3">
                         <input
                           type="time"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.changOpeningTime}
                           id="openingTime"
                           value={this.state.openingTime}
@@ -255,15 +255,15 @@ class ModalShop extends Component {
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div className="form-group">
                     <div className="row">
-                      <label for="closeTime" class="col-sm-2 col-form-label">
+                      <label for="closeTime" className="col-sm-2 col-form-label">
                         Giờ Đóng Cửa
                       </label>
-                      <div class="col-sm-3">
+                      <div className="col-sm-3">
                         <input
                           type="time"
-                          class="form-control form-control-sm"
+                          className="form-control form-control-sm"
                           onChange={this.changCloseTime}
                           id="closeTime"
                           value={this.state.closeTime}

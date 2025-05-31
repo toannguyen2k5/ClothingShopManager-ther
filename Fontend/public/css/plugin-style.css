@@ -1903,3 +1903,20 @@ footer .top-ft-wanda ul li a:hover {
    color: white;
    text-align: center;
 } */
+
+.container{
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.product-card .image-wrapper{
+  height: 200px;
+  padding: 5%;
+}
+.image-wrapper a img {
+  width: 100%;
+  height: 100%;
+}
+.image-wrapper a{
+  width: 100%;
+  height: 100%;
+}

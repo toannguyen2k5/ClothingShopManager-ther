@@ -18,10 +18,10 @@ export default class Topbar extends Component {
   render() {
     return (
       <>
-        <header id="header" class="site-header">
+        <header id="header" className="site-header">
           <div id="topbar">
-            <div class="marquee-topbar">
-              <div class="item">
+            <div className="marquee-topbar">
+              <div className="item">
                 <a>
                   <p>
                     <strong>VOUCHER 10% TỐI ĐA 10K</strong>
@@ -29,7 +29,7 @@ export default class Topbar extends Component {
                 </a>
               </div>
 
-              <div class="item">
+              <div className="item">
                 <a>
                   <p>
                     <strong>VOUCHER 50K ĐƠN TỪ 699K</strong>
@@ -37,7 +37,7 @@ export default class Topbar extends Component {
                 </a>
               </div>
 
-              <div class="item">
+              <div className="item">
                 <a>
                   <p>
                     <strong>VOUCHER 80K ĐƠN TỪ 999K</strong>
@@ -45,7 +45,7 @@ export default class Topbar extends Component {
                 </a>
               </div>
 
-              <div class="item">
+              <div className="item">
                 <p>
                   <strong>FREESHIP ĐƠN TỪ 399K</strong>
                 </p>
@@ -53,20 +53,20 @@ export default class Topbar extends Component {
             </div>
           </div>
 
-          <div id="site-header-center" class="header-top">
-            <div class="container">
-              <div class="row d-flex d-flex-center">
-                <div class="hidden-lg hidden-md col-xs-3 col-sm-4 d-flex pd-right-0">
-                  <button class="btn-menu-mb">
-                    Menu <i class="fa-bars-menu" aria-hidden="true"></i>
-                    <i class="fa-bars-menu" aria-hidden="true"></i>
-                    <i class="fa-bars-menu" aria-hidden="true"></i>
+          <div id="site-header-center" className="header-top">
+            <div className="container">
+              <div className="row d-flex d-flex-center">
+                <div className="hidden-lg hidden-md col-xs-3 col-sm-4 d-flex pd-right-0">
+                  <button className="btn-menu-mb">
+                    Menu <i className="fa-bars-menu" aria-hidden="true"></i>
+                    <i className="fa-bars-menu" aria-hidden="true"></i>
+                    <i className="fa-bars-menu" aria-hidden="true"></i>
                   </button>
                 </div>
-                <div class="logo col-md-2 col-lg-3 col-xs-5 col-sm-4 pd-right-0">
+                <div className="logo col-md-2 col-lg-3 col-xs-5 col-sm-4 pd-right-0">
                   <a href="/">
                     <img
-                      class="dt-width-auto1 logo-img"
+                      className="dt-width-auto1 logo-img"
                       height="35"
                       width="130"
                       src="/icon_page.png"
@@ -74,14 +74,14 @@ export default class Topbar extends Component {
                     />
                   </a>
                 </div>
-                <nav class="col-md-6 hidden-xs hidden-sm pd-right-0">
-                  <div class="site_search search-desktop">
-                    <form action="/search" class="wanda-mxm-search">
-                      <div class="search-inner">
+                <nav className="col-md-6 hidden-xs hidden-sm pd-right-0">
+                  <div className="site_search search-desktop">
+                    <form action="/search" className="wanda-mxm-search">
+                      <div className="search-inner">
                         <input
                           name="q"
                           autocomplete="off"
-                          class="searchinput input-search search-input"
+                          className="searchinput input-search search-input"
                           type="text"
                           size="20"
                           placeholder="Bạn đang tìm gì..."
@@ -90,7 +90,7 @@ export default class Topbar extends Component {
                       </div>
                       <button
                         type="submit"
-                        class="btn-search"
+                        className="btn-search"
                         aria-label="Tìm kiếm"
                       >
                         <img
@@ -101,42 +101,42 @@ export default class Topbar extends Component {
                         />
                       </button>
                     </form>
-                    <div class="smart-search-wrapper ajaxSearchResults">
-                      <div class="results-seach">
-                        <div class="title-search text-center">
+                    <div className="smart-search-wrapper ajaxSearchResults">
+                      <div className="results-seach">
+                        <div className="title-search text-center">
                           Kết quả tìm kiếm
                         </div>
-                        <div class="group-head-smart d-flex">
-                          <span class="title-search-item-parent">Sản phẩm</span>
+                        <div className="group-head-smart d-flex">
+                          <span className="title-search-item-parent">Sản phẩm</span>
                           <a
-                            class="total-product-result result-total-smart"
+                            className="total-product-result result-total-smart"
                             href="/"
-                          ></a>
+                          >Sản Phẩm</a>
                         </div>
-                        <div class="product-result-data padding-15"></div>
-                        <div class="group-head-smart  d-flex">
-                          <span class="title-search-item-parent">Bài viết</span>
+                        <div className="product-result-data padding-15"></div>
+                        <div className="group-head-smart  d-flex">
+                          <span className="title-search-item-parent">Bài viết</span>
                           <a
-                            class="total-article-result result-total-smart"
+                            className="total-article-result result-total-smart"
                             href="/"
                           >
                             Xem tất cả 10 bài viết
                           </a>
                         </div>
-                        <div class="article-result-data padding-15"></div>
+                        <div className="article-result-data padding-15"></div>
                       </div>
                     </div>
                   </div>
                 </nav>
-                <div class="col-md-4 col-lg-3 group-icon-header col-xs-4 col-sm-4 pd-right-0 pd-0-mb">
-                  <div class="cart-login-search align-items-center">
-                    <ul class="list-inline list-unstyled mb-0 d-flex-header header-group-icon d-flex-center">
-                      <li class="list-inline-item mr-0 hidden-md hidden-lg header-search-mb">
+                <div className="col-md-4 col-lg-3 group-icon-header col-xs-4 col-sm-4 pd-right-0 pd-0-mb">
+                  <div className="cart-login-search align-items-center">
+                    <ul className="list-inline list-unstyled mb-0 d-flex-header header-group-icon d-flex-center">
+                      <li className="list-inline-item mr-0 hidden-md hidden-lg header-search-mb">
                         <a
-                          class="group-icon-item group-icon-item-popup d-flex d-flex-center"
+                          className="group-icon-item group-icon-item-popup d-flex d-flex-center"
                           href="javascript:void(0)"
                         >
-                          <span class="box-icon">
+                          <span className="box-icon">
                             <img
                               width="24"
                               height="24"
@@ -144,10 +144,10 @@ export default class Topbar extends Component {
                               alt="Tìm kiếm"
                             />
                           </span>
-                          <span class="box-text hidden-xs hidden-sm">
+                          <span className="box-text hidden-xs hidden-sm">
                             Tìm kiếm
                           </span>
-                          <span class="box-arrow">
+                          <span className="box-arrow">
                             <svg viewBox="0 0 20 9" role="presentation">
                               <path
                                 d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z"
@@ -156,12 +156,12 @@ export default class Topbar extends Component {
                             </svg>
                           </span>
                         </a>
-                        <div class="header-action_dropdown">
-                          <div class="header-dropdown_content">
-                            <p class="title-search">Tìm kiếm</p>
-                            <div class="site_search">
-                              <form action="/search" class="wanda-mxm-search">
-                                <div class="search-inner">
+                        <div className="header-action_dropdown">
+                          <div className="header-dropdown_content">
+                            <p className="title-search">Tìm kiếm</p>
+                            <div className="site_search">
+                              <form action="/search" className="wanda-mxm-search">
+                                <div className="search-inner">
                                   <input
                                     type="hidden"
                                     name="type"
@@ -170,7 +170,7 @@ export default class Topbar extends Component {
                                   <input
                                     name="q"
                                     autocomplete="off"
-                                    class="searchinput input-search search-input"
+                                    className="searchinput input-search search-input"
                                     type="text"
                                     size="20"
                                     placeholder="Tìm kiếm sản phẩm..."
@@ -179,7 +179,7 @@ export default class Topbar extends Component {
                                 </div>
                                 <button
                                   type="submit"
-                                  class="btn-search"
+                                  className="btn-search"
                                   aria-label="Tìm kiếm"
                                 >
                                   <img
@@ -190,33 +190,33 @@ export default class Topbar extends Component {
                                   />
                                 </button>
                               </form>
-                              <div class="smart-search-wrapper ajaxSearchResults">
-                                <div class="results-seach">
-                                  <div class="title-search text-center">
+                              <div className="smart-search-wrapper ajaxSearchResults">
+                                <div className="results-seach">
+                                  <div className="title-search text-center">
                                     Kết quả tìm kiếm
                                   </div>
-                                  <div class="group-head-smart d-flex">
-                                    <span class="title-search-item-parent">
+                                  <div className="group-head-smart d-flex">
+                                    <span className="title-search-item-parent">
                                       Sản phẩm
                                     </span>
                                     <a
-                                      class="total-product-result result-total-smart"
+                                      className="total-product-result result-total-smart"
                                       href="/"
                                     ></a>
                                   </div>
-                                  <div class="product-result-data padding-15"></div>
-                                  <div class="group-head-smart  d-flex">
-                                    <span class="title-search-item-parent">
+                                  <div className="product-result-data padding-15"></div>
+                                  <div className="group-head-smart  d-flex">
+                                    <span className="title-search-item-parent">
                                       Bài viết
                                     </span>
                                     <a
-                                      class="total-article-result result-total-smart"
+                                      className="total-article-result result-total-smart"
                                       href="/"
                                     >
                                       Xem tất cả 10 bài viết
                                     </a>
                                   </div>
-                                  <div class="article-result-data padding-15"></div>
+                                  <div className="article-result-data padding-15"></div>
                                 </div>
                               </div>
                             </div>
@@ -224,13 +224,13 @@ export default class Topbar extends Component {
                         </div>
                       </li>
 
-                      <li class="list-inline-item mr-0  header-store">
-                        <div class="list-inline-item-text">
+                      <li className="list-inline-item mr-0  header-store">
+                        <div className="list-inline-item-text">
                           <a
-                            class="group-icon-item address-header d-flex d-flex-center "
+                            className="group-icon-item address-header d-flex d-flex-center "
                             href="/shop/view_list"
                           >
-                            <span class="box-icon">
+                            <span className="box-icon">
                               <img
                                 width="24"
                                 height="24"
@@ -238,21 +238,21 @@ export default class Topbar extends Component {
                                 alt="Hệ thống cửa hàng"
                               />
                             </span>
-                            <span class="box-text hidden-xs hidden-sm">
-                              <span class="small-text ">Cửa hàng</span>
+                            <span className="box-text hidden-xs hidden-sm">
+                              <span className="small-text ">Cửa hàng</span>
                             </span>
-                            <span class="box-arrow"></span>
+                            <span className="box-arrow"></span>
                           </a>
                         </div>
                       </li>
 
-                      <li class="list-inline-item mr-0 header-account">
-                        <div class="list-inline-item-text">
+                      <li className="list-inline-item mr-0 header-account">
+                        <div className="list-inline-item-text">
                           <a
-                            class="group-icon-item group-icon-item-popup d-flex d-flex-center account-header"
+                            className="group-icon-item group-icon-item-popup d-flex d-flex-center account-header"
                             href="/login"
                           >
-                            <span class="box-icon">
+                            <span className="box-icon">
                               <img
                                 width="24"
                                 height="24"
@@ -260,10 +260,10 @@ export default class Topbar extends Component {
                                 alt="Tài khoản"
                               />
                             </span>
-                            <span class="box-text box-text-login hidden-sm hidden-xs">
+                            <span className="box-text box-text-login hidden-sm hidden-xs">
                               Đăng nhập
                             </span>
-                            <span class="box-arrow">
+                            <span className="box-arrow">
                               <svg viewBox="0 0 20 9" role="presentation">
                                 <path
                                   d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z"
@@ -274,25 +274,25 @@ export default class Topbar extends Component {
                           </a>
                         </div>
                       </li>
-                      <li class="list-inline-item mr-0 header-cart">
-                        <div class="list-inline-item-text">
+                      <li className="list-inline-item mr-0 header-cart">
+                        <div className="list-inline-item-text">
                           <a
-                            class="group-icon-item group-icon-item-popup d-flex d-flex-center "
+                            className="group-icon-item group-icon-item-popup d-flex d-flex-center "
                             href="/shop/shoping_cart"
                           >
-                            <span class="box-icon">
+                            <span className="box-icon">
                               <img
                                 width="24"
                                 height="24"
                                 src="//theme.hstatic.net/1000253775/1001315144/14/shopping-cart.svg?v=634"
                                 alt="Hệ thống cửa hàng"
                               />
-                              <span class="js-number-cart number-cart">0</span>
+                              <span className="js-number-cart number-cart">0</span>
                             </span>
-                            <span class="box-text hidden-xs hidden-sm">
+                            <span className="box-text hidden-xs hidden-sm">
                               Giỏ hàng
                             </span>
-                            <span class="box-arrow">
+                            <span className="box-arrow">
                               <svg viewBox="0 0 20 9" role="presentation">
                                 <path
                                   d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z"

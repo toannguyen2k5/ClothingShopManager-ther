@@ -41,32 +41,32 @@ class Account extends Component {
                   className="fa fa-address-card-o me-sm-1"
                   aria-hidden="true"
                 ></i>
-                <span className="d-sm-inline d-none">Thông tin cá nhân</span>
+                <span className="d-sm-inline">&nbsp;Thông tin cá nhân</span>
               </a>
             </li>
             <li className="mb-2">
               <a className="dropdown-item border-radius-md" href="/admin/billing/">
                 <i className="fa fa-credit-card me-sm-1" aria-hidden="true"></i>
-                <span className="d-sm-inline d-none">Thông tin giao dịch</span>
+                <span className="d-sm-inline">&nbsp;Thông tin giao dịch</span>
               </a>
             </li>
             <li className="mb-2">
               <a className="dropdown-item border-radius-md" href="#">
                 <i className="fa fa-inbox me-sm-1" aria-hidden="true"></i>
-                <span className="d-sm-inline d-none">Hộp thư đến</span>
+                <span className="d-sm-inline">&nbsp;Hộp thư đến</span>
               </a>
             </li>
             <li className="mb-2">
               <a className="dropdown-item border-radius-md" href="#">
                 <i className="fa fa-comments me-sm-1" aria-hidden="true"></i>
-                <span className="d-sm-inline d-none">Bình luận</span>
+                <span className="d-sm-inline">&nbsp;Bình luận</span>
               </a>
             </li>
             <hr />
             <li className="mb-2">
               <a className="dropdown-item border-radius-md" href="/admin/setting/">
                 <i className="fa fa-cog me-sm-1" aria-hidden="true"></i>
-                <span className="d-sm-inline d-none">Thiết lập tài khoản</span>
+                <span className="d-sm-inline">&nbsp;Thiết lập tài khoản</span>
               </a>
             </li>
             <hr />
@@ -75,7 +75,7 @@ class Account extends Component {
                 this.props.actions.log_out();
               }}>
                 <i className="fa fa-sign-out me-sm-1" aria-hidden="true"></i>
-                <span className="d-sm-inline d-none">Đăng xuất</span>
+                <span className="d-sm-inline">&nbsp;Đăng xuất</span>
               </a>
             </li>
           </ul>
