@@ -7,6 +7,8 @@ import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.DetailPurchaseSlip;
 import com.example.ClothingStoreManagementAPI.model.Entity.ListOfReceivingStores;
 import com.example.ClothingStoreManagementAPI.model.Entity.PurchaseSlip;
+import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.DTO.*;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
 import java.util.*;
 import java.time.LocalDate;
@@ -31,6 +33,19 @@ public class PurchaseSlipController {
 	@GetMapping("/SelectByIdCreater")
 	public ResponseEntity<?> SelectByIdCreater(@RequestParam String IdCreater){
 		List<PurchaseSlip> PurchaseSlips = PurchaseSlipService.SellectPurchaseSlipByIdCreater(IdCreater);
+		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlips, "Sellect", "PurchaseSlip"));
+	}
+	@GetMapping("/SelectAll/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SelectAll(@PathVariable String param_limit, @PathVariable String param_offset){
+		int limit, offset;
+    	limit = CommonUtil.tryParseInt(param_limit);
+    	offset = CommonUtil.tryParseInt(param_offset);
+		List<PurchaseSlipDTO> PurchaseSlips = PurchaseSlipService.SellectAll(offset,limit);
+		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlips, "Sellect", "PurchaseSlip"));
+	}
+	@GetMapping("/SelectDetail")
+	public ResponseEntity<?> SelectDetail(@RequestParam String idPurchaseSlip){
+		List<DetailPurchaseSlipDTO> PurchaseSlips = PurchaseSlipService.SellectDetailPurchaseSlip(idPurchaseSlip);
 		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlips, "Sellect", "PurchaseSlip"));
 	}
 	@PostMapping("/insertPurchaseSlip")

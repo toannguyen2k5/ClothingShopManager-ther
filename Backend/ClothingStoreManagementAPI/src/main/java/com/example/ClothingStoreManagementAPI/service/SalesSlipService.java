@@ -4,6 +4,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.ClothingStoreManagementAPI.repository.*;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+
 import com.example.ClothingStoreManagementAPI.model.ConstData.District;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
@@ -34,6 +38,32 @@ public class SalesSlipService {
 	private ShoppingCartRepository shoppingCartRepository;
 	@Autowired
 	private DetailProductService DetailProductService;
+	@Autowired
+	private UserRepository UserRepository;
+	@Autowired
+    private EntityManager entityManager;
+	@Autowired
+	private DetailProductRepository DetailProductRepository;
+	public List<SalesSlipDTO> SellectAll(int offset, int limit){
+		try{
+			List<SalesSlipDTO> result = new ArrayList<>();
+			Query query = entityManager.createQuery("SELECT c FROM SalesSlip c", SalesSlip.class);
+            if (offset > 0)
+				query.setFirstResult(offset); // OFFSET
+			if (limit > 0)
+				query.setMaxResults(limit); // LIMIT
+            List<SalesSlip> SalesSlips = query.getResultList();
+            for(SalesSlip SalesSlip : SalesSlips) {
+            	result.add(new SalesSlipDTO(SalesSlip.getIdSalesSlip(),UserRepository.SellectFullName(SalesSlip.getIdCreater()),UserRepository.SellectFullName(SalesSlip.getIdClient()),
+            			SalesSlip.getCreateDate(),SalesSlip.getDeliveryAddress(),SalesSlip.getShippingFee(),SalesSlip.getTotalBill(),SalesSlip.isDeliveryStatus()));
+            }
+            return result;
+		}
+		catch(Exception e) {
+			System.out.print("SelectPurchaseSlip all, Error : " + e.getMessage());
+			return null;
+		}
+	}
 	public String SelectMaxId() {
 		try{
 			return SalesSlipRepository.SelectMaxId();
@@ -43,31 +73,38 @@ public class SalesSlipService {
 			return null;
 		}
 	}
-	// tìm kiếm thông tin đơn hàng bằng mã khách hàng , ngày , mã người tạo
-	public List<SalesSlipDTO> SelectSalesSlipByIdClient(String IdClient) {
+	public List<ShowAllRateDTO> ShowAllRate(){
 		try{
-			return SalesSlipRepository.SelectSalesSlipByIdClient(IdClient);
+			List<ShowAllRateDTO> result = new ArrayList<>();
+			List<SalesSlip> SalesSlips = SalesSlipRepository.findAll();
+			for(SalesSlip salesSlip : SalesSlips) {
+				if(salesSlip.isDeliveryStatus())
+				result.add(new ShowAllRateDTO(salesSlip.getIdSalesSlip(),UserRepository.SellectFullName(salesSlip.getIdClient()),salesSlip.getCreateDate(),salesSlip.getDeliveryAddress(),
+						salesSlip.getEvaluate(),salesSlip.getComment()));
+			}
+			return result;
 		}
 		catch(Exception e) {
-			System.out.print("SelectSalesSlipByIdClient, Error : " + e.getMessage());
+			System.out.print("ShowAllRate, Error : " + e.getMessage());
 			return null;
 		}
 	}
-	public List<SalesSlipDTO> SellectSalesSlipByDate(LocalDate  createDate){
+	public List<DetailPurchaseSlipDTO> SellectDetailSalesSlip(String idSalesSlip) {
 		try{
-			return SalesSlipRepository.SellectSalesSlipByDate(createDate);
+			List<DetailPurchaseSlipDTO> result = new ArrayList<>();
+			List<ListOfDeliveryStores> ListOfReceivingStoress = ListOfDeliveryStoresService.SellectListOfDeliveryStores(idSalesSlip);
+			for(ListOfDeliveryStores ListOfDeliveryStores : ListOfReceivingStoress) {
+				List<DetailSalesSlip> DetailSalesSlips = DetailSalesSlipService.SellectDetailSalesSlip(ListOfDeliveryStores.getIdList());
+				for(DetailSalesSlip DetailSalesSlip : DetailSalesSlips) {
+					ReverseRetrievalDProductDTO ReverseRetrievalDProductDTO = DetailProductRepository.ReverseRetrievalDProduct(DetailSalesSlip.getIdDetailProduct());
+					result.add(new DetailPurchaseSlipDTO(ListOfDeliveryStores.getIdShop(),DetailProductRepository.SelectIdDetailByIdPro(DetailSalesSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),DetailSalesSlip.getPrice(),
+							DetailSalesSlip.getQuantity(),ReverseRetrievalDProductDTO.getNameColor(),ReverseRetrievalDProductDTO.getNameSize()));
+				}
+			}
+			return result;
 		}
 		catch(Exception e) {
-			System.out.print("SellectSalesSlipByDate, Error : " + e.getMessage());
-			return null;
-		}
-	}
-	public List<SalesSlipDTO> SellectSalesSlipByIdCreater(String IdCreater){
-		try{
-			return SalesSlipRepository.SellectSalesSlipByIdCreater(IdCreater);
-		}
-		catch(Exception e) {
-			System.out.print("SellectSalesSlipByIdCreater, Error : " + e.getMessage());
+			System.out.print("SellectDetailSalesSlip, Error : " + e.getMessage());
 			return null;
 		}
 	}
@@ -98,7 +135,7 @@ public class SalesSlipService {
 			newIdSalesSlip = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(SalesSlip.class);
 			SalesSlipRepository.save(new SalesSlip (newIdSalesSlip,salesSlipData.getIdCreater(),salesSlipData.getIdClient(),
 					salesSlipData.getCreateDate(),salesSlipData.getDeliveryAddress(),salesSlipData.getTotalBill(),salesSlipData.getShippingFee(),false,salesSlipData.getNote(),
-					null,null,null,salesSlipData.getDiscountcode(),null)); // thêm brand vào csdl
+					null,null,null,salesSlipData.getDiscountcode(),null,null)); // thêm brand vào csdl
 			SalesSlipRepository.flush();
 			Set<Boolean> statusCreate = new HashSet<>();
 			statusCreate.add(SalesSlipRepository.existsById(newIdSalesSlip));
@@ -156,7 +193,7 @@ public class SalesSlipService {
 				if(!SalesSlip.isDeliveryStatus()) {
 					return SalesSlipRepository.UpdateSalesSlip(SalesSlip.getIdSalesSlip(), SalesSlip.getIdCreater(), SalesSlip.getIdClient(), SalesSlip.getCreateDate(),
 							SalesSlip.getDeliveryAddress(), SalesSlip.getTotalBill(),SalesSlip.getShippingFee(), SalesSlip.isDeliveryStatus(), SalesSlip.getNote(), SalesSlip.getEvaluate(),SalesSlip.getRefundStatus(), SalesSlip.getProof(),
-							SalesSlip.getDiscountCode(), SalesSlip.getDeliveryDate()) > 0;
+							SalesSlip.getDiscountCode(), SalesSlip.getDeliveryDate(),SalesSlip.getComment()) > 0;
 				}
 				else return false;
 			}

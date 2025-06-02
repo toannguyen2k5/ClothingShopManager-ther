@@ -53,4 +53,7 @@ public class SalesSlip {
     
     @Column(name = "deliveryDate")
     private LocalDate deliveryDate;
+    
+    @Column(name = "comment", length = 500)
+    private String comment;
 }

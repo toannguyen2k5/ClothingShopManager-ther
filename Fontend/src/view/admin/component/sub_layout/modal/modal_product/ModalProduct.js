@@ -27,7 +27,6 @@ class ModalProduct extends Component {
     console.log("Row clicked:", row);
     this.props.updateProduct({
       idProduct: row.idProduct,
-      nameProduct: row.nameProduct,
       nameBrand: row.nameBrand,
       nameCategory: row.nameCategory,
       nameMaterial: row.nameMaterial,
@@ -37,9 +36,8 @@ class ModalProduct extends Component {
     });
     this.setState({ show: false });
     if (this.props.onClose) {
-      this.props.onClose(); // gọi hàm đóng từ component cha nếu có
+      this.props.onClose();
     }
-    // You can navigate or open modal or perform other actions here
   };
   handleChange = (e) => {
     const { name, value } = e.target;

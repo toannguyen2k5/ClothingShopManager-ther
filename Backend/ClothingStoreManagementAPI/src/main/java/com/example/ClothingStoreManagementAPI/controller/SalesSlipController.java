@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.*;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
+import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.DTO.DetailPurchaseSlipDTO;
+import com.example.ClothingStoreManagementAPI.model.DTO.PurchaseSlipDTO;
 import com.example.ClothingStoreManagementAPI.model.DTO.SalesSlipDTO;
+import com.example.ClothingStoreManagementAPI.model.DTO.ShowAllRateDTO;
+
 import java.util.*;
 import java.time.LocalDate;
 @CrossOrigin(origins = "http://localhost:3000")
@@ -22,20 +27,23 @@ public class SalesSlipController {
 		String idDetail = SalesSlipService.checkinforvalid(CheckInforValidData);
 		return ResponseEntity.ok(common.ReturnReponse(idDetail, "Select", "SalesSlip"));
 	}
-	@GetMapping("/selectByIdClient")
-	public ResponseEntity<?> SelectByIdClient(@RequestParam String IdClient){
-		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SelectSalesSlipByIdClient(IdClient);
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Select", "SalesSlip"));
+	@GetMapping("/SelectAll/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SelectAll(@PathVariable String param_limit, @PathVariable String param_offset){
+		int limit, offset;
+    	limit = CommonUtil.tryParseInt(param_limit);
+    	offset = CommonUtil.tryParseInt(param_offset);
+		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectAll(offset,limit);
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Sellect", "PurchaseSlip"));
 	}
-	@GetMapping("/selectByDate")
-	public ResponseEntity<?> SelectByDate(@RequestParam LocalDate createDate){
-		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectSalesSlipByDate(createDate);
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Select", "SalesSlip"));
+	@GetMapping("/SelectDetail")
+	public ResponseEntity<?> SelectDetail(@RequestParam String idSalesSlip){
+		List<DetailPurchaseSlipDTO> PurchaseSlips = SalesSlipService.SellectDetailSalesSlip(idSalesSlip);
+		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlips, "Sellect", "PurchaseSlip"));
 	}
-	@GetMapping("/selectByIdCreater")
-	public ResponseEntity<?> SelectByIdCreater(@RequestParam String IdCreater){
-		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectSalesSlipByIdCreater(IdCreater);
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Select", "SalesSlip"));
+	@GetMapping("/showAllRate")
+	public ResponseEntity<?> showAllReate(){
+		List<ShowAllRateDTO> SalesSlipDTOs = SalesSlipService.ShowAllRate();
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Show", "comment"));
 	}
 	@PostMapping("/insertSalesSlip")
 	public ResponseEntity<?> InsertSalesSlip(@RequestBody SaleSlipFullData saleSlipFullData){

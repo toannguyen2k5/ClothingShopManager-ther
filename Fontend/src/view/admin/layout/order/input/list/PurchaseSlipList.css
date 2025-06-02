@@ -49,8 +49,10 @@
   background-color: #fff;
   padding: 30px;
   border-radius: 12px;
-  max-width: 90%;
-  width: 900px;
+  width: 80%; /* tăng chiều ngang */
+  max-width: 1250px; /* giới hạn chiều ngang tối đa */
+  height: 80%; /* tăng chiều cao */
+  max-height: 90vh; /* giới hạn chiều cao tối đa */
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   position: relative;
   max-height: 90vh;
@@ -139,9 +141,11 @@
   display: flex;
 }
 .psl-slip-row strong {
-    text-align: center;
+  text-align: center;
 }
-.psl-slip-row select, .psl-slip-row select:before, .psl-slip-row select:after {
+.psl-slip-row select,
+.psl-slip-row select:before,
+.psl-slip-row select:after {
   padding: 6px 10px;
   font-size: 14px;
   border: 1px solid #ccc;

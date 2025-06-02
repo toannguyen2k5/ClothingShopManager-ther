@@ -1,5 +1,5 @@
 package com.example.ClothingStoreManagementAPI.service;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +8,6 @@ import com.example.ClothingStoreManagementAPI.repository.DiscountEventRepository
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-
-import com.example.ClothingStoreManagementAPI.model.Entity.Brand;
-import com.example.ClothingStoreManagementAPI.model.Entity.Color;
 import com.example.ClothingStoreManagementAPI.model.Entity.DiscountEvent;
 import java.util.*;
 
@@ -26,7 +23,7 @@ public class DiscountEventService {
 
     public List<DiscountEvent> SellectAllDiscountEvent(int limit, int offset) {
         try {
-            Query query = entityManager.createNativeQuery("SELECT * FROM DiscountEvent", Color.class);
+            Query query = entityManager.createNativeQuery("SELECT * FROM DiscountEvent", DiscountEvent.class);
             if (offset > 0)
 				query.setFirstResult(offset); // OFFSET
 			if (limit > 0)
@@ -46,7 +43,7 @@ public class DiscountEventService {
 			if (limit > 0)
 				query1.setMaxResults(limit); // LIMIT
             query1.setParameter("query", "%" + query + "%");// LIMIT
-            query1.setParameter("now",LocalDateTime.now());
+            query1.setParameter("now",LocalDate.now());
             return query1.getResultList();
         } catch (Exception e) {
             System.out.print("SellectDiscountEvent, Error : " + e.getMessage());

@@ -1,135 +1,162 @@
-// PromoCodeManager.jsx
-import React, { Component } from 'react';
-import DataTable from 'react-data-table-component';
-import './PromoCodeManager.css';
+import React, { Component } from "react";
+import PromoCodeTable from "./PromoCodeTable";
+import PromoCodeModal from "./PromoCodeModal";
+import { urlapi } from "../../../../setting/store/const";
+import "./PromoCodeManager.css";
 
 export default class PromoCodeManager extends Component {
-  state = {
-    codes: [],
-    filterText: '',
-    showModal: false,
-    editingIndex: null,
-    form: {
-      code: '', description: '', discount: '', minOrder: '', start: '', end: '', active: true
-    }
-  };
-
-  componentDidMount() {
-    this.setState({
-      codes: [
-        { code: 'TGDD10', description: 'Giảm 10% đơn ≥1.000.000₫', discount: '10%', minOrder: 1000000, start: '2025-06-01', end: '2025-06-30', active: true },
-        { code: 'DMX300', description: 'Giảm 300K đơn ≥3.000.000₫', discount: '300K', minOrder: 3000000, start: '2025-05-15', end: '2025-05-31', active: true }
-      ]
-    });
+  constructor(props) {
+    super(props);
+    this.state = {
+      codes: [],
+      filterText: "",
+      showModal: false,
+      editingIndex: null,
+      selectedProduct: {},
+    };
   }
 
-  handleFormChange = e => {
-    const { name, value, type, checked } = e.target;
-    this.setState(prev => ({
-      form: { ...prev.form, [name]: type === 'checkbox' ? checked : value }
-    }));
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = () => {
+    fetch(urlapi + "/api/DiscountEvent/sellectAll/all/all/")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          this.setState({ codes: data.data });
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
-  openModal = idx => {
-    if (idx != null) {
-      this.setState({ editingIndex: idx, form: { ...this.state.codes[idx] }, showModal: true });
+  handleOpenModal = (index = null) => {
+    this.setState({ editingIndex: index, showModal: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+  handleSave = (newData, editingIndex) => {
+    if (editingIndex === null) {
+      const req = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idEvent: null,
+          eventCode: newData.eventCode,
+          idProduct: newData.idProduct,
+          decrease: newData.decrease,
+          quantityLimit: newData.quantityLimit,
+          eventDeadline: newData.eventDeadline,
+          description: newData.description,
+        }),
+      };
+      fetch(urlapi + "/api/DiscountEvent/insertDiscountEvent", req)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "200") {
+            this.setState((prev) => ({
+              codes: [...prev.codes, newData],
+              showModal: false,
+            }));
+            alert("Thêm mã giảm giá thành công !");
+          } else alert("Thêm mã giảm giá thất bại !");
+          console.log("Response từ server:", data);
+        })
+        .catch((error) => console.error("Lỗi POST:", error));
     } else {
-      this.setState({
-        editingIndex: null,
-        form: { code: '', description: '', discount: '', minOrder: '', start: '', end: '', active: true },
-        showModal: true
-      });
+      // Cập nhật
+      const req = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idEvent: newData.idEvent,
+          eventCode: newData.eventCode,
+          idProduct: newData.idProduct,
+          decrease: newData.decrease,
+          quantityLimit: newData.quantityLimit,
+          eventDeadline: newData.eventDeadline,
+          description: newData.description,
+        }),
+      };
+      fetch(urlapi + "/api/DiscountEvent/updateDiscountEvent", req)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "200") {
+            const updated = [...this.state.codes];
+            updated[editingIndex] = newData;
+            this.setState({ codes: updated, showModal: false });
+            alert("Sửa mã giảm giá thành công !");
+          } else alert("Sửa mã giảm giá thất bại !");
+          console.log("Response từ server:", data);
+        })
+        .catch((error) => console.error("Lỗi POST:", error));
     }
   };
 
-  closeModal = () => this.setState({ showModal: false });
-
-  saveCode = () => {
-    const { editingIndex, form, codes } = this.state;
-    if (editingIndex == null) {
-      this.setState({ codes: [...codes, form], showModal: false });
-    } else {
-      const updated = [...codes];
-      updated[editingIndex] = form;
-      this.setState({ codes: updated, showModal: false });
-    }
-  };
-
-  deleteCode = index => {
-    if (window.confirm('Bạn có chắc chắn xóa mã này?')) {
-      const updated = [...this.state.codes];
-      updated.splice(index, 1);
-      this.setState({ codes: updated });
+  handleDelete = (index) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa mã này?")) {
+      fetch(
+        urlapi +
+          "/api/DiscountEvent/deleteDiscountEvent?idDiscountEvent=" +
+          this.state.codes[index].idEvent
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status && data.status === "200") {
+            const updated = [...this.state.codes];
+            updated.splice(index, 1);
+            this.setState({ codes: updated });
+          }
+        })
+        .catch((err) => console.error(err));
     }
   };
 
   render() {
-    const { codes, filterText, form, showModal } = this.state;
-    const filteredCodes = codes.filter(item =>
-      item.code.toLowerCase().includes(filterText.toLowerCase()) ||
-      item.description.toLowerCase().includes(filterText.toLowerCase())
+    const { codes, filterText, showModal, editingIndex } = this.state;
+    const filteredCodes = codes.filter(
+      (item) =>
+        item.eventCode.toLowerCase().includes(filterText.toLowerCase()) ||
+        item.description.toLowerCase().includes(filterText.toLowerCase())
     );
 
-    const columns = [
-      { name: 'Code', selector: row => row.code, sortable: true },
-      { name: 'Mô tả', selector: row => row.description },
-      { name: 'Giảm', selector: row => row.discount },
-      { name: 'Tối thiểu', selector: row => `${row.minOrder.toLocaleString()}₫` },
-      { name: 'Hiệu lực', selector: row => `${row.start} → ${row.end}` },
-      { name: 'Trạng thái', selector: row => row.active ? 'Hoạt động' : 'Khóa', sortable: true },
-      {
-        name: 'Hành động',
-        cell: (row, index) => (
-          <>
-            <button onClick={() => this.openModal(index)} className="pm-btn">Sửa</button>
-            <button onClick={() => this.deleteCode(index)} className="pm-btn pm-btn-del">Xóa</button>
-          </>
-        ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true
-      }
-    ];
-
     return (
-      <div className="">
+      <div>
         <h2>Quản lý Mã Khuyến Mãi</h2>
         <div className="pm-toolbar">
           <input
             type="text"
             placeholder="Tìm kiếm..."
             value={filterText}
-            onChange={e => this.setState({ filterText: e.target.value })}
+            onChange={(e) => this.setState({ filterText: e.target.value })}
             className="pm-search"
           />
-          <button onClick={() => this.openModal()} className="pm-btn pm-btn-add">Thêm mã</button>
+          <button
+            onClick={() => this.handleOpenModal()}
+            className="pm-btn pm-btn-add"
+          >
+            Thêm mã
+          </button>
         </div>
-
-        <DataTable
-          columns={columns}
+        <PromoCodeTable
           data={filteredCodes}
-          pagination
-          highlightOnHover
-          striped
+          onEdit={this.handleOpenModal}
+          onDelete={this.handleDelete}
         />
-
         {showModal && (
-          <div className="pm-modal" onClick={this.closeModal}>
-            <div className="pm-modal-content" onClick={e => e.stopPropagation()}>
-              <h3>{this.state.editingIndex == null ? 'Thêm Mã' : 'Sửa Mã'}</h3>
-              <label>Code:<input name="code" value={form.code} onChange={this.handleFormChange} /></label>
-              <label>Mô tả:<input name="description" value={form.description} onChange={this.handleFormChange} /></label>
-              <label>Giảm giá:<input name="discount" value={form.discount} onChange={this.handleFormChange} /></label>
-              <label>Tối thiểu:<input name="minOrder" type="number" value={form.minOrder} onChange={this.handleFormChange} /></label>
-              <label>Bắt đầu:<input name="start" type="date" value={form.start} onChange={this.handleFormChange} /></label>
-              <label>Kết thúc:<input name="end" type="date" value={form.end} onChange={this.handleFormChange} /></label>
-              <label><input type="checkbox" name="active" checked={form.active} onChange={this.handleFormChange} /> Hoạt động</label>
-              <div className="pm-modal-actions">
-                <button onClick={this.saveCode} className="pm-btn pm-btn-add">Lưu</button>
-                <button onClick={this.closeModal} className="pm-btn pm-btn-del">Hủy</button>
-              </div>
-            </div>
-          </div>
+          <PromoCodeModal
+            onClose={this.handleCloseModal}
+            onSave={this.handleSave}
+            editingIndex={editingIndex}
+            data={editingIndex !== null ? codes[editingIndex] : null}
+          />
         )}
       </div>
     );

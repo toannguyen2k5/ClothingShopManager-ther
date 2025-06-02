@@ -7,7 +7,10 @@ import com.example.ClothingStoreManagementAPI.repository.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
+import com.example.ClothingStoreManagementAPI.model.DTO.DetailPurchaseSlipDTO;
 import com.example.ClothingStoreManagementAPI.model.DTO.ProductDTO;
+import com.example.ClothingStoreManagementAPI.model.DTO.PurchaseSlipDTO;
+import com.example.ClothingStoreManagementAPI.model.DTO.ReverseRetrievalDProductDTO;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.*;
 import java.util.*;
@@ -32,12 +35,58 @@ public class PurchaseSlipService {
 	private Common common;
 	@Autowired
 	private InventoryShopReponsitory InventoryShopReponsitory;
+	@Autowired
+    private EntityManager entityManager;
+	@Autowired
+	private UserRepository UserRepository;
+	@Autowired
+	private SupplierRepository SupplierRepository;
 	public String SelectMaxId() {
 		try{
 			return PurchaseSlipRepository.SelectMaxId();
 		}
 		catch(Exception e) {
 			System.out.print("SelectMaxId, Error : " + e.getMessage());
+			return null;
+		}
+	}
+	public List<PurchaseSlipDTO> SellectAll(int offset, int limit) {
+		try{
+			List<PurchaseSlipDTO> result = new ArrayList<>();
+			Query query = entityManager.createQuery("SELECT c FROM PurchaseSlip c", PurchaseSlip.class);
+            if (offset > 0)
+				query.setFirstResult(offset); // OFFSET
+			if (limit > 0)
+				query.setMaxResults(limit); // LIMIT
+            List<PurchaseSlip> PurchaseSlips = query.getResultList();
+            for(PurchaseSlip PurchaseSlip : PurchaseSlips) {
+            	result.add(new PurchaseSlipDTO(PurchaseSlip.getIdPurchaseSlip(),UserRepository.SellectFullName(PurchaseSlip.getIdCreater()),
+            			SupplierRepository.SellectFullName(PurchaseSlip.getIdSupplier()),PurchaseSlip.getDayCreate(),PurchaseSlip.getTotalBill(),PurchaseSlip.isApproveStatus(),
+            			PurchaseSlip.getStatusUpdateDate(),UserRepository.SellectFullName(PurchaseSlip.getIdStatusEditor()),PurchaseSlip.isStatusReceive()));
+            }
+            return result;
+		}
+		catch(Exception e) {
+			System.out.print("SelectPurchaseSlip all, Error : " + e.getMessage());
+			return null;
+		}
+	}
+	public List<DetailPurchaseSlipDTO> SellectDetailPurchaseSlip(String idPurchaseSlip) {
+		try{
+			List<DetailPurchaseSlipDTO> result = new ArrayList<>();
+			List<ListOfReceivingStores> ListOfReceivingStoress = ListOfReceivingStoresService.SellectListOfReceivingStores(idPurchaseSlip);
+			for(ListOfReceivingStores ListOfReceivingStores : ListOfReceivingStoress) {
+				List<DetailPurchaseSlip> DetailPurchaseSlips = DetailPurchaseSlipService.SellectDetailPurchaseSlip(ListOfReceivingStores.getIdList());
+				for(DetailPurchaseSlip detailPurchaseSlip : DetailPurchaseSlips) {
+					ReverseRetrievalDProductDTO ReverseRetrievalDProductDTO = DetailProductRepository.ReverseRetrievalDProduct(detailPurchaseSlip.getIdDetailProduct());
+					result.add(new DetailPurchaseSlipDTO(ListOfReceivingStores.getIdShop(),DetailProductRepository.SelectIdDetailByIdPro(detailPurchaseSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),detailPurchaseSlip.getPrice(),
+							detailPurchaseSlip.getQuantity(),ReverseRetrievalDProductDTO.getNameColor(),ReverseRetrievalDProductDTO.getNameSize()));
+				}
+			}
+			return result;
+		}
+		catch(Exception e) {
+			System.out.print("SellectDetailPurchaseSlip, Error : " + e.getMessage());
 			return null;
 		}
 	}

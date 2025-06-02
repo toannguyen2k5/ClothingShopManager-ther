@@ -2,7 +2,7 @@ package com.example.ClothingStoreManagementAPI.model.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "discountevent")
@@ -29,7 +29,7 @@ public class DiscountEvent {
     private Integer quantityLimit;
 
     @Column(name = "eventDeadline")
-    private LocalDateTime eventDeadline;
+    private LocalDate eventDeadline;
 
     @Column(name = "description", length = 255)
     private String description;

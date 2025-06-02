@@ -15,7 +15,7 @@ public interface DetailPurchaseSlipRepository extends JpaRepository<DetailPurcha
 	@Query("SELECT MAX(idDetail) FROM DetailPurchaseSlip")
 	String SelectMaxId();
 	// tìm kiếm danh sách hàng bằng mã hàng hóa
-	@Query("SELECT idDetail,idDetailProduct,quantity,price FROM DetailPurchaseSlip WHERE idList = :idList")
+	@Query("SELECT d FROM DetailPurchaseSlip d WHERE idList = :idList")
 	List<DetailPurchaseSlip> SellectDetailPurchaseSlip(@Param("idList") String idList);
 	// thêm chi tiết phiếu
 	@Query("INSERT INTO DetailPurchaseSlip(idDetail,idList,idDetailProduct,quantity,price) VALUES (:idDetail,:idList,:idDetailProduct,:quantity,:price)")

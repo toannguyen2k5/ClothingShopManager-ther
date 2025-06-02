@@ -18,7 +18,7 @@ public class DiscountEventController {
     @Autowired
     private Common common;
 
-    @GetMapping("/sellectAll")
+    @GetMapping("/sellectAll/{param_offset}/{param_limit}/")
     public ResponseEntity<?> SellectAll(@PathVariable String param_limit, @PathVariable String param_offset) {
     	int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);
@@ -27,7 +27,7 @@ public class DiscountEventController {
         return ResponseEntity.ok(common.ReturnReponse(discountEvents, "Sellect All", "DiscountEvent"));
     }
 
-    @GetMapping("/sellectDiscountEvent")
+    @GetMapping("/sellectDiscountEvent/{param_offset}/{param_limit}/")
     public ResponseEntity<?> SellectDiscountEvent(@RequestParam String query, @PathVariable String param_limit, @PathVariable String param_offset) {
     	int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);

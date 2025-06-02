@@ -810,7 +810,6 @@ export default class CreateSalesSlip extends Component {
                       <i class="bi bi-search"></i>
                     </button>
                     <ModalProduct
-                      idShop={this.state.data_shop_selected.idShop}
                       isOpen={this.state.isOpenModalProduct}
                       onClose={() =>
                         this.setState({ isOpenModalProduct: false })

@@ -37,6 +37,9 @@ public interface UserRepository extends JpaRepository<Users, String> {
 	// tìm kiếm tất cả nhân viên của kho , hay shop , hay các quản lý hay tìm kiếm người dùng
 	@Query("SELECT u FROM Users u WHERE u.role = :role")
 	List<Users> SellectByRole (@Param("role") String role);
+	// tìm kiếm tên người dùng dựa trên id
+	@Query("SELECT u.fullName FROM Users u WHERE u.idUser = :idUser")
+	String SellectFullName (@Param("idUser") String idUser);
 	// tìm kiếm tất cả nhân viên hay quản lý của 1 shop 
 	@Query("SELECT u FROM Users u\r\n"
 			+ "INNER JOIN ListWarehouseInCharge l ON l.idStaff = u.idUser\r\n"

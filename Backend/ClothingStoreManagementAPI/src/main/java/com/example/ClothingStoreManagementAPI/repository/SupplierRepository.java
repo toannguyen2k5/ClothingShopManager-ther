@@ -15,6 +15,10 @@ public interface SupplierRepository extends JpaRepository<Supplier,String>{
 	@Query("SELECT MAX(idSupplier) FROM Supplier")
 	String SelectMaxId();
 	
+	// tìm kiếm tên nhà cung cấp dựa trên id
+	@Query("SELECT u.nameSupplier FROM Supplier u WHERE u.idSupplier = :idSupplier")
+	String SellectFullName (@Param("idSupplier") String idSupplier);
+	
 	// tìm kiếm nhà cung cấp dựa trên tên nhà cung cấp
 	@Query("SELECT a.idSupplier FROM Supplier a WHERE a.nameSupplier = :nameSupplier")
 	String SelectIdSupplier(@Param("nameSupplier") String nameSupplier);

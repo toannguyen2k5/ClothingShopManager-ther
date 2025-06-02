@@ -7,8 +7,11 @@ import java.time.LocalDate;
 @Setter
 public class SalesSlipDTO {
 	private String idSalesSlip;
-	private String fullname;
-	private String phoneNumber;
+	private String nameCreate;
+	public String nameClient;
 	private LocalDate createDate;
+	private String deliveryAddress;
+	private Integer shippingFee;
+	private Integer totalBill;
 	private boolean deliveryStatus;
 }

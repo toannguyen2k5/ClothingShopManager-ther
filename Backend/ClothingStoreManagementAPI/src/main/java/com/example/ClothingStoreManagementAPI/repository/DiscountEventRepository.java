@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.ClothingStoreManagementAPI.model.Entity.DiscountEvent;
 import org.springframework.stereotype.Repository;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Repository
 public interface DiscountEventRepository extends JpaRepository<DiscountEvent,String>{
@@ -19,5 +19,5 @@ public interface DiscountEventRepository extends JpaRepository<DiscountEvent,Str
 	@Modifying
 	@Query("UPDATE DiscountEvent d SET d.eventCode = :eventCode,d.idProduct=:idProduct,d.decrease=:decrease,d.quantityLimit=:quantityLimit,d.eventDeadline=:eventDeadline,d.description=:description\r\n"
 			+ "WHERE d.idEvent = :idEvent")
-	int UpdateDiscountEvent(@Param("idEvent") String idEvent ,@Param("eventCode") String eventCode ,@Param("idProduct") String idProduct,@Param("decrease") Float decrease,@Param("quantityLimit") Integer quantityLimit,@Param("eventDeadline") LocalDateTime eventDeadline,@Param("description") String description);
+	int UpdateDiscountEvent(@Param("idEvent") String idEvent ,@Param("eventCode") String eventCode ,@Param("idProduct") String idProduct,@Param("decrease") Float decrease,@Param("quantityLimit") Integer quantityLimit,@Param("eventDeadline") LocalDate eventDeadline,@Param("description") String description);
 }

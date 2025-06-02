@@ -20,17 +20,21 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, St
     @Query("SELECT d.idDetail from  DetailProduct d WHERE d.idProduct = :idProduct AND d.idColor = :idColor AND d.idSize = :idSize ")
     String SelectIdDetailProduct(@Param("idProduct") String idProduct, @Param("idColor") String idColor, @Param("idSize") String idSize);
 
+    @Query("SELECT d.idProduct from  DetailProduct d WHERE d.idDetail = :idDetail ")
+    String SelectIdDetailByIdPro(@Param("idDetail") String idDetail);
+    
     // tìm kiếm trạng thái bán của sản phẩm
     @Query("SELECT d.status From DetailProduct d  WHERE d.idDetail = :idDetail")
     boolean CheckSellStatus(@Param("idDetail") String idDetail);
 
     // tìm kiếm tên sản phẩm , kích thước , màu sắc dựa trên tên sp
-    @Query("SELECT p.nameProduct , s.nameSize , c.nameColor\r\n"
-            + "FROM DetailProduct d\r\n"
-            + "INNER JOIN Product p ON d.idProduct = p.idProduct\r\n"
-            + "INNER JOIN Size s ON d.idSize = s.idSize\r\n"
-            + "INNER JOIN Color c ON d.idColor = c.idColor\r\n"
-            + "WHERE d.idDetail = :idDetail")
+    @Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ReverseRetrievalDProductDTO("
+    	     + "p.nameProduct, s.nameSize, c.nameColor) "
+    	     + "FROM DetailProduct d "
+    	     + "INNER JOIN Product p ON d.idProduct = p.idProduct "
+    	     + "INNER JOIN Size s ON d.idSize = s.idSize "
+    	     + "INNER JOIN Color c ON d.idColor = c.idColor "
+    	     + "WHERE d.idDetail = :idDetail")
     ReverseRetrievalDProductDTO ReverseRetrievalDProduct(@Param("idDetail") String idDetail);
 
     @Modifying
