@@ -79,7 +79,7 @@ class ShopingCart extends Component {
                       <div className="item-wrap" id="cart-page-result">
                         <ShopingCartItem
                           total={this.callBack}
-                          idUser="User0001"
+                          idUser={this.props.state_data.user_info.id_user}
                           {...this.props}
                         />
                       </div>

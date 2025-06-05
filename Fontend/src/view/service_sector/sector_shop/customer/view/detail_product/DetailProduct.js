@@ -110,7 +110,7 @@ class DetailProduct extends Component {
                             <a
                               href={
                                 urlapi +
-                                  "/api/Image/product/" +
+                                  "/api/Image/" +
                                   this.state.product.images?.find(
                                     (image) => image.main
                                   )?.path || "#"
@@ -129,7 +129,7 @@ class DetailProduct extends Component {
                                 loading="lazy"
                                 src={
                                   urlapi +
-                                    "/api/Image/product/" +
+                                    "/api/Image/" +
                                     this.state.product.images?.find(
                                       (image) => image.main
                                     )?.path || "#"

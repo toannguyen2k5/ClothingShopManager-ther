@@ -37,7 +37,7 @@ public class ProductController {
     	int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);
     	offset = CommonUtil.tryParseInt(param_offset);
-		List<ProductDTO> ProductDTOs = ProductService.SellectAll(limit, offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectAll(limit, offset);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
     }
 	// khi người dùng tìm kiếm thông tin hàng hóa
@@ -46,7 +46,7 @@ public class ProductController {
 		int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);
     	offset = CommonUtil.tryParseInt(param_offset);
-		List<ProductDTO> ProductDTOs = ProductService.SellectInfor(select,limit,offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectInfor(select,limit,offset);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect", "product"));
 	}
 
@@ -56,7 +56,7 @@ public class ProductController {
 		int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);
     	offset = CommonUtil.tryParseInt(param_offset);
-		List<ProductDTO> ProductDTOs = ProductService.SellectByCategory(idCategory,limit,offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectByCategory(idCategory,limit,offset);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect", "product"));
 	}
 	// thêm hoặc chỉnh sửa sản phẩm

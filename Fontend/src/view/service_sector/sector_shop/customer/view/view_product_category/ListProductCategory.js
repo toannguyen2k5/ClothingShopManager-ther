@@ -4,7 +4,7 @@ import Banner from "../../component/sub_layout/banner/Banner";
 import ProductList from "../../component/sub_layout/list_product/ProductList";
 import FilterProduct from "../../component/sub_layout/filter_product/FilterProduct";
 import { urlapi } from "../../../../../../setting/store/const";
-class Home extends Component {
+class ListProductCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,7 +34,7 @@ class Home extends Component {
     this.getListCategory();
   };
   render() {
-    console.log(this.state.data_list);
+    console.log("ListProductCategory", this.state.list_product);
     return (
       <>
         <main>
@@ -60,7 +60,8 @@ class Home extends Component {
                       <ul className="result-filter-full">
                         <li className="clear-all">
                           {" "}
-                          Xóa hết <i className="fa fa-times" aria-hidden="true"></i>
+                          Xóa hết{" "}
+                          <i className="fa fa-times" aria-hidden="true"></i>
                         </li>
                       </ul>
                     </div>
@@ -85,4 +86,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default ListProductCategory;

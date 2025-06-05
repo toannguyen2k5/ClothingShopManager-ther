@@ -10,7 +10,8 @@ class Account extends Component {
   }
 
   render() {
-    if (this.props.state_data.user_info.role_level >=5)// "admin")
+    if (this.props.state_data.user_info.role_level >= 5)
+      // "admin")
       return (
         <>
           <a
@@ -26,7 +27,8 @@ class Account extends Component {
             <img
               src={`${urlapi}/api/Image/${this.props.state_data.user_info.avatar}`}
               style={{ width: "40px", height: "auto" }}
-            />&nbsp;
+            />
+            &nbsp;
             <span className="d-sm-inline d-none">
               {this.props.state_data.user_info.full_name}
             </span>
@@ -36,7 +38,10 @@ class Account extends Component {
             aria-labelledby="dropdownMenuButton"
           >
             <li className="mb-2">
-              <a className="dropdown-item border-radius-md" href="/admin/profile">
+              <a
+                className="dropdown-item border-radius-md"
+                href="/admin/profile"
+              >
                 <i
                   className="fa fa-address-card-o me-sm-1"
                   aria-hidden="true"
@@ -45,7 +50,10 @@ class Account extends Component {
               </a>
             </li>
             <li className="mb-2">
-              <a className="dropdown-item border-radius-md" href="/admin/billing/">
+              <a
+                className="dropdown-item border-radius-md"
+                href="/admin/billing/"
+              >
                 <i className="fa fa-credit-card me-sm-1" aria-hidden="true"></i>
                 <span className="d-sm-inline">&nbsp;Thông tin giao dịch</span>
               </a>
@@ -64,16 +72,23 @@ class Account extends Component {
             </li>
             <hr />
             <li className="mb-2">
-              <a className="dropdown-item border-radius-md" href="/admin/setting/">
+              <a
+                className="dropdown-item border-radius-md"
+                href="/admin/setting/"
+              >
                 <i className="fa fa-cog me-sm-1" aria-hidden="true"></i>
                 <span className="d-sm-inline">&nbsp;Thiết lập tài khoản</span>
               </a>
             </li>
             <hr />
             <li>
-              <a className="dropdown-item border-radius-md" href="/home" onClick={(e)=>{
-                this.props.actions.log_out();
-              }}>
+              <a
+                className="dropdown-item border-radius-md"
+                href="/home"
+                onClick={(e) => {
+                  this.props.actions.log_out();
+                }}
+              >
                 <i className="fa fa-sign-out me-sm-1" aria-hidden="true"></i>
                 <span className="d-sm-inline">&nbsp;Đăng xuất</span>
               </a>

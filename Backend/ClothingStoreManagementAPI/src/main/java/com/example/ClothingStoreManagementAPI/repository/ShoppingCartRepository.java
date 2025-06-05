@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.ClothingStoreManagementAPI.model.Entity.ShoppingCart;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Repository
 public interface ShoppingCartRepository  extends JpaRepository<ShoppingCart, String>{
@@ -32,7 +32,7 @@ public interface ShoppingCartRepository  extends JpaRepository<ShoppingCart, Str
 		       "INNER JOIN Price a ON a.idProduct = p.idProduct AND a.status = true "+
 		       "LEFT JOIN DiscountEvent de On de.idProduct = p.idProduct AND de.eventDeadline > :now "+
 		       "WHERE sc.idUser = :idUser")
-	List<ShoppingCartItemDTO> SelectShoppingCartByidUser(@Param("idUser") String idUser,@Param("now") LocalDateTime  now);
+	List<ShoppingCartItemDTO> SelectShoppingCartByidUser(@Param("idUser") String idUser,@Param("now") LocalDate  now);
 	// chỉnh sửa số lượng giỏ hàng
 	@Modifying
 	@Query("UPDATE ShoppingCart s SET s.status = :status WHERE s.idShoppingCart = :idShoppingCart")

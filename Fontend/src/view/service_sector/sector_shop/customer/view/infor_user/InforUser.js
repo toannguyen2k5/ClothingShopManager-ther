@@ -13,7 +13,7 @@ class InforUser extends Component {
   renderContent = () => {
     switch (this.state.selectedMenu) {
       case "profile":
-        return <Information />;
+        return <Information {...this.props} />;
       case "orders":
         return <></>;
       case "address":
@@ -79,7 +79,7 @@ class InforUser extends Component {
           </>
         );
       default:
-        return <Information />;
+        return <Information {...this.props} />;
     }
   };
   render() {

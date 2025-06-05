@@ -163,8 +163,17 @@ class ShopingCartItem extends Component {
             />
             <div className="item-info">
               <div className="item-img">
-                <a href="#">
-                  <img src={shopingcart_item.path} alt="Sản phẩm" />
+                <a href={urlapi + "/api/Image/" + shopingcart_item.path}>
+                  <img
+                    src={urlapi + "/api/Image/" + shopingcart_item.path}
+                    alt="Sản phẩm"
+                    style={{
+                      width: "100px", // Kích thước cố định
+                      height: "100px",
+                      objectFit: "cover", // Crop hình để khung luôn đầy đủ
+                      borderRadius: "50%", // Nếu muốn hình tròn
+                    }}
+                  />
                 </a>
               </div>
               <div className="cart_content">

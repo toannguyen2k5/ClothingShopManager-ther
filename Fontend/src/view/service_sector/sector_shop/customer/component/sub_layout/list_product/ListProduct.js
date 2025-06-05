@@ -18,7 +18,7 @@ class ListProduct extends Component {
               product={{
                 ...item,
                 nameProduct: item.nameProduct,
-                path: urlapi + "/api/Image/product/" + item.path,
+                path: urlapi + "/api/Image/" + item.path,
                 price: item?.price * (1 - item?.decrease) || 0,
                 oldPrice: item?.price || 0,
                 sale: item?.decrease * 100 || 0,
@@ -27,14 +27,6 @@ class ListProduct extends Component {
               {...this.props}
             />
           ))}
-        </div>
-        <div className="collection-view-content">
-          <button
-            className="btn-collectionview"
-            onClick={() => this.GetProducts()}
-          >
-            Xem thêm
-          </button>
         </div>
       </>
     );

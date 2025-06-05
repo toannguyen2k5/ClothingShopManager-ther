@@ -8,7 +8,7 @@ import com.example.ClothingStoreManagementAPI.model.DTO.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.ShoppingCart;
 import com.example.ClothingStoreManagementAPI.model.DataRequest.ShoppingCartIncreaseData;
 import java.util.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 @Service
 public class ShoppingCartService {
 	@Autowired
@@ -39,7 +39,7 @@ public class ShoppingCartService {
 	}
 	public List<ShoppingCartItemDTO> SellectShoppingCart(String idUser){
 		try {
-			return shoppingCartRepository.SelectShoppingCartByidUser(idUser,LocalDateTime.now());
+			return shoppingCartRepository.SelectShoppingCartByidUser(idUser,LocalDate.now());
 		}
 		catch(Exception e) {
 			System.out.print("SellectShoppingCart, Error : " + e.getMessage());

@@ -47,7 +47,11 @@ class ChooseUserDiscountCode extends Component {
                       data-tinh={UserDiscountCode.discountCode}
                       data-value={UserDiscountCode.discountCode}
                     >
-                      {UserDiscountCode.discountCode}
+                      {UserDiscountCode.code} -giảm{" "}
+                      {UserDiscountCode.discountOrPrice > 1
+                        ? UserDiscountCode.discountOrPrice.toLocaleString() +
+                          "VND"
+                        : UserDiscountCode.discountOrPrice * 100 + "%"}
                     </option>
                   ))}
                 </select>

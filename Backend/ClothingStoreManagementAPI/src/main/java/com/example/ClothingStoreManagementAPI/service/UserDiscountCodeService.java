@@ -2,7 +2,8 @@ package com.example.ClothingStoreManagementAPI.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.example.ClothingStoreManagementAPI.repository.UserDiscountCodeRepository;
+import com.example.ClothingStoreManagementAPI.repository.*;
+import com.example.ClothingStoreManagementAPI.model.DTO.UserDiscountCodeDTO;
 import com.example.ClothingStoreManagementAPI.model.Entity.UserDiscountCode;
 import com.example.ClothingStoreManagementAPI.model.Entity.Users;
 
@@ -12,8 +13,27 @@ public class UserDiscountCodeService {
 	@Autowired
 	private UserDiscountCodeRepository UserDiscountCodeRepository;
 	@Autowired
+	private UserRepository UserRepository;
+	@Autowired
 	private Common common;
-	public List<UserDiscountCode> SelectAllUserDiscountCode(String idUser){
+	public List<UserDiscountCodeDTO> SelectAllUserDiscountCode(){
+		try {
+			List<UserDiscountCode> UserDiscountCodes = UserDiscountCodeRepository.findAll();
+			List<UserDiscountCodeDTO> result = new ArrayList<>();
+			for(UserDiscountCode UserDiscountCode : UserDiscountCodes) {
+				String nameCreater = UserRepository.SellectFullName(UserDiscountCode.getIdCreater());
+				String nameUser = UserRepository.SellectFullName(UserDiscountCode.getIdUser());
+				result.add(new UserDiscountCodeDTO(UserDiscountCode.getDiscountCode(),UserDiscountCode.getCode(),nameCreater,UserDiscountCode.getIdUser(),nameUser
+						,UserDiscountCode.getDiscountOrPrice(),UserDiscountCode.getMinimumOrderValue(),UserDiscountCode.getExpiry()));
+			}
+			return result;
+		}
+		catch(Exception e) {
+			System.out.print("SelectAllUserDiscountCode, Error : " + e.getMessage());
+			return null;
+		}
+	}
+	public List<UserDiscountCode> SelectDiscodeByIdUser(String idUser){
 		try {
 			return UserDiscountCodeRepository.SellectUserDiscountCode(idUser);
 		}
@@ -48,7 +68,7 @@ public class UserDiscountCodeService {
 	@Transactional
 	public boolean UpdateUserDiscountCode(UserDiscountCode UserDiscountCode) {
 		try {
-			return UserDiscountCodeRepository.UpdateUserDiscountCode(UserDiscountCode.getDiscountCode(),UserDiscountCode.getDiscountOrPrice(),
+			return UserDiscountCodeRepository.UpdateUserDiscountCode(UserDiscountCode.getDiscountCode(),UserDiscountCode.getCode(),UserDiscountCode.getIdUser(),UserDiscountCode.getDiscountOrPrice(),
 					UserDiscountCode.getMinimumOrderValue(),UserDiscountCode.getExpiry())>0;
 		}
 		catch(Exception e) {
@@ -57,10 +77,10 @@ public class UserDiscountCodeService {
 		}
 	}
 	@Transactional
-	public boolean DeleteUserDiscountCode(UserDiscountCode UserDiscountCode) {
+	public boolean DeleteUserDiscountCode(String discountCode) {
 		try {
-			UserDiscountCodeRepository.delete(UserDiscountCode);
-			return !UserDiscountCodeRepository.existsById(UserDiscountCode.getDiscountCode());
+			UserDiscountCodeRepository.deleteById(discountCode);
+			return !UserDiscountCodeRepository.existsById(discountCode);
 		}
 		catch(Exception e) {
 			System.out.print("DeleteUserDiscountCode, Error : " + e.getMessage());

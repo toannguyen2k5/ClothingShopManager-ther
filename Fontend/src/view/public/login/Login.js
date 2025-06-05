@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import "./style.css";
 import {
   mailformat,
   nameWebsite,
   rePassword,
+  url_layout,
   urlapi,
   validate_email_empty,
   validate_email_invaild,
@@ -69,15 +69,14 @@ export default class Login extends Component {
         password: md5(this.state.password_dn),
       }),
     };
-    
+    console.log("pass md5 : ", md5(this.state.password_dn));
     fetch(`${urlapi}/api/auth/login`, req)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         const { actions } = this.props;
-        console.log("data: ",data);
-        if(data.status && data.status === "200"){
-          
+        console.log("data: ", data);
+        if (data.status && data.status === "200") {
           actions.login_success(data.data);
           //--------------------------------------------------------
           console.log("Login Line 83", this.props.state_data);
@@ -85,13 +84,14 @@ export default class Login extends Component {
           this.setState({
             requestHome: true,
           });
-        }
-        else{
+        } else {
           actions.log_out();
           //--------------------------------------------------------
           console.log("Logout 92", this.props.state_data);
           //--------------------------------------------------------
         }
+        if (data.status && data.status === "201")
+          alert("Tài khoản này hiện không còn hoạt động !");
       })
       .catch((error) => console.error(error));
   }
@@ -138,6 +138,7 @@ export default class Login extends Component {
     if (!this.state.isCheckLogin) this.getRole();
     return (
       <div className="auth">
+        <link rel="stylesheet" href={`${url_layout}/css/styleLogin.css`} />
         <div className="auth-container">
           <div className="card">
             <header className="auth-header">

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class StoreCard extends Component {
   render() {
@@ -16,7 +16,7 @@ class StoreCard extends Component {
 
     return (
       <div
-        className="col-xs-12 col-sm-12 col-md-3 store-container"
+        className="col-xs-12 col-sm-12 col-md-4 store-container"
         data-tinh="ho-chi-minh"
         data-quan="phu-nhuan"
         style={{ display: "block" }}
@@ -24,7 +24,10 @@ class StoreCard extends Component {
         <div className="store-content">
           <div className="product-gallery-address d-flex-slick slick-initialized slick-slider slick-dotted">
             <div className="slick-list draggable">
-              <div className="slick-track" style={{ opacity: 1, width: "537px" }}>
+              <div
+                className="slick-track"
+                style={{ opacity: 1, width: "537px" }}
+              >
                 <div
                   className="item item-owl slick-slide slick-current slick-active"
                   style={{ width: "537px" }}
@@ -52,7 +55,9 @@ class StoreCard extends Component {
               {nameShop.toUpperCase()}
               {status && (
                 <span className="store-new">
-                  <span className="store-anomation">New<span></span></span>
+                  <span className="store-anomation">
+                    New<span></span>
+                  </span>
                 </span>
               )}
             </h1>
@@ -60,7 +65,14 @@ class StoreCard extends Component {
               <i className="fa-solid fa-location-dot"></i>
               <span>{address}</span>
             </p>
-            <p className="title-info space-between" style={{paddingLeft:"10px", paddingRight:"10px", paddingBottom:"10px"}}>
+            <p
+              className="title-info space-between"
+              style={{
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                paddingBottom: "10px",
+              }}
+            >
               <span>
                 <i className="fa-regular fa-clock"></i>
                 <span>

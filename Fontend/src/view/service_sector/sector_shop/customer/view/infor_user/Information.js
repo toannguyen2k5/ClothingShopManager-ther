@@ -1,15 +1,33 @@
 import React, { Component } from "react";
+import { urlapi } from "../../../../../../setting/store/const";
 class Information extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      full_name: null,
-      birth_day: null,
-      phone_number: null,
-      gender: null,
+      user: null,
     };
   }
+  componentDidMount() {
+    fetch(
+      urlapi +
+        `/api/Users/` +
+        this.props.state_data.user_info.id_user +
+        `/getInfo`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          this.setState({
+            user: data.data,
+          });
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
   render() {
+    console.log("data props : ", this.props);
+    const { user } = this.state;
     return (
       <>
         <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
@@ -47,6 +65,9 @@ class Information extends Component {
                             type="text"
                             name="customer[last_name]"
                             placeholder="Họ và tên"
+                            value={
+                              this.props.state_data.user_info.full_name || ""
+                            }
                             id="last_name"
                             className="text"
                             size="30"

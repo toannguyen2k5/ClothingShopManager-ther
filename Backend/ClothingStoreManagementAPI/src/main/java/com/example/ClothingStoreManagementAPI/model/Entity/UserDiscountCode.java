@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "userdiscountcode")  // Tên bảng viết thường
@@ -18,8 +18,14 @@ public class UserDiscountCode {
     @Column(name="discountCode",length = 45, nullable = false)
     private String discountCode;  // PK
     
+    @Column(name="code",length = 45, nullable = false)
+    private String code;  // PK
+    
     @Column(name="idUser",length = 45, nullable = false)
     private String idUser;  // PK
+    
+    @Column(name="idCreater",length = 45, nullable = false)
+    private String idCreater;  // PK
     
     @Column(name="discountOrPrice")
     private double discountOrPrice;
@@ -28,5 +34,5 @@ public class UserDiscountCode {
     private int minimumOrderValue;
 
     @Column(name="expiry",nullable = false)
-    private LocalDateTime expiry;
+    private LocalDate expiry;
 }

@@ -1904,10 +1904,6 @@ footer .top-ft-wanda ul li a:hover {
    text-align: center;
 } */
 
-.container {
-  padding-left: 10%;
-  padding-right: 10%;
-}
 .product-card .image-wrapper {
   height: 170px;
 }
@@ -1996,10 +1992,12 @@ footer .top-ft-wanda ul li a:hover {
   font-size: 12px;
 }
 
-.product-info .brand-title, .product-info .material-title{
+.product-info .brand-title,
+.product-info .material-title {
   color: #64f846;
 }
 
-.product-info .brand, .product-info .material{
+.product-info .brand,
+.product-info .material {
   color: #facf12;
 }

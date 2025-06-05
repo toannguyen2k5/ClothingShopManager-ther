@@ -17,9 +17,9 @@ class MainPhoto extends Component {
             aria-hidden="false"
           >
             <a
-              href="javascript:void(0)"
+              href={urlapi + "/api/Image/" + image.path}
               className="product__thumbnail"
-              data-image={urlapi + "/api/Image/product/" + image.path}
+              data-image={urlapi + "/api/Image/" + image.path}
               data-index={index}
               tabIndex="0"
             >
@@ -27,7 +27,7 @@ class MainPhoto extends Component {
                 alt="Áo Sweatshirt Nam ICONDENIM Orgnls Painted"
                 className="lazyload-cus dt-width-100"
                 loading="lazy"
-                src={urlapi + "/api/Image/product/" + image.path}
+                src={urlapi + "/api/Image/" + image.path}
                 width="100"
                 height="100"
               />
