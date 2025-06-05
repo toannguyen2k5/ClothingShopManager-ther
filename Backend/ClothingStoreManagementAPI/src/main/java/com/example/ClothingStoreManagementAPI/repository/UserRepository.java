@@ -59,5 +59,8 @@ public interface UserRepository extends JpaRepository<Users, String> {
     @Query("UPDATE Users u SET u.status = :status WHERE u.idUser = :idUser")
     int updateStatusById(String idUser, boolean status);
 	
-	
+	@Modifying
+    @Transactional
+    @Query("UPDATE Users u SET u.password = :pass WHERE u.idUser = :idUser")
+    int updatepass(@Param("idUser")String idUser,@Param("pass") String pass);
 }

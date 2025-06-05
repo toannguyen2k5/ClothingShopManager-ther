@@ -15,12 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface SalesSlipRepository extends JpaRepository<SalesSlip,String>{
 	@Query("SELECT MAX(idSalesSlip) FROM SalesSlip")
 	String SelectMaxId();
-	// tìm kiếm khách hàng dựa trên mã khách hàng
-//	@Query("SELECT new  com.example.ClothingStoreManagementAPI.model.DTO.SalesSlipDTO(s.idSalesSlip , u.fullName ,u.phoneNumber , s.createDate , s.deliveryStatus)\r\n"
-//			+ "FROM SalesSlip s\r\n"
-//			+ "INNER JOIN Users u ON s.idClient = u.idUser\r\n"
-//			+ "WHERE s.idClient = :idClient")
-//	List<SalesSlipDTO> SelectSalesSlipByIdClient(@Param("idClient") String idClient);
 	// cập nhật thông tin đơn hàng
 	@Modifying
 	@Query("UPDATE SalesSlip SET idCreater =:idCreater,idClient=:idClient,createDate=:createDate,deliveryAddress=:deliveryAddress,totalBill=:totalBill,"

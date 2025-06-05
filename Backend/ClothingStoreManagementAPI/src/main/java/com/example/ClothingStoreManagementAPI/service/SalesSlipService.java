@@ -64,6 +64,22 @@ public class SalesSlipService {
 			return null;
 		}
 	}
+	public List<SalesSlipDTO> GetSalesSlipByIdCLient(String idClient){
+		try{
+			List<SalesSlipDTO> result = new ArrayList<>();
+			Query query = entityManager.createQuery("SELECT c FROM SalesSlip c", SalesSlip.class);
+			List<SalesSlip> SalesSlips = query.getResultList();
+            for(SalesSlip SalesSlip : SalesSlips) {
+            	if(SalesSlip.getIdClient().equals(idClient))result.add(new SalesSlipDTO(SalesSlip.getIdSalesSlip(),UserRepository.SellectFullName(SalesSlip.getIdCreater()),UserRepository.SellectFullName(SalesSlip.getIdClient()),
+            			SalesSlip.getCreateDate(),SalesSlip.getDeliveryAddress(),SalesSlip.getShippingFee(),SalesSlip.getTotalBill(),SalesSlip.isDeliveryStatus()));
+            }
+            return result;
+		}
+		catch(Exception e) {
+			System.out.print("SelectMaxId, Error : " + e.getMessage());
+			return null;
+		}
+	}
 	public String SelectMaxId() {
 		try{
 			return SalesSlipRepository.SelectMaxId();

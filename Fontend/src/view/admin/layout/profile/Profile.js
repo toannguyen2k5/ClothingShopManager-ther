@@ -137,7 +137,9 @@ class Profile extends Component {
                           onUpdate={(updatedData) => {
                             // Gọi API cập nhật tài khoản ở đây
                             this.updateShop(updatedData);
-                            this.getInfoUser(this.props.state_data.user_info.id_user);
+                            this.getInfoUser(
+                              this.props.state_data.user_info.id_user
+                            );
                           }}
                         />
                       </div>

@@ -1,33 +1,83 @@
 import React, { Component } from "react";
 import { urlapi } from "../../../../../../setting/store/const";
 class Information extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      user: null,
+      user: {
+        idUser: null,
+        username: null,
+        address: null,
+        birthDay: null,
+        email: null,
+        fullName: null,
+        gender: null,
+        password: null,
+        pathAvatar: null,
+        phoneNumber: null,
+        role: null,
+        status: null,
+      },
     };
   }
-  componentDidMount() {
-    fetch(
-      urlapi +
-        `/api/Users/` +
-        this.props.state_data.user_info.id_user +
-        `/getInfo`
-    )
+  saveInforUser = (e) => {
+    e.preventDefault();
+    const { user } = this.state;
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idUser: user.idUser,
+        username: user.username,
+        password: user.password,
+        status: user.status,
+        role: user.role,
+        fullName: user.fullName,
+        address: user.address,
+        birthDay: user.birthDay,
+        gender: user.gender,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        pathAvatar: user.pathAvatar,
+      }),
+    };
+    fetch(urlapi + "/api/Users/UpdateUser", req)
       .then((response) => response.json())
       .then((data) => {
-        if (data.status && data.status === "200") {
-          this.setState({
-            user: data.data,
-          });
-        }
-        console.log(data);
+        if (data.status === "200")
+          alert("Cập nhật thông tin người dùng thành công !");
+        else alert("Cập nhật thông tin người dùng thất bại !");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error("Lỗi POST:", error));
+  };
+  handleChangeValue = (e) => {
+    const { name, value } = e.target;
+    this.setState((prevState) => ({
+      user: {
+        ...prevState.user,
+        [name]: name === "gender" ? value === "true" : value,
+      },
+    }));
+  };
+
+  getInfoUser = (id) => {
+    fetch(`${urlapi}/api/Users/${id}/getInfo`, {
+      method: "PUT",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ user: data.data });
+      })
+      .catch((error) => {});
+  };
+  componentDidMount() {
+    this.getInfoUser(this.props.state_data.user_info.id_user);
   }
   render() {
-    console.log("data props : ", this.props);
     const { user } = this.state;
+    console.log("data user :", user);
     return (
       <>
         <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
@@ -63,15 +113,14 @@ class Information extends Component {
                           <input
                             required=""
                             type="text"
-                            name="customer[last_name]"
+                            name="fullName"
                             placeholder="Họ và tên"
-                            value={
-                              this.props.state_data.user_info.full_name || ""
-                            }
+                            value={user?.fullName}
                             id="last_name"
                             className="text"
                             size="30"
                             style={{ width: "850px" }}
+                            onChange={this.handleChangeValue}
                           />
                         </div>
                       </div>
@@ -82,10 +131,12 @@ class Information extends Component {
                             required=""
                             type="date"
                             id="datepicker"
-                            name="datepicker"
+                            name="birthDay"
                             placeholder="Ngày sinh"
                             className="text"
                             size="30"
+                            value={user?.birthDay}
+                            onChange={this.handleChangeValue}
                           />
                         </div>
                       </div>
@@ -95,9 +146,26 @@ class Information extends Component {
                           <label>Số điện thoại</label>
                           <input
                             type="text"
-                            name="customer[phone]"
+                            name="phoneNumber"
                             className="text phone"
                             size="30"
+                            value={user?.phoneNumber}
+                            onChange={this.handleChangeValue}
+                          />
+                        </div>
+                      </div>
+                      <div className="account_col">
+                        <div className="account_main">
+                          <label>Email</label>
+                          <input
+                            type="text"
+                            name="email"
+                            className="text phone"
+                            size="30"
+                            value={user?.email}
+                            disabled
+                            readOnly
+                            style={{ backgroundColor: "blanchedalmond" }}
                           />
                         </div>
                       </div>
@@ -106,10 +174,13 @@ class Information extends Component {
                           <label>địa chỉ</label>
                           <input
                             type="text"
-                            name="customer[phone]"
+                            name="address"
                             className="text phone"
-                            readOnly=""
                             size="30"
+                            value={user?.address}
+                            readOnly
+                            disabled
+                            style={{ backgroundColor: "blanchedalmond" }}
                           />
                         </div>
                       </div>
@@ -121,8 +192,10 @@ class Information extends Component {
                               <input
                                 id="gender_m"
                                 type="radio"
-                                name="customer[gender]"
-                                value="0"
+                                name="gender"
+                                value="true"
+                                checked={user?.gender === true}
+                                onChange={this.handleChangeValue}
                               />
                               <label for="gender_m">
                                 <span className="sp_input"></span>
@@ -134,8 +207,10 @@ class Information extends Component {
                               <input
                                 id="gender_f"
                                 type="radio"
-                                name="customer[gender]"
-                                value="1"
+                                name="gender"
+                                value="false"
+                                checked={user?.gender === false}
+                                onChange={this.handleChangeValue}
                               />
                               <label for="gender_f">
                                 <span className="sp_input"></span>
@@ -147,7 +222,12 @@ class Information extends Component {
                       </div>
                       <div className="account_col">
                         <div className="account_main col_main_submit">
-                          <button id="submit_info" className="updateAccount">
+                          <button
+                            type="button"
+                            id="submit_info"
+                            className="updateAccount"
+                            onClick={this.saveInforUser}
+                          >
                             <span>Cập nhật</span>
                           </button>
                         </div>

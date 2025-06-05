@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import Information from "./Information";
 import "./plugin-style.css";
 import "./style-smb.css";
-import ChooseAddress from "../shoping_cart/ChooseAddress";
+import AddressUser from "./AddressUser";
+import ResetPass from "./ResetPass";
+import DiscountUser from "./DiscountUser";
+import OrderUser from "./OrderUser";
 class InforUser extends Component {
   constructor(props) {
     super(props);
@@ -15,69 +18,13 @@ class InforUser extends Component {
       case "profile":
         return <Information {...this.props} />;
       case "orders":
-        return <></>;
+        return <OrderUser {...this.props} />;
       case "address":
-        return (
-          <>
-            <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
-              <div className="row">
-                <div className="col-xs-12" id="customer_sidebar">
-                  <div className="accounts style-bg">
-                    <div className="accounts_title">
-                      <h2>Địa chỉ</h2>
-                    </div>
-                    <ChooseAddress />
-                    <div className="account_col">
-                      <div className="account_main col_main_submit">
-                        <button id="submit_info" className="updateAccount">
-                          <span>Cập nhật</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        );
+        return <AddressUser {...this.props} />;
       case "vouchers":
-        return <></>;
+        return <DiscountUser {...this.props} />;
       case "reset":
-        return (
-          <>
-            <div className="col-xs-12 col-sm-9 col-md-9 accounts-right">
-              <div className="row">
-                <div className="col-xs-12" id="customer_sidebar">
-                  <div className="accounts style-bg">
-                    <div className="accounts_title">
-                      <h2>Đổi mật khẩu</h2>
-                    </div>
-                    <div className="account_col">
-                      <div className="account_main">
-                        <strong>Email </strong>
-                        <input
-                          required=""
-                          type="email"
-                          placeholder="Địa chỉ email"
-                          className="text"
-                          size="30"
-                          style={{ width: "850px" }}
-                        />
-                      </div>
-                    </div>
-                    <div className="account_col">
-                      <div className="account_main col_main_submit">
-                        <button id="submit_info" className="updateAccount">
-                          <span>Reset</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        );
+        return <ResetPass {...this.props} />;
       default:
         return <Information {...this.props} />;
     }

@@ -12,7 +12,11 @@ public class ForgetPassController {
 	@Autowired
 	private Common common;
 	@GetMapping("/forgetpass")
-	public ResponseEntity<?> forgetpass(@RequestParam String email) {
-		return ResponseEntity.ok(common.ReturnReponse(forgetPassService.SendEmail(email), "Send", "email"));
+	public ResponseEntity<?> forgetpass(@RequestParam String email,@RequestParam String code) {
+		return ResponseEntity.ok(common.ReturnReponse(forgetPassService.SendEmail(email,code), "Send", "email"));
+	}
+	@GetMapping("/reset")
+	public ResponseEntity<?> resetpass(@RequestParam String idUser,@RequestParam String pass) {
+		return ResponseEntity.ok(common.ReturnReponse(forgetPassService.resetpass(idUser,pass), "reset", "pass"));
 	}
 }

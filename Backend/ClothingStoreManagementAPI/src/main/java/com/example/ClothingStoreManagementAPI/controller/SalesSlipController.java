@@ -35,6 +35,11 @@ public class SalesSlipController {
 		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectAll(offset,limit);
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Sellect", "PurchaseSlip"));
 	}
+	@GetMapping("/SelectByIdClient")
+	public ResponseEntity<?> SelectByIdClient(@RequestParam String idClient){
+		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.GetSalesSlipByIdCLient(idClient);
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Sellect by idCliet", "SalesSlip"));
+	}
 	@GetMapping("/SelectDetail")
 	public ResponseEntity<?> SelectDetail(@RequestParam String idSalesSlip){
 		List<DetailPurchaseSlipDTO> PurchaseSlips = SalesSlipService.SellectDetailSalesSlip(idSalesSlip);

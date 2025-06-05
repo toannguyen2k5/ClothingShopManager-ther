@@ -122,8 +122,8 @@ export default class SalesSlipList extends Component {
 
     const filteredSlips = slips.filter(
       (slip) =>
-        slip.idSalesSlip.includes(searchText) ||
-        slip.nameCreater.toLowerCase().includes(searchText.toLowerCase()) ||
+        slip.idSalesSlip.toLowerCase().includes(searchText.toLowerCase()) ||
+        slip.nameCreate.toLowerCase().includes(searchText.toLowerCase()) ||
         slip.nameClient.toLowerCase().includes(searchText.toLowerCase())
     );
 

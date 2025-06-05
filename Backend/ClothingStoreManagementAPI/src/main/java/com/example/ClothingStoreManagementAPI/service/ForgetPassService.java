@@ -11,7 +11,7 @@ public class ForgetPassService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public boolean SendEmail(String email) {
+	public boolean SendEmail(String email,String code) {
 		if(userRepository.findByEmail(email)!=null) {
 			String senderEmail = "Toannguyenmk2005@gmail.com";
 	        String appPassword = "mnik mksn arju xeas"; // Mật khẩu ứng dụng
@@ -37,9 +37,9 @@ public class ForgetPassService {
 	            String content = "Chào "+userRepository.findByEmail(email).getFullName()+",\r\n"
 	            		+ "\r\n"
 	            		+ "Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.\r\n"
-	            		+ "Để đặt lại mật khẩu của bạn, vui lòng nhấp vào liên kết bên dưới:\r\n"
-	            		+ "👉 https://www.google.com/search?q=gg+d%E1%BB%8Bch&oq=gg&gs_lcrp=EgZjaHJvbWUqDggBEEUYJxg7GIAEGIoFMg4IABBFGCcYOxiABBiKBTIOCAEQRRgnGDsYgAQYigUyBggCEEUYOzIMCAMQABhDGIAEGIoFMhIIBBAAGEMYgwEYsQMYgAQYigUyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQgxMjcyajBqNKgCALACAQ&sourceid=chrome&ie=UTF-8 \r\n"
-	            		+ "Liên kết này sẽ hết hạn sau [thời gian hết hạn], vì vậy hãy đảm bảo thực hiện sớm.\r\n"
+	            		+ "Để đặt lại mật khẩu của bạn, vui lòng nhập mã này vào ô xác minh :\r\n"
+	            		+ "mã code để xác minh người dùng : "+code+ " \r\n"
+	            		+ "Vui lòng không chia sẽ mã ngày với bất kỳ ai , nếu không rủi ro tài khoản bị đánh cắp hoặc bị hack.\r\n"
 	            		+ "Nếu bạn gặp bất kỳ vấn đề nào, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi.\r\n"
 	            		+ "Cảm ơn bạn!\r\n"
 	            		+ "Hệ thống bán hàng trực tuyến ";
@@ -53,5 +53,14 @@ public class ForgetPassService {
 	        }
 		}
 		else return false;
+	}
+	public boolean resetpass(String iduser,String pass) {
+		try {
+			return userRepository.updatepass(iduser, pass) > 0;
+		}
+		catch(Exception e) {
+			System.out.println("resetpass, error : "+e.getMessage());
+			return false;
+		}
 	}
 }

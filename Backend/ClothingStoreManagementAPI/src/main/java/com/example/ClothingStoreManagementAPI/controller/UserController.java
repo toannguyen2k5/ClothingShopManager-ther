@@ -104,10 +104,9 @@ public class UserController {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, null, null), "Update", "Users"));
 	}
 
-	@PutMapping("/{id}/getInfo")
+	@PutMapping("{id}/getInfo")
 	public ResponseEntity<?> getInfoUser(@PathVariable("id") String idUser) {
-
 		Optional<Users> user = UsersService.getInfoUser(idUser);
-		return ResponseEntity.ok(common.ReturnReponse(user, null, null));
+		return ResponseEntity.ok(common.ReturnReponse(user, "Get", "InforUser"));
 	}
 }
