@@ -4,7 +4,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import com.example.ClothingStoreManagementAPI.model.Entity.InventoryShop;
+import com.example.ClothingStoreManagementAPI.model.Entity.*;
+import java.util.*;
 @Repository
 public interface InventoryShopReponsitory extends JpaRepository<InventoryShop,String>{
 	@Query("SELECT MAX(idList) FROM InventoryShop")
@@ -16,6 +17,12 @@ public interface InventoryShopReponsitory extends JpaRepository<InventoryShop,St
 	//tìm kiếm số lượng tồn kho
 	@Query("SELECT u FROM InventoryShop u WHERE u.idShop = :idShop AND u.idDetail = :idDetail")
 	InventoryShop SelectInventoryShop(@Param("idShop") String idShop , @Param("idDetail") String idDetail);
+	
+	//tìm kiếm số lượng tồn kho
+	@Query("SELECT s FROM Shop s "
+			+ "INNER JOIN InventoryShop i ON i.idShop = s.idShop AND i.idDetail=:idDetail ")
+	List<Shop> SelecShopByIdDetail(@Param("idDetail") String idDetail);
+	
 	// update số lượng tồn kho
 	@Modifying
 	@Query("UPDATE InventoryShop u SET u.quantity = :quantity WHERE u.idShop = :idShop AND u.idDetail = :idDetail")

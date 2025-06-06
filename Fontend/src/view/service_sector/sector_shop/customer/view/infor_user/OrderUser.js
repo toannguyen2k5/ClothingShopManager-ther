@@ -15,7 +15,6 @@ class OrderUser extends Component {
       itemsLoading: false,
       showModal: false,
       itemSearchText: "",
-      statusOptions: ["Chưa duyệt", "Đã duyệt", "Đang giao hàng", "hoàn thành"],
       selectedStatus: "",
     };
   }
@@ -118,7 +117,6 @@ class OrderUser extends Component {
       slipItems,
       itemsLoading,
       itemSearchText,
-      statusOptions,
     } = this.state;
 
     const filteredSlips = slips.filter(

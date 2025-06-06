@@ -9,12 +9,106 @@ import "./style-cart.scss.css";
 import "./style-page.scss.css";
 import "./style-smb.css";
 import "./styles-new.scss.css";
+import "../../../../../admin/layout/order/input/list/PurchaseSlipList.css";
+import { urlapi } from "../../../../../../setting/store/const";
+import DataTable from "react-data-table-component";
 class ShopingCart extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      shopingcart_items: [],
+      shops: [],
+      showModal: false,
+      itemSearchText: "",
+      ShopDeliveryData: {
+        idShop: "",
+        shoppingCartData: [],
+      },
+    };
   }
+  GetShopingCartItem = () => {
+    fetch(
+      urlapi +
+        "/api/shoppingcart/sellectShoppingCart?idUser=" +
+        this.props.state_data.user_info.id_user
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          this.setState(
+            { shopingcart_items: data.data },
+            this.GetShopByInventory
+          );
+        }
+        console.log("data shopitem :", data);
+      })
+      .catch((error) => console.error(error));
+  };
+  GetShopByInventory = () => {
+    const params = new URLSearchParams();
+    const { shopingcart_items } = this.state;
+    shopingcart_items.map((item, idx) => {
+      if (item.status) params.append("idDetailProducts", item.idDetail);
+    });
+    fetch(urlapi + `/api/SalesSlip/GetShopByInventory?${params}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          this.setState({ shops: data.data, showModal: true });
+        }
+        console.log("data shop inven :", data);
+      })
+      .catch((error) => console.error(error));
+  };
+  handleSelectedRowsChange = (state) => {
+    const { ShopDeliveryData } = this.state;
+    state.selectedRows.map((item, index) => {
+      const exits = ShopDeliveryData.some((items) => items.idShop);
+      if (!exits) {
+        const params = new URLSearchParams();
+      }
+    });
+    console.log("Selected Rows: ", state.selectedRows);
+  };
   render() {
     console.log(this.props);
+    const { itemSearchText, shopingcart_items } = this.state;
+    const filteredItems = shopingcart_items.filter((item) => {
+      return (
+        item.status &&
+        (item.idProduct.toLowerCase().includes(itemSearchText.toLowerCase()) ||
+          item.nameProduct.toLowerCase().includes(itemSearchText.toLowerCase()))
+      );
+    });
+
+    const itemColumns = [
+      { name: "Mã sản phẩm", selector: (row) => row.idProduct, sortable: true },
+      { name: "Tên", selector: (row) => row.nameProduct, sortable: true },
+      { name: "Màu", selector: (row) => row.nameColor, sortable: true },
+      { name: "Kích thước", selector: (row) => row.nameSize, sortable: true },
+      { name: "Số lượng", selector: (row) => row.quantity, sortable: true },
+      {
+        name: "Unit Price",
+        selector: (row) => row.price,
+        format: (row) => row.price.toLocaleString() + " VND",
+        sortable: true,
+      },
+    ];
+    const shopColumns = [
+      {
+        name: "Shop ID",
+        selector: (row) => row.idShop,
+        sortable: true,
+        width: "150px",
+      },
+      {
+        name: "Name",
+        selector: (row) => row.nameShop,
+        sortable: true,
+        width: "300px",
+      },
+      { name: "address", selector: (row) => row.address, sortable: true },
+    ];
     return (
       <>
         <main>
@@ -170,7 +264,7 @@ class ShopingCart extends Component {
                             }}
                           ></textarea>
                           <ChooseUserDiscountCode
-                            idUser="User000000000000"
+                            idUser={this.props.state_data.user_info.id_user}
                             total={0}
                             {...this.props}
                           />
@@ -179,9 +273,10 @@ class ShopingCart extends Component {
                           <button
                             className="btncart-checkout text-center"
                             name="checkout"
-                            type="submit"
+                            type="button"
+                            onClick={this.GetShopingCartItem}
                           >
-                            Giao Hàng Ngay
+                            Chọn cửa hàng
                           </button>
                           <p className="link-continue text-center">
                             <a href="/collections/all">
@@ -198,6 +293,73 @@ class ShopingCart extends Component {
             </div>
           </section>
         </main>
+
+        <div className="">
+          {this.state.showModal && (
+            <div
+              className="psl-modal-overlay"
+              onClick={() => {
+                this.setState({ showModal: false });
+              }}
+            >
+              <div
+                className="psl-modal-content"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  height: "530px",
+                  overflowY: "auto",
+                }}
+              >
+                <button
+                  className="psl-modal-close"
+                  onClick={() => {
+                    this.setState({ showModal: false });
+                  }}
+                >
+                  ×
+                </button>
+                <h3>Chọn cửa hàng</h3>
+
+                {this.state.showModal && (
+                  <div className="psl-slip-info">
+                    <DataTable
+                      columns={shopColumns}
+                      data={this.state.shops}
+                      pagination
+                      paginationPerPage={5}
+                      paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
+                      highlightOnHover
+                      pointerOnHover
+                      subHeader
+                      selectableRows
+                      onSelectedRowsChange={this.handleSelectedRowsChange}
+                    />
+                  </div>
+                )}
+                <DataTable
+                  columns={itemColumns}
+                  data={filteredItems}
+                  pagination
+                  paginationPerPage={5}
+                  paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
+                  highlightOnHover
+                  pointerOnHover
+                  subHeader
+                  subHeaderComponent={
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm sản phẩm..."
+                      className="psl-search"
+                      value={itemSearchText}
+                      onChange={this.handleItemSearch}
+                    />
+                  }
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </>
     );
   }

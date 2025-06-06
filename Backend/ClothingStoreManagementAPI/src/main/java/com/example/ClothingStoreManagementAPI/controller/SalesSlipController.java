@@ -87,7 +87,7 @@ public class SalesSlipController {
 	public ResponseEntity<?> DeleteDetailedRefundSlip(@RequestParam String idDetailedRefundSlip){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.DeleteDetailedRefundSlip(idDetailedRefundSlip), "Delete", "DetailedRefundSlips"));
 	}
-	@PostMapping("/detailedRefundSlips/update")
+	@PostMapping("/detailedRefundSlips/	")
 	public ResponseEntity<?> UpdateDetailedRefundSlip(@RequestBody DetailedRefundSlip DetailedRefundSlip){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateDetailedRefundSlip(DetailedRefundSlip), "Update", "DetailedRefundSlips"));
 	}
@@ -98,5 +98,9 @@ public class SalesSlipController {
 	@PostMapping("/inventoryRefundSlip/update")
 	public ResponseEntity<?> UpdateInventoryRefundSlip(@RequestBody SalesSlip SalesSlip ,@RequestBody List<DetailedRefundSlip> DetailedRefundSlips){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateInventoryRefundSlip(SalesSlip,DetailedRefundSlips), "Update", "Inventory From RefundSlip"));
+	}
+	@GetMapping("/GetShopByInventory")
+	public ResponseEntity<?> GetShopByInventory(@RequestParam List<String> idDetailProducts){
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.GetShopByInventory(idDetailProducts), "Update", "Inventory From RefundSlip"));
 	}
 }

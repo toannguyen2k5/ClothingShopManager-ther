@@ -492,4 +492,12 @@ public class SalesSlipService {
 				return false;
 			}
 	}
+	public List<Shop> GetShopByInventory(List<String> idDetailProducts){
+		List<Shop> result = new ArrayList<>();
+		for(String idDetailProduct : idDetailProducts ) {
+			List<Shop> GetShopData = InventoryShopReponsitory.SelecShopByIdDetail(idDetailProduct);
+			for(Shop shop : GetShopData) if(!result.contains(shop))result.add(shop);
+		}
+		return result;
+	}
 }	
