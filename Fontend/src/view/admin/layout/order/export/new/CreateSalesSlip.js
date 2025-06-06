@@ -493,8 +493,8 @@ export default class CreateSalesSlip extends Component {
       define_nav.admin.newOrderInputProduct.name
     )
       this.props.actions.current_page({
-        name_new: define_nav.admin.newOrderInputProduct.name,
-        path_new: define_nav.admin.newOrderInputProduct.path,
+        name_new: define_nav.admin.newOrderExportProduct.name,
+        path_new: define_nav.admin.newOrderExportProduct.path,
         old_page: this.props.state_data.current_page,
       });
     const {
@@ -505,7 +505,7 @@ export default class CreateSalesSlip extends Component {
       showProductPopup,
       responseMessage,
     } = this.state;
-    console.log(this.props);
+    console.log("data_product_selected",this.state.data_product_selected);
     return (
       <div className="">
         <link
@@ -521,9 +521,9 @@ export default class CreateSalesSlip extends Component {
         <div className="row">
           <h2>Thông Tin Đơn Hàng</h2>
           <div className="row mb-3">
-            <div class="form-group col-5">
+            <div class="form-group col-6">
               <div className="row">
-                <label for="dayCreate" class="col-sm-3 col-form-label">
+                <label for="dayCreate" class="col-sm-4 col-form-label">
                   Ngày Tạo Hóa Đơn
                 </label>
                 <div class="col-sm-7">
@@ -538,7 +538,7 @@ export default class CreateSalesSlip extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-group col-5">
+            <div class="form-group col-6">
               <div className="row">
                 <label for="idCreater" class="col-sm-3 col-form-label">
                   Người Tạo Hóa Đơn
@@ -556,7 +556,59 @@ export default class CreateSalesSlip extends Component {
             </div>
           </div>
           <div className="row mb-2">
-            <div class="form-group col-5">
+            <div class="row form-group col-6">
+              <label for="color" class="col-sm-3 col-form-label">
+                Tên khách hàng
+              </label>
+              <div class="col-sm-8">
+                <div className="row form-inline">
+                  <div className="col-9">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      name="color"
+                      id="color"
+                      value={this.state.data_client_selected.fullName}
+                      readOnly
+                      disabled
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-outline-info col-2"
+                    onClick={this.handleOpenModalClient}
+                  >
+                    <i class="bi bi-search"></i>
+                  </button>
+                  <ModalClient
+                    isOpen={this.state.isOpenModalClient}
+                    onClose={() => this.setState({ isOpenModalClient: false })}
+                    updateClient={(data) => this.updateClient(data)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-6">
+              <div className="row">
+                <label for="statusReceive" class="col-sm-4 col-form-label">
+                  Hình thức nhận hàng
+                </label>
+                <select
+                  id="fruit-select"
+                  className="form-select"
+                  style={{ width: "200px" }}
+                  value={this.state.deliveryMethod}
+                  onChange={this.handledeliveryMethod}
+                >
+                  <option value="choose">---Choose---</option>
+                  <option value="receive">Nhận tại quầy</option>
+                  <option value="deliver">Giao hàng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div class="form-group col-6">
               <div className="row">
                 <label for="statusReceive" class="col-sm-4 col-form-label">
                   Trạng Thái Đơn Hàng
@@ -571,55 +623,6 @@ export default class CreateSalesSlip extends Component {
                     disabled
                   />
                 </div>
-              </div>
-            </div>
-            <div class="form-group col-5">
-              <div className="row">
-                <label for="totalBill" class="col-sm-3 col-form-label">
-                  Tiền Ship
-                </label>
-                <div class="col-sm-7">
-                  <input
-                    type="text"
-                    readonly
-                    class="form-control form-control-sm"
-                    id="totalBill"
-                    value={this.state.shippingFee.toLocaleString() + " đ"}
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row mb-2">
-            <label for="color" class="col-sm-2 col-form-label">
-              Tên khách hàng
-            </label>
-            <div class="col-sm-8">
-              <div className="row form-inline">
-                <div className="col-10">
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    name="color"
-                    id="color"
-                    value={this.state.data_client_selected.fullName}
-                    readOnly
-                    disabled
-                  />
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-outline-info col-2"
-                  onClick={this.handleOpenModalClient}
-                >
-                  <i class="bi bi-search"></i>
-                </button>
-                <ModalClient
-                  isOpen={this.state.isOpenModalClient}
-                  onClose={() => this.setState({ isOpenModalClient: false })}
-                  updateClient={(data) => this.updateClient(data)}
-                />
               </div>
             </div>
           </div>
@@ -710,22 +713,22 @@ export default class CreateSalesSlip extends Component {
             </div>
           </div>
           <div className="row mb-2">
-            <div class="form-group col-5">
+            
+          <div class="form-group col-5">
               <div className="row">
-                <label for="statusReceive" class="col-sm-4 col-form-label">
-                  Hình thức nhận hàng
+                <label for="totalBill" class="col-sm-3 col-form-label">
+                  Tiền Ship
                 </label>
-                <select
-                  id="fruit-select"
-                  className="form-select"
-                  style={{ width: "200px" }}
-                  value={this.state.deliveryMethod}
-                  onChange={this.handledeliveryMethod}
-                >
-                  <option value="choose">---Choose---</option>
-                  <option value="receive">Nhận tại quầy</option>
-                  <option value="deliver">Giao hàng</option>
-                </select>
+                <div class="col-sm-7">
+                  <input
+                    type="text"
+                    readonly
+                    class="form-control form-control-sm"
+                    id="totalBill"
+                    value={this.state.shippingFee.toLocaleString() + " đ"}
+                    disabled
+                  />
+                </div>
               </div>
             </div>
             <div class="form-group col-5">

@@ -14,12 +14,14 @@ export default class ContentWrapper extends Component {
 
         <div className="container-fluid py-4">
           {/* <!-- Begin Page Content --> */}
-          <PageContent {...this.props} />
+          <div className="px-0 mx-4 ">
+            <PageContent {...this.props} />
+          </div>
           {/* <!-- /.container-fluid --> */}
           {/* <!-- End of Main Content --> */}
 
           {/* <!-- Footer --> */}
-          <Footer {...this.props}/>
+          <Footer {...this.props} />
           {/* <!-- End of Footer --> */}
         </div>
       </>

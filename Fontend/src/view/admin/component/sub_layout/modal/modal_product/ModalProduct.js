@@ -28,6 +28,7 @@ class ModalProduct extends Component {
     this.props.updateProduct({
       idProduct: row.idProduct,
       nameBrand: row.nameBrand,
+      nameProduct: row.nameProduct,
       nameCategory: row.nameCategory,
       nameMaterial: row.nameMaterial,
       nameStyle: row.nameStyle,

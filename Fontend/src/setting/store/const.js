@@ -70,7 +70,10 @@ export const define_nav = {
       name: "Tạo mới Sản Phẩm",
       path: "/admin/manager/product/new/",
     },
-
+    newOrderExportProduct: {
+      name: "Thêm Đơn Bán Hàng",
+      path: "/admin/manager/order/export/new/",
+    },
     newOrderInputProduct: {
       name: "Thêm Đơn Nhập Hàng",
       path: "/admin/manager/order/input/new/",

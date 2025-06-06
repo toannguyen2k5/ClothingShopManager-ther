@@ -185,14 +185,14 @@ export default class PurchaseSlipList extends Component {
     );
 
     const itemColumns = [
-      { name: "Shop ID", selector: (row) => row.idShop, sortable: true },
-      { name: "Product ID", selector: (row) => row.idProduct, sortable: true },
-      { name: "Name", selector: (row) => row.nameProduct, sortable: true },
-      { name: "Color", selector: (row) => row.color, sortable: true },
-      { name: "Size", selector: (row) => row.size, sortable: true },
-      { name: "Quantity", selector: (row) => row.quantity, sortable: true },
+      { name: "STT", selector: (row, index) => index+1, width:"80px"},
+      { name: "Tên Cửa Hàng", selector: (row) => row.nameShop, sortable: true , width:"300px"},
+      { name: "Tên Sản Phẩm", selector: (row) => row.nameProduct, sortable: true, width:"300px" },
+      { name: "Màu", selector: (row) => row.color, sortable: true , width:"80px"},
+      { name: "Size", selector: (row) => row.size, sortable: true , width:"80px"},
+      { name: "Số Lượng", selector: (row) => row.quantity, sortable: true, width:"120px" },
       {
-        name: "Unit Price",
+        name: "Đơn Giá",
         selector: (row) => row.price,
         format: (row) => row.price.toLocaleString() + " VND",
         sortable: true,
