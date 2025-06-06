@@ -27,6 +27,8 @@ public class SalesSlipService {
 	@Autowired
 	private ShopRepository ShopRepository;
 	@Autowired
+	private ShopService shopService;
+	@Autowired
 	private DistrictRepository DistrictRepository;
 	@Autowired
 	private ProvinceRepository ProvinceRepository;
@@ -113,7 +115,9 @@ public class SalesSlipService {
 				List<DetailSalesSlip> DetailSalesSlips = DetailSalesSlipService.SellectDetailSalesSlip(ListOfDeliveryStores.getIdList());
 				for(DetailSalesSlip DetailSalesSlip : DetailSalesSlips) {
 					ReverseRetrievalDProductDTO ReverseRetrievalDProductDTO = DetailProductRepository.ReverseRetrievalDProduct(DetailSalesSlip.getIdDetailProduct());
-					result.add(new DetailPurchaseSlipDTO(ListOfDeliveryStores.getIdShop(),DetailProductRepository.SelectIdDetailByIdPro(DetailSalesSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),DetailSalesSlip.getPrice(),
+					Optional<Shop> shop = shopService.getShop(ListOfDeliveryStores.getIdShop());
+					
+					result.add(new DetailPurchaseSlipDTO(ListOfDeliveryStores.getIdShop(), shop.get().getNameShop(),DetailProductRepository.SelectIdDetailByIdPro(DetailSalesSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),DetailSalesSlip.getPrice(),
 							DetailSalesSlip.getQuantity(),ReverseRetrievalDProductDTO.getNameColor(),ReverseRetrievalDProductDTO.getNameSize()));
 				}
 			}

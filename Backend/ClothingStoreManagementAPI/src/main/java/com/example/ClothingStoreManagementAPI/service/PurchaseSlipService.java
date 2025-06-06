@@ -32,6 +32,8 @@ public class PurchaseSlipService {
 	@Autowired
 	private PriceService PriceService;
 	@Autowired
+	private ShopService shopService;
+	@Autowired
 	private Common common;
 	@Autowired
 	private InventoryShopReponsitory InventoryShopReponsitory;
@@ -79,7 +81,8 @@ public class PurchaseSlipService {
 				List<DetailPurchaseSlip> DetailPurchaseSlips = DetailPurchaseSlipService.SellectDetailPurchaseSlip(ListOfReceivingStores.getIdList());
 				for(DetailPurchaseSlip detailPurchaseSlip : DetailPurchaseSlips) {
 					ReverseRetrievalDProductDTO ReverseRetrievalDProductDTO = DetailProductRepository.ReverseRetrievalDProduct(detailPurchaseSlip.getIdDetailProduct());
-					result.add(new DetailPurchaseSlipDTO(ListOfReceivingStores.getIdShop(),DetailProductRepository.SelectIdDetailByIdPro(detailPurchaseSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),detailPurchaseSlip.getPrice(),
+					Optional<Shop> shop = shopService.getShop(ListOfReceivingStores.getIdShop());
+					result.add(new DetailPurchaseSlipDTO(ListOfReceivingStores.getIdShop(),shop.get().getNameShop(),DetailProductRepository.SelectIdDetailByIdPro(detailPurchaseSlip.getIdDetailProduct()),ReverseRetrievalDProductDTO.getNameProduct(),detailPurchaseSlip.getPrice(),
 							detailPurchaseSlip.getQuantity(),ReverseRetrievalDProductDTO.getNameColor(),ReverseRetrievalDProductDTO.getNameSize()));
 				}
 			}

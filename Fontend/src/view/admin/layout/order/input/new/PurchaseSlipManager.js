@@ -6,6 +6,7 @@ import DataTable from "react-data-table-component";
 import ModalShop from "../../../../component/sub_layout/modal/moda_shop/ModalShop";
 import ModalProduct from "../../../../component/sub_layout/modal/modal_product/ModalProduct";
 import ModalColor from "../../../../component/sub_layout/modal/modal_color/ModalColor";
+import ModalSize from "../../../../component/sub_layout/modal/modal_size/ModalSize";
 // import "css/material-dashboard.min.css";
 
 export default class PurchaseSlipManager extends Component {
@@ -23,6 +24,7 @@ export default class PurchaseSlipManager extends Component {
       isOpenModalShop: false,
       isOpenModalProduct: false,
       isOpenModalColor: false,
+      isOpenModalSize: false,
       searchText: "",
       currentDate: currentDate,
       data_shop_selected: {
@@ -99,6 +101,19 @@ export default class PurchaseSlipManager extends Component {
       },
     ];
   }
+  
+  updateSize = (data) => {
+    this.setState((prev) => ({
+      data_product_selected: {
+        ...prev.data_product_selected,
+        idSize: data.idSize,
+        size: data.nameSize,
+      },
+    }));
+  };
+  handleOpenModalSize = () => {
+    this.setState({ ...this.state, isOpenModalSize: true });
+  };
   deleteProduct = (index) => {
     let newListItem = [...this.state.items];
 
@@ -657,19 +672,37 @@ export default class PurchaseSlipManager extends Component {
               </div>
               <div className="form-group col-6 form-group-input">
                 <div className="row">
-                  <label for="size" className="col-sm-2 col-form-label">
+                <label for="size" class="col-sm-2 col-form-label">
                     Size
                   </label>
-                  <div className="col-sm-9">
-                    <input
-                      type="text"
-                      readonly
-                      className="form-control form-control-sm"
-                      id="size"
-                      name="size"
-                      onChange={this.handleItemChange}
-                      value={this.state.data_product_selected.size}
-                    />
+                  <div class="col-sm-8">
+                    <div className="row form-inline">
+                      <div className="col-10">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          name="color"
+                          id="color"
+                          value={this.state.data_product_selected.size}
+                          readOnly
+                          disabled
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-outline-info col-2"
+                        onClick={this.handleOpenModalSize}
+                      >
+                        <i class="bi bi-search"></i>
+                      </button>
+                      <ModalSize
+                        isOpen={this.state.isOpenModalSize}
+                        onClose={() =>
+                          this.setState({ isOpenModalSize: false })
+                        }
+                        updateColor={(data) => this.updateSize(data)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

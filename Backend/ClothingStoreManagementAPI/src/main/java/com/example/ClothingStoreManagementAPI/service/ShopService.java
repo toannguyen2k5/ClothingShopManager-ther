@@ -13,7 +13,7 @@ import java.util.*;
 public class ShopService {
 
 	@Autowired
-	private ShopRepository ShopRepository;
+	private ShopRepository shopRepository;
 	@Autowired
 	private Common common;
 	@Autowired
@@ -35,6 +35,9 @@ public class ShopService {
 		}
 	}
 
+	public Optional<Shop> getShop (String idShop) {
+		return shopRepository.findById(idShop);
+	}
 	public List<Shop> SellectShop(String query, int limit, int offset) {
 		try {
 			Query query1 = entityManager
@@ -57,12 +60,12 @@ public class ShopService {
 
 	public boolean InsertShop(Shop Shop) {
 		try {
-			String idcurrent = ShopRepository.SelectMaxId();
+			String idcurrent = shopRepository.SelectMaxId();
 			String newId = idcurrent != null ? common.FindNextId(idcurrent) : common.GetFirstId(Shop.class);
 			Shop.setIdShop(newId);
-			ShopRepository.save(Shop); // thêm brand vào csdl
-			ShopRepository.flush();
-			return ShopRepository.existsById(newId); // trạng thái tồn tại của object mới
+			shopRepository.save(Shop); // thêm brand vào csdl
+			shopRepository.flush();
+			return shopRepository.existsById(newId); // trạng thái tồn tại của object mới
 		} catch (Exception e) {
 			System.out.print("InsertColor, Error : " + e.getMessage());
 			return false;
@@ -72,7 +75,7 @@ public class ShopService {
 	@Transactional
 	public boolean UpdateShop(Shop Shop) {
 		try {
-			return ShopRepository.UpdateShop(Shop.getIdShop(), Shop.getNameShop(), Shop.getAddress(),
+			return shopRepository.UpdateShop(Shop.getIdShop(), Shop.getNameShop(), Shop.getAddress(),
 					Shop.getOpeningTime(), Shop.getClosingTime(), Shop.isStatus()) > 0;
 		} catch (Exception e) {
 			System.out.print("UpdateColor, Error : " + e.getMessage());
@@ -83,7 +86,7 @@ public class ShopService {
 	@Transactional
 	public boolean deleteShop(Shop Shop) {
 		try {
-			ShopRepository.delete(Shop);
+			shopRepository.delete(Shop);
 			return true;
 		} catch (Exception e) {
 			System.out.print("UpdateColor, Error : " + e.getMessage());

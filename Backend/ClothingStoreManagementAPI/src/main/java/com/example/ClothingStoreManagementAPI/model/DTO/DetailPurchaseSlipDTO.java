@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DetailPurchaseSlipDTO {
 	private String idShop;
+	private String nameShop;
+	
 	private String idProduct;
 	private String nameProduct;
 	private int price;
