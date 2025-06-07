@@ -1,4 +1,4 @@
-import React, { Component, createRef  } from "react";
+import React, { Component, createRef } from "react";
 import { define_nav, urlapi } from "../../../../setting/store/const";
 import LeaveCalendar from "./LeaveCalendar";
 import UpdateAccountModal from "./UpdateAccountModal";
@@ -24,6 +24,7 @@ class Profile extends Component {
       modalIsOpen: false,
     };
     this.fileInputRef = createRef();
+    this._isMounted = false;
   }
   handleImageClick = () => {
     this.fileInputRef.current.click();
@@ -34,12 +35,17 @@ class Profile extends Component {
 
     // Gửi file lên server
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("addimages", file);
     try {
-      const response = await fetch(urlapi + "/api/Image/upload/avatar/"+this.props.state_data.user_info.id_user, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        urlapi +
+          "/api/Image/upload/avatar/" +
+          this.props.state_data.user_info.id_user,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();
@@ -68,9 +74,7 @@ class Profile extends Component {
       .then((data) => {
         if (data.status === "200") alert("Cập Nhật Tài Khoản Thành Công!");
         // cập nhật state nếu cần
-        this.setState({ isActionAdd: true, message: data.message });
-        this.getListShop();
-        this.clearShopInfo();
+        this.getInfoUser(this.props.state_data.user_info.id_user);
       })
       .catch((error) => console.error("Lỗi POST:", error));
   };
@@ -83,14 +87,33 @@ class Profile extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ infoUser: data.data });
+        if (this._isMounted) {
+          this.setState({ infoUser: data.data });
+        }
       })
       .catch((error) => {});
   };
   componentDidMount() {
-    // this.props.
+    this._isMounted = true;
     this.getInfoUser(this.props.state_data.user_info.id_user);
-    console.log(this.props);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.infoUser.pathAvatar !== this.state.infoUser.pathAvatar) {
+      const user = this.props.state_data.user_info;
+      let user_info = {
+        idUser: user.id_user,
+        email: user.email,
+        fullName: user.full_name,
+        role: user.role,
+        roleLevel: user.role_level,
+        avatar: this.state.infoUser.pathAvatar,
+      };
+      this.props.actions.login_success(user_info);
+    }
   }
   render() {
     if (
@@ -177,9 +200,6 @@ class Profile extends Component {
                           onUpdate={(updatedData) => {
                             // Gọi API cập nhật tài khoản ở đây
                             this.updateShop(updatedData);
-                            this.getInfoUser(
-                              this.props.state_data.user_info.id_user
-                            );
                           }}
                         />
                       </div>

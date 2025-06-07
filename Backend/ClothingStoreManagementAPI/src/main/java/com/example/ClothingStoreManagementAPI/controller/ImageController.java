@@ -32,8 +32,8 @@ public class ImageController {
 	 public ResponseEntity<?> uploadImages(@PathVariable String ScopeName,@PathVariable String id,@RequestParam List<MultipartFile> addimages,@RequestParam boolean IsMain) {
        return ResponseEntity.ok(common.ReturnReponse(ImageService.uploadImages(addimages,ScopeName,id,IsMain), "Upload", "image"));
 	}
-	@PostMapping("/upload/avatar/{id}")
-	 public ResponseEntity<?> uploadAvatar(@PathVariable String idUser,@RequestParam List<MultipartFile> addimages) {
+	@PostMapping("/upload/avatar/{idUser}")
+	 public ResponseEntity<?> uploadAvatar(@PathVariable String idUser,@RequestParam MultipartFile addimages) {
       return ResponseEntity.ok(common.ReturnReponse(userService.uploadAvatar(addimages,idUser), "Upload", "image"));
 	}
 	@GetMapping("/Get/{ScopeName}/{id}")
