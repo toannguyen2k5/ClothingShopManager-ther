@@ -1,10 +1,15 @@
 package com.example.ClothingStoreManagementAPI.service;
 import org.springframework.stereotype.Service;
 import com.example.ClothingStoreManagementAPI.model.Entity.DiscountEvent;
+import com.example.ClothingStoreManagementAPI.model.Entity.InventoryShop;
+import com.example.ClothingStoreManagementAPI.model.Entity.Shop;
+import com.example.ClothingStoreManagementAPI.model.Entity.Size;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.ClothingStoreManagementAPI.repository.*;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
+import com.example.ClothingStoreManagementAPI.model.Entity.Color;
 import com.example.ClothingStoreManagementAPI.model.Entity.DetailProduct;
 import java.util.*;
 @Service
@@ -13,6 +18,12 @@ public class DetailProductService {
 	private ProductRepository productRepository;
 	@Autowired
 	private DetailProductRepository detailProductRepository;
+	@Autowired
+	private SizeRepository SizeRepository;
+	@Autowired
+	private ColorRepository ColorRepository;
+	@Autowired
+	private InventoryShopReponsitory InventoryShopReponsitory;
 	@Autowired
 	private Common common;
 	@Autowired
@@ -34,6 +45,26 @@ public class DetailProductService {
 			System.out.println("SelectDetail, Error : " + e.getMessage());
 			return "";
 		}
+	}
+	public List<DetailProductv2DTO> GetDetailProductv2DTO(String GetDetaiById){
+		List<DetailProductv2DTO> result = new ArrayList<>();
+		List<DetailProduct> DetailProducts = detailProductRepository.GetDetaiById(GetDetaiById);
+		for(DetailProduct DetailProduct :DetailProducts) {
+			Optional<Size> Size = SizeRepository.findById(DetailProduct.getIdSize());
+			Optional<Color> Color = ColorRepository.findById(DetailProduct.getIdColor());
+			result.add(new DetailProductv2DTO (DetailProduct.getIdDetail(),DetailProduct.getNumberSeri(),Size.get().getNameSize(),DetailProduct.getDayImport(),DetailProduct.isStatus(),
+					DetailProduct.isSellStatus(),Color.get().getNameColor(),InventoryShopReponsitory.SelectInventoryShop(DetailProduct.getIdDetail())));
+		}
+		return result;
+	}
+	public List<InventoryDTO> GetInventoryDTO(String idDetail){
+		List<InventoryDTO> result = new ArrayList<>();
+		List<Shop> shops = InventoryShopReponsitory.SelecShopByIdDetail(idDetail);
+		for(Shop shop : shops) {
+			InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(shop.getIdShop(),idDetail);
+			result.add(new InventoryDTO(shop.getIdShop(), shop.getNameShop(),InventoryShop.getQuantity()));
+		}
+		return result;
 	}
 	// tìm kiếm danh sách DetailProductDTO dựa trên mã sản phẩm
 	public DetailProductDTO SelectDetail(String idProduct) {

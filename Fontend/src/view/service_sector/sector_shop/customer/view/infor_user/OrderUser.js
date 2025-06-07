@@ -159,14 +159,21 @@ class OrderUser extends Component {
       },
       {
         name: "Trạng thái nhận hàng",
-        selector: (row) =>
-          row.deliveryStatus ? "Đã nhận hàng" : "Chưa nhận hàng",
+        selector: (row) => {
+          const statusMapping = {
+            SCd001: "Chưa duyệt",
+            SCd002: "Đã duyệt",
+            SCd003: "Đang giao hàng",
+            SCd004: "hoàn thành",
+          };
+          return statusMapping[row.deliveryStatus];
+        },
         sortable: true,
       },
       {
         name: "Actions",
         cell: (row) =>
-          !row.approveStatus && (
+          row.deliveryStatus === "SCd001" && (
             <>
               <button
                 className="btn btn-sm btn-outline-danger"

@@ -165,7 +165,6 @@ class ShopingCart extends Component {
       totalBill = this.TotalMoneyCurrent() + this.state.shippingFee;
     }
     const today = new Date();
-    const formattedDate = today.toISOString().split("T")[0];
     const req = {
       method: "POST",
       headers: {
@@ -175,7 +174,7 @@ class ShopingCart extends Component {
         salesSlipData: {
           idCreater: this.props.state_data.user_info.id_user,
           idClient: this.props.state_data.user_info.id_user,
-          createDate: formattedDate,
+          createDate: today,
           deliveryAddress: this.state.address,
           totalBill: totalBill,
           shippingFee: this.state.shippingFee,

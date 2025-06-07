@@ -1,6 +1,8 @@
 package com.example.ClothingStoreManagementAPI.repository;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -26,6 +28,10 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, St
     // tìm kiếm trạng thái bán của sản phẩm
     @Query("SELECT d.status From DetailProduct d  WHERE d.idDetail = :idDetail")
     boolean CheckSellStatus(@Param("idDetail") String idDetail);
+    
+    // tìm kiếm trạng thái bán của sản phẩm
+    @Query("SELECT d From DetailProduct d  WHERE d.idProduct = :idProduct")
+    List<DetailProduct> GetDetaiById(@Param("idProduct") String idProduct);
 
     // tìm kiếm tên sản phẩm , kích thước , màu sắc dựa trên tên sp
     @Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ReverseRetrievalDProductDTO("

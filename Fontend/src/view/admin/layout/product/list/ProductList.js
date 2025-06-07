@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import { urlapi } from "../../../../../setting/store/const";
 import "./style.css";
 import { define_nav } from "../../../../../setting/store/const";
-
+import "../../../layout/order/input/list/PurchaseSlipList.css";
 let mockProducts = [];
 
 const columns = [
@@ -29,6 +29,15 @@ class ProductListClass extends Component {
       searchText: "",
       filterStatus: "",
       perPage: 5,
+      showModalDetail: false,
+      itemsLoading: false,
+      itemSearchText: "",
+      DetailProducts: [],
+      nameProduct: "",
+      showModalShop: false,
+      nameDetail: "",
+      InventSearchText: "",
+      InventShop: [],
     };
   }
 
@@ -50,7 +59,7 @@ class ProductListClass extends Component {
                 id_danh_muc: item.nameCategory,
                 trang_thai: item.status,
                 so_luong: item.quantity || 0,
-                gia_ban: item.price||0,
+                gia_ban: item.price || 0,
               },
             ];
           });
@@ -95,8 +104,68 @@ class ProductListClass extends Component {
   handlePerPageChange = (e) => {
     this.setState({ perPage: parseInt(e.target.value) });
   };
-
+  handleRowClick = (row) => {
+    this.setState(
+      { showModalDetail: true, nameProduct: row.ten_san_pham },
+      () => {
+        const queryString = new URLSearchParams();
+        queryString.append("idProduct", row.id);
+        fetch(
+          urlapi +
+            `/api/detailproduct/sellect/alldetail?${queryString.toString()}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status && data.status == "200") {
+              this.setState({ DetailProducts: data.data });
+            }
+            console.log("data detail :", data);
+          })
+          .catch((error) => console.error(error));
+      }
+    );
+  };
+  handleInventRowClick = (row) => {
+    this.setState(
+      {
+        showModalShop: true,
+        nameDetail:
+          this.state.nameProduct + "/" + row.nameSize + "/" + row.nameColor,
+      },
+      () => {
+        const queryString = new URLSearchParams();
+        queryString.append("idDetail", row.idDetail);
+        fetch(
+          urlapi +
+            `/api/detailproduct/sellect/invenofshop?${queryString.toString()}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status && data.status == "200") {
+              this.setState({ InventShop: data.data });
+            }
+            console.log("InventShop :", data);
+          })
+          .catch((error) => console.error(error));
+      }
+    );
+  };
   render() {
+    const {
+      showModalDetail,
+      itemsLoading,
+      itemSearchText,
+      DetailProducts,
+      InventSearchText,
+      showModalShop,
+      InventShop,
+    } = this.state;
     if (
       this.props.state_data.current_page.name !==
       define_nav.admin.listproduct.name
@@ -106,39 +175,171 @@ class ProductListClass extends Component {
         path_new: define_nav.admin.listproduct.path,
         old_page: this.props.state_data.current_page,
       });
+    const filteredItems = DetailProducts.filter(
+      (item) =>
+        item.numberSeri.toLowerCase().includes(itemSearchText.toLowerCase()) ||
+        item.nameColor.toLowerCase().includes(itemSearchText.toLowerCase()) ||
+        item.nameSize.toLowerCase().includes(itemSearchText.toLowerCase())
+    );
+    const detailColumns = [
+      { name: "Mã Detail", selector: (row) => row.idDetail, sortable: true },
+      { name: "Color", selector: (row) => row.nameColor, sortable: true },
+      { name: "Size", selector: (row) => row.nameSize, sortable: true },
+      { name: "Số seri", selector: (row) => row.numberSeri, sortable: true },
+      { name: "Quantity", selector: (row) => row.quantity, sortable: true },
+    ];
+    const filteredInvent = InventShop.filter(
+      (item) =>
+        item.idShop.toLowerCase().includes(InventSearchText.toLowerCase()) ||
+        item.nameShop.toLowerCase().includes(InventSearchText.toLowerCase())
+    );
+    const InventColumns = [
+      { name: "Mã shop", selector: (row) => row.idShop, sortable: true },
+      { name: "tên shop", selector: (row) => row.nameShop, sortable: true },
+      { name: "số lượng", selector: (row) => row.quantity, sortable: true },
+    ];
     return (
-      <div className="row">
-        <div className="flex flex-wrap gap-4 mb-4">
-          <select
-            onChange={this.handleStatusFilter}
-            value={this.state.filterStatus}
-            className="border p-2 rounded form-control-sm"
-            style={{ float: "left" }}
-          >
-            <option value="">Tất cả trạng thái</option>
-            <option value="Còn hàng">Còn hàng</option>
-            <option value="Hết hàng">Hết hàng</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Tìm kiếm sản phẩm..."
-            className="border p-2 rounded form-control-sm"
-            onChange={this.handleSearch}
-            value={this.state.searchText}
-            style={{ float: "right", width: "250px" }}
+      <>
+        <div className="row">
+          <div className="flex flex-wrap gap-4 mb-4">
+            <select
+              onChange={this.handleStatusFilter}
+              value={this.state.filterStatus}
+              className="border p-2 rounded form-control-sm"
+              style={{ float: "left" }}
+            >
+              <option value="">Tất cả trạng thái</option>
+              <option value="Còn hàng">Còn hàng</option>
+              <option value="Hết hàng">Hết hàng</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Tìm kiếm sản phẩm..."
+              className="border p-2 rounded form-control-sm"
+              onChange={this.handleSearch}
+              value={this.state.searchText}
+              style={{ float: "right", width: "250px" }}
+            />
+          </div>
+
+          <DataTable
+            columns={columns}
+            data={this.state.filteredProducts}
+            pagination
+            paginationPerPage={this.state.perPage}
+            highlightOnHover
+            striped
+            responsive
+            onRowClicked={(row) => this.handleRowClick(row)}
           />
         </div>
 
-        <DataTable
-          columns={columns}
-          data={this.state.filteredProducts}
-          pagination
-          paginationPerPage={this.state.perPage}
-          highlightOnHover
-          striped
-          responsive
-        />
-      </div>
+        <div className="">
+          {showModalDetail && (
+            <div
+              className="psl-modal-overlay"
+              onClick={() => {
+                this.setState({ showModalDetail: false });
+              }}
+            >
+              <div
+                className="psl-modal-content"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  height: "530px",
+                  overflowY: "auto",
+                }}
+              >
+                <button
+                  className="psl-modal-close"
+                  onClick={() => {
+                    this.setState({ showModalDetail: false });
+                  }}
+                >
+                  ×
+                </button>
+                <h3>Chi tiết sản phẩm {this.state.nameProduct}</h3>
+                <DataTable
+                  columns={detailColumns}
+                  data={filteredItems}
+                  progressPending={itemsLoading}
+                  pagination
+                  paginationPerPage={5}
+                  paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
+                  highlightOnHover
+                  pointerOnHover
+                  subHeader
+                  onRowClicked={(row) => this.handleInventRowClick(row)}
+                  subHeaderComponent={
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm số seri / màu / size..."
+                      className="psl-search"
+                      value={itemSearchText}
+                      onChange={(e) => {
+                        this.setState({ itemSearchText: e.target.value });
+                      }}
+                    />
+                  }
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="">
+          {showModalShop && (
+            <div
+              className="psl-modal-overlay"
+              onClick={() => {
+                this.setState({ showModalShop: false });
+              }}
+            >
+              <div
+                className="psl-modal-content"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  height: "530px",
+                  overflowY: "auto",
+                }}
+              >
+                <button
+                  className="psl-modal-close"
+                  onClick={() => {
+                    this.setState({ showModalShop: false });
+                  }}
+                >
+                  ×
+                </button>
+                <h4>Chi tiết sản phẩm {this.state.nameDetail}</h4>
+                <DataTable
+                  columns={InventColumns}
+                  data={filteredInvent}
+                  progressPending={itemsLoading}
+                  pagination
+                  paginationPerPage={5}
+                  paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
+                  highlightOnHover
+                  pointerOnHover
+                  subHeader
+                  subHeaderComponent={
+                    <input
+                      type="text"
+                      placeholder="Tìm kiếm shop..."
+                      className="psl-search"
+                      value={InventSearchText}
+                      onChange={(e) => {
+                        this.setState({ InventSearchText: e.target.value });
+                      }}
+                    />
+                  }
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 }
