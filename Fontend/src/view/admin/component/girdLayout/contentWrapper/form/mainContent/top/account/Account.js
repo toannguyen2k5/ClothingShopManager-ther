@@ -10,7 +10,7 @@ class Account extends Component {
   }
 
   render() {
-    console.log("state_data Account: ",this.props.state_data);
+    console.log("state_data Account: ", this.props.state_data);
     if (this.props.state_data.user_info.role_level >= 5)
       // "admin")
       return (
@@ -27,7 +27,7 @@ class Account extends Component {
           >
             <img
               src={`${urlapi}/api/Image/${this.props.state_data.user_info.avatar}`}
-              style={{ width: "40px", height: "auto" }}
+              style={{ width: "40px", height: "auto", borderRadius: "50%" }}
             />
             &nbsp;
             <span className="d-sm-inline d-none">

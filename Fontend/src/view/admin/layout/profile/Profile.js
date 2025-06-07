@@ -153,6 +153,7 @@ class Profile extends Component {
                           src={`${urlapi}/api/Image/${this.state.infoUser.pathAvatar}`}
                           alt="profile_image"
                           className="w-100 border-radius-lg shadow-sm"
+                          style={{ borderRadius: "50%" }}
                         />
                         <input
                           type="file"
