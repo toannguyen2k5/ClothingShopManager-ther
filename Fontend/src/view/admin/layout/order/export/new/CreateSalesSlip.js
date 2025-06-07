@@ -498,11 +498,6 @@ export default class CreateSalesSlip extends Component {
         old_page: this.props.state_data.current_page,
       });
     const {
-      purchaseSlip,
-      newItem,
-      items,
-      productFilter,
-      showProductPopup,
       responseMessage,
     } = this.state;
     console.log("data_product_selected",this.state.data_product_selected);

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef  } from "react";
 import { define_nav, urlapi } from "../../../../setting/store/const";
 import LeaveCalendar from "./LeaveCalendar";
 import UpdateAccountModal from "./UpdateAccountModal";
@@ -23,7 +23,36 @@ class Profile extends Component {
       },
       modalIsOpen: false,
     };
+    this.fileInputRef = createRef();
   }
+  handleImageClick = () => {
+    this.fileInputRef.current.click();
+  };
+  handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Gửi file lên server
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch(urlapi + "/api/Image/upload/avatar/"+this.props.state_data.user_info.id_user, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Upload thành công:", result);
+        this.getInfoUser(this.props.state_data.user_info.id_user);
+      } else {
+        console.error("Upload thất bại:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Lỗi khi upload:", error);
+    }
+  };
+
   updateShop = (data) => {
     const req = {
       method: "POST",
@@ -92,11 +121,22 @@ class Profile extends Component {
                 <div className="card card-plain h-100">
                   <div className="card-header pb-0 p-3">
                     <div className="col-auto">
-                      <div className="avatar avatar-xl position-relative">
+                      <div
+                        className="avatar avatar-xl position-relative"
+                        onClick={this.handleImageClick}
+                        style={{ cursor: "pointer" }}
+                      >
                         <img
                           src={`${urlapi}/api/Image/${this.state.infoUser.pathAvatar}`}
                           alt="profile_image"
                           className="w-100 border-radius-lg shadow-sm"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={this.fileInputRef}
+                          onChange={this.handleFileChange}
+                          style={{ display: "none" }}
                         />
                       </div>
                     </div>

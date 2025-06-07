@@ -13,5 +13,5 @@ public class SalesSlipDTO {
 	private String deliveryAddress;
 	private Integer shippingFee;
 	private Integer totalBill;
-	private boolean deliveryStatus;
+	private String deliveryStatus;
 }

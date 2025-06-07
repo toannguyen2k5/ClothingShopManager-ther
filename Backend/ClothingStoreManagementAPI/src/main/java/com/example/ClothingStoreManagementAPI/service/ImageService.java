@@ -15,6 +15,7 @@ import java.io.File;
 public class ImageService {
 	@Autowired
 	private ProductImageService ProductImageService;
+	
 	private String TypeImage(String mimeType) {
 		switch (mimeType) {
 	        case "image/jpeg":return ".jpg";
@@ -34,6 +35,28 @@ public class ImageService {
 	public List<String> uploadImages(List<MultipartFile> addimages , String ScopeName, String id , boolean isMain) {
     	return InserImage("upload/"+ScopeName.toLowerCase()+"/",addimages,id,ScopeName.toLowerCase(),isMain);
     }
+	public List<String> uploadAvatar(List<MultipartFile> addimages, String idUser) {
+    	return insertAvatar("upload/user/",addimages,idUser);
+    }
+	public List<String> insertAvatar(String path , List<MultipartFile> addimages, String idUser) {
+		List<String> uploadedFileNames = new ArrayList<>();
+		try {
+				for (MultipartFile file : addimages) {
+		            if (!file.isEmpty()) {
+		                String filename = idUser +"_"+ file.getOriginalFilename();
+		                String pathFile = path + filename;
+		                Path paths = Paths.get(pathFile);
+		                Files.createDirectories(paths.getParent()); // Ensure directory exists
+		                Files.copy(file.getInputStream(), paths, StandardCopyOption.REPLACE_EXISTING);
+		                uploadedFileNames.add(pathFile);
+		            }
+		        }
+				return uploadedFileNames;
+        	} 
+		catch (IOException e) {
+        	return null;
+        }
+	}
 	public List<String> InserImage(String path , List<MultipartFile> addimages, String id,String ScopeName, boolean isMain) {
 		List<String> uploadedFileNames = new ArrayList<>();
 		try {

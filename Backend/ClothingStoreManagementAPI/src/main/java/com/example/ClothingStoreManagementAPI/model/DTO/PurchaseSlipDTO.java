@@ -16,7 +16,7 @@ public class PurchaseSlipDTO {
     private String nameSupplier;
     private LocalDate dayCreate;
     private int totalBill;
-    private boolean approveStatus;
+    private String approveStatus;
     private LocalDate statusUpdateDate;
     private String nameStatusEditor;
     private boolean statusReceive;

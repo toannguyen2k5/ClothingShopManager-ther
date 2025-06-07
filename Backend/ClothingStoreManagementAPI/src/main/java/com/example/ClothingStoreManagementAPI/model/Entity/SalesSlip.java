@@ -34,7 +34,7 @@ public class SalesSlip {
     private int shippingFee;
     
     @Column(name = "deliveryStatus")
-    private boolean deliveryStatus;
+    private String deliveryStatus;
 
     @Column(name = "note", length = 255)
     private String note;
