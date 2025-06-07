@@ -36,15 +36,16 @@ public class UserService {
 					.createQuery("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowUserDTO("
 							+ "u.idUser, u.fullName, u.email, u.phoneNumber, u.address, "
 							+ "u.gender, u.birthDay, u.username, "
-							+ "SUM(CASE WHEN ss.deliveryStatus = true THEN 1 ELSE 0 END), "
-							+ "SUM(CASE WHEN ss.deliveryStatus = false THEN 1 ELSE 0 END), "
-							+ "SUM(CASE WHEN ss.deliveryStatus = true THEN ss.totalBill ELSE 0 END)) " + "FROM Users u "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveryStatus THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus != :deliveryStatus THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveryStatus THEN ss.totalBill ELSE 0 END)) " + "FROM Users u "
 							+ "LEFT JOIN SalesSlip ss ON ss.idClient = u.idUser " + "WHERE u.role = customer "
 							+ "GROUP BY u.idUser, u.fullName, u.email, u.phoneNumber, u.address, "
 							+ "u.gender, u.birthDay, u.username", ShowUserDTO.class);
+			query.setParameter("deliveryStatus", "SCd004");
 			return query.getResultList();
 		} catch (Exception e) {
-			System.out.print("SellectProduct, Error : " + e.getMessage());
+			System.out.print("ShowAllClient, Error : " + e.getMessage());
 			return null;
 		}
 	}
