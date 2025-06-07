@@ -31,6 +31,15 @@ class ChooseAddress extends Component {
           detailaddress: detailAddress,
         },
       });
+      if (this.props && this.props.choosed) {
+        this.props.choosed(
+          detailAddress +
+            "," +
+            district_current.nameDistrict +
+            "," +
+            province_current.nameProvince
+        );
+      }
       console.log("data props after: ", this.props);
     }
     console.log(

@@ -105,6 +105,6 @@ public class SalesSlipController {
 	}
 	@GetMapping("/GetInventoryByShop")
 	public ResponseEntity<?> GetInventoryByShop(@RequestParam String idShop, @RequestParam List<String> idDetailProducts){
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.GetShopByInventory(idDetailProducts), "Update", "Inventory From RefundSlip"));
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.GetInventoryByShop(idShop,idDetailProducts), "Update", "Inventory From RefundSlip"));
 	}
 }

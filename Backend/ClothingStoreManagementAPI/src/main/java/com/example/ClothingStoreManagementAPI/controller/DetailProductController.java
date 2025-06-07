@@ -25,7 +25,7 @@ public class DetailProductController {
 	}
 	@GetMapping("sellect/inventory")
 	public ResponseEntity<?> SellectInventory(@RequestParam String idDetail){
-		long quantity = InventoryShopService.SelectQuantityInventory(idDetail);
+		Long quantity = InventoryShopService.SelectQuantityInventory(idDetail);
 		return ResponseEntity.ok(common.ReturnReponse(quantity, "Sellect", "Inventory Detail Product"));
 	}
 	// khi thêm hoặc chỉnh sửa sản phẩm

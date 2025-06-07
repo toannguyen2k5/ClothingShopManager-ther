@@ -86,7 +86,7 @@ class ShopingCartItem extends Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
-          this.setState({ shopingcart_items: items });
+          this.setState({ shopingcart_items: items }, this.props.update());
         }
         console.log(data);
       })
@@ -152,6 +152,39 @@ class ShopingCartItem extends Component {
       })
       .catch((error) => console.error(error));
   }
+  GetMensenger = (idShoppingCart_item, quantity) => {
+    const inventorySelectedShop =
+      this.props.inventory &&
+      this.props.inventory.find(
+        (item) => item.idShoppingCart === idShoppingCart_item
+      );
+    console.log("inventorySelectedShop :", inventorySelectedShop);
+    if (!inventorySelectedShop) return null;
+    console.log("data inven :", quantity);
+    if (quantity <= inventorySelectedShop.quantity) {
+      return (
+        <h4
+          style={{
+            color: "green",
+            font: "1",
+          }}
+        >
+          Đủ hàng
+        </h4>
+      );
+    } else {
+      return (
+        <h4
+          style={{
+            color: "red",
+            font: "1",
+          }}
+        >
+          Thiếu hàng (tồn kho : {inventorySelectedShop.quantity})
+        </h4>
+      );
+    }
+  };
   render() {
     return (
       <div>
@@ -251,6 +284,11 @@ class ShopingCartItem extends Component {
                               </>
                             )}
                           </del>
+                          {shopingcart_item.status &&
+                            this.GetMensenger(
+                              shopingcart_item.idShoppingCart,
+                              shopingcart_item.quantity
+                            )}
                         </span>
                       </span>
                     </div>

@@ -504,7 +504,7 @@ public class SalesSlipService {
 		}
 		return result;
 	}
-	public List<Integer> GetShopByInventory(String idShop,List<String> idDetailProducts){
+	public List<Integer> GetInventoryByShop(String idShop,List<String> idDetailProducts){
 		List<Integer> result = new ArrayList<>();
 		for(String idDetailProduct : idDetailProducts ) {
 			InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(idShop, idDetailProduct);

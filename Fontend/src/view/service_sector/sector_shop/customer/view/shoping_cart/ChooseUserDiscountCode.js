@@ -8,7 +8,13 @@ class ChooseUserDiscountCode extends Component {
       UserDiscountCodes: [],
     };
   }
-
+  handelDisCode = (e) => {
+    const discode = this.state.UserDiscountCodes.find(
+      (item) => item.discountCode === e.target.value
+    );
+    console.log("discode : ", discode);
+    this.props.Choosed(discode);
+  };
   componentDidMount() {
     console.log("Get Data");
     fetch(
@@ -42,6 +48,7 @@ class ChooseUserDiscountCode extends Component {
                   name="change-tinh"
                   className="change-tinh"
                   style={{ width: "100000px" }}
+                  onChange={this.handelDisCode}
                 >
                   <option value="all">Chọn mã giảm giá(nếu có)</option>
                   {this.state.UserDiscountCodes.map((UserDiscountCode) => (
