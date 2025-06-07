@@ -66,7 +66,7 @@ public class UserService {
 			return null;
 		}
 	}
-
+	@Transactional
 	public boolean updatePathAvatar(String idUser, String pathAvatar) {
 		return UserRepository.updatePathAvatar(idUser, pathAvatar) > 0;
 	}
@@ -104,7 +104,7 @@ public class UserService {
 		return UserRepository.findByRoleNot(Role.customer); // loại bỏ customer
 	}
 
-	public List<String> uploadAvatar(List<MultipartFile> addimages, String idUser) {
+	public List<String> uploadAvatar(MultipartFile addimages, String idUser) {
 		List<String> list = ImageService.uploadAvatar(addimages, idUser);
 
 		updatePathAvatar(idUser, list.get(0));

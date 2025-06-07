@@ -129,11 +129,11 @@ class UpdateAccountModal extends Component {
           </div>
 
           <div className="form-group">
-            <label for="phone">Số điện thoại:</label>
+            <label for="phoneNumber">Số điện thoại:</label>
             <input
               type="text"
-              id="phone"
-              name="phone"
+              id="phoneNumber"
+              name="phoneNumber"
               value={formData.phoneNumber || ""}
               onChange={this.handleChange}
             />
