@@ -232,11 +232,6 @@ class CustomerManager extends Component {
       { name: "Ngày sinh", selector: (row) => row.dob },
       { name: "Đơn mua", selector: (row) => row.totalOrders, width: "100px" },
       {
-        name: "Đơn hủy",
-        selector: (row) => row.cancelledOrders,
-        width: "100px",
-      },
-      {
         name: "Tổng giá trị",
         selector: (row) => row.totalValue.toLocaleString() + "₫",
         sortable: true,
