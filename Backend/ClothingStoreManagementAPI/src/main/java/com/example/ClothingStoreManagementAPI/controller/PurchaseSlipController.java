@@ -56,6 +56,10 @@ public class PurchaseSlipController {
 	public ResponseEntity<?> UpdatePurchaseSlip(@RequestBody PurchaseSlip PurchaseSlip){
 		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlipService.UpdatePurchaseSlip(PurchaseSlip), "Update", "PurchaseSlip"));
 	}
+	@PostMapping("/updateStatusPurchaseSlip")
+	public ResponseEntity<?> updateStatusPurchaseSlip(@RequestBody PurchaseSlip purchaseSlip){
+		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlipService.updateStatusPurchaseSlip(purchaseSlip), "Update", "PurchaseSlip"));
+	}
 	@PostMapping("/updateAll")
 	public ResponseEntity<?> UpdatePurchaseSlip(@RequestBody PucharSlipData PucharSlipData){
 		return ResponseEntity.ok(common.ReturnReponse(PurchaseSlipService.UpdatePurchaseSlip(PucharSlipData.getPurchaseSlip(),PucharSlipData.getShopReceiveData()), "Update", "PurchaseSlip"));

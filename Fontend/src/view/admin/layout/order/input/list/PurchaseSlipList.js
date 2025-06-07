@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { urlapi } from "../../../../../../setting/store/const";
+import { role_manager, urlapi } from "../../../../../../setting/store/const";
 import "./PurchaseSlipList.css";
 
 export default class PurchaseSlipList extends Component {
@@ -16,7 +16,12 @@ export default class PurchaseSlipList extends Component {
       itemsLoading: false,
       showModal: false,
       itemSearchText: "",
-      statusOptions: ["Chưa duyệt", "Đã duyệt", "Đang giao hàng", "hoàn thành"],
+      statusOptions: [
+        { value: "SCd001", text: "Chưa duyệt" },
+        { value: "SCd002", text: "Đã duyệt" },
+        { value: "SCd003", text: "Đang giao hàng" },
+        { value: "SCd004", text: "hoàn thành" },
+      ],
       selectedStatus: "",
     };
   }
@@ -24,6 +29,10 @@ export default class PurchaseSlipList extends Component {
   componentDidMount() {
     this.fetchSlips();
   }
+  getStatusText = (code) => {
+    const status = this.state.statusOptions.find((opt) => opt.value === code);
+    return status ? status.text : "Không rõ";
+  };
 
   fetchSlips = async () => {
     fetch(urlapi + "/api/PurchaseSlip/SelectAll/all/all/")
@@ -105,11 +114,42 @@ export default class PurchaseSlipList extends Component {
           ? { ...slip, approveStatus: updatedStatus }
           : slip
       ),
+      approveStatus: updatedStatus,
     }));
   };
-  handleUpdateStatus = () => {};
+  handleUpdateStatus = () => {
+    const data = {
+      approveStatus: this.state.approveStatus,
+      statusUpdateDate: new Date(),
+      idStatusEditor: this.props.state_data.user_info.id_user,
+      idPurchaseSlip: this.state.selectedSlipId,
+    };
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...data,
+      }),
+    };
+    fetch(urlapi + "/api/PurchaseSlip/updateStatusPurchaseSlip", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") {
+          alert("Cập nhật trạng thái đơn nhập hàng thành công!!!");
+          this.setState({
+            approveStatus: "",
+          });
+        }
+        console.log("Response từ server:", data);
+        // cập nhật state nếu cần
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
+  };
 
   render() {
+    console.log(this.props);
     const {
       slips,
       loading,
@@ -152,8 +192,7 @@ export default class PurchaseSlipList extends Component {
       },
       {
         name: "Trạng thái duyệt",
-        selector: (row) =>
-          row.approveStatus ? "Đã phê duyệt" : "Chưa phê duyệt",
+        selector: (row) => this.getStatusText(row.approveStatus),
         sortable: true,
       },
       {
@@ -185,12 +224,37 @@ export default class PurchaseSlipList extends Component {
     );
 
     const itemColumns = [
-      { name: "STT", selector: (row, index) => index+1, width:"80px"},
-      { name: "Tên Cửa Hàng", selector: (row) => row.nameShop, sortable: true , width:"300px"},
-      { name: "Tên Sản Phẩm", selector: (row) => row.nameProduct, sortable: true, width:"300px" },
-      { name: "Màu", selector: (row) => row.color, sortable: true , width:"80px"},
-      { name: "Size", selector: (row) => row.size, sortable: true , width:"80px"},
-      { name: "Số Lượng", selector: (row) => row.quantity, sortable: true, width:"120px" },
+      { name: "STT", selector: (row, index) => index + 1, width: "80px" },
+      {
+        name: "Tên Cửa Hàng",
+        selector: (row) => row.nameShop,
+        sortable: true,
+        width: "300px",
+      },
+      {
+        name: "Tên Sản Phẩm",
+        selector: (row) => row.nameProduct,
+        sortable: true,
+        width: "300px",
+      },
+      {
+        name: "Màu",
+        selector: (row) => row.color,
+        sortable: true,
+        width: "80px",
+      },
+      {
+        name: "Size",
+        selector: (row) => row.size,
+        sortable: true,
+        width: "80px",
+      },
+      {
+        name: "Số Lượng",
+        selector: (row) => row.quantity,
+        sortable: true,
+        width: "120px",
+      },
       {
         name: "Đơn Giá",
         selector: (row) => row.price,
@@ -261,8 +325,13 @@ export default class PurchaseSlipList extends Component {
                   </div>
                   <div className="psl-slip-row">
                     <strong>Trạng thái:</strong>
-                    {selectedSlip.approveStatus === "Hoàn thành" ? (
-                      <span> Hoàn thành</span>
+                    {selectedSlip.approveStatus === "SCd004" &&
+                    this.state.approveStatus !== selectedSlip.approveStatus &&
+                    this.props.state_data.user_info.role_level >=
+                      role_manager ? (
+                      <span>
+                        {this.getStatusText(selectedSlip.approveStatus)}
+                      </span>
                     ) : (
                       <>
                         <select
@@ -271,8 +340,8 @@ export default class PurchaseSlipList extends Component {
                           onChange={this.handleStatusChange}
                         >
                           {statusOptions.map((status) => (
-                            <option key={status} value={status}>
-                              {status}
+                            <option key={status} value={status.value}>
+                              {status.text}
                             </option>
                           ))}
                         </select>

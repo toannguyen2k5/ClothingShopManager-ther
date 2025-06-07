@@ -28,7 +28,7 @@ public class PurchaseSlip {
     private int totalBill;
 
     @Column(name = "approveStatus", nullable = false)
-    private boolean approveStatus;
+    private String approveStatus;
 
     @Column(name = "statusUpdateDate")
     private LocalDate statusUpdateDate;

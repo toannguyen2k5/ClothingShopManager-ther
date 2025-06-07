@@ -58,6 +58,10 @@ public class SalesSlipController {
 	public ResponseEntity<?> UpdateSalesSlip(@RequestBody SalesSlip SalesSlip){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateSalesSlip(SalesSlip), "Update", "SalesSlip"));
 	}
+	@PostMapping("/updateStatusSalesSlip")
+	public ResponseEntity<?> updateStatusSalesSlip(@RequestBody SalesSlip SalesSlip){
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateStatusSalesSlip(SalesSlip), "Update", "SalesSlip"));
+	}
 	@PostMapping("/updateAll")
 	public ResponseEntity<?> UpdateSalesSlip(@RequestBody SaleSlipInsertData SaleSlipInsertData){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateSalesSlip(SaleSlipInsertData.getSalesSlip(),SaleSlipInsertData.getShopDeliveryData()), "Update", "SalesSlip"));
@@ -91,10 +95,10 @@ public class SalesSlipController {
 	public ResponseEntity<?> UpdateDetailedRefundSlip(@RequestBody DetailedRefundSlip DetailedRefundSlip){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateDetailedRefundSlip(DetailedRefundSlip), "Update", "DetailedRefundSlips"));
 	}
-	@PostMapping("/inventorySalesSlip/update")
-	public ResponseEntity<?> UpdateInventorySalesSlip(@RequestBody SalesSlip SalesSlip,@RequestBody Map<String,List<CartData>> ShoppingCartDatas){
-		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateInventorySalesSlip(SalesSlip,ShoppingCartDatas), "Update", "Inventory From SalesSlip"));
-	}
+//	@PostMapping("/inventorySalesSlip/update")
+//	public ResponseEntity<?> UpdateInventorySalesSlip(@RequestBody SalesSlip SalesSlip,@RequestBody Map<String,List<CartData>> ShoppingCartDatas){
+//		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateInventorySalesSlip(SalesSlip,ShoppingCartDatas), "Update", "Inventory From SalesSlip"));
+//	}
 	@PostMapping("/inventoryRefundSlip/update")
 	public ResponseEntity<?> UpdateInventoryRefundSlip(@RequestBody SalesSlip SalesSlip ,@RequestBody List<DetailedRefundSlip> DetailedRefundSlips){
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipService.UpdateInventoryRefundSlip(SalesSlip,DetailedRefundSlips), "Update", "Inventory From RefundSlip"));

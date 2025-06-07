@@ -106,3 +106,8 @@ export const define_name_sector = {
     home: "blog",
   },
 };
+
+export const role_admin = 99;
+export const role_manager = 10;
+export const role_staff = 5;
+export const role_customer = 0;

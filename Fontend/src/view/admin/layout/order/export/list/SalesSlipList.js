@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { urlapi } from "../../../../../../setting/store/const";
+import { role_manager, urlapi } from "../../../../../../setting/store/const";
 import "../../input/list/PurchaseSlipList.css";
 
 export default class SalesSlipList extends Component {
@@ -16,7 +16,12 @@ export default class SalesSlipList extends Component {
       itemsLoading: false,
       showModal: false,
       itemSearchText: "",
-      statusOptions: ["Chưa duyệt", "Đã duyệt", "Đang giao hàng", "hoàn thành"],
+      statusOptions: [
+        { value: "SCd001", text: "Chưa duyệt" },
+        { value: "SCd002", text: "Đã duyệt" },
+        { value: "SCd003", text: "Đang giao hàng" },
+        { value: "SCd004", text: "hoàn thành" },
+      ],
       selectedStatus: "",
     };
   }
@@ -24,7 +29,10 @@ export default class SalesSlipList extends Component {
   componentDidMount() {
     this.fetchSlips();
   }
-
+  getStatusText = (code) => {
+    const status = this.state.statusOptions.find((opt) => opt.value === code);
+    return status ? status.text : "Không rõ";
+  };
   fetchSlips = async () => {
     fetch(urlapi + "/api/SalesSlip/SelectAll/all/all/")
       .then((response) => response.json())
@@ -100,12 +108,40 @@ export default class SalesSlipList extends Component {
     this.setState((prev) => ({
       slips: prev.slips.map((slip) =>
         slip.idSalesSlip === prev.selectedSlipId
-          ? { ...slip, approveStatus: updatedStatus }
+          ? { ...slip, deliveryStatus: updatedStatus }
           : slip
       ),
+      deliveryStatus: updatedStatus,
     }));
   };
-  handleUpdateStatus = () => {};
+  handleUpdateStatus = () => {
+    const data = {
+      deliveryStatus: this.state.deliveryStatus,
+      idSalesSlip: this.state.selectedSlipId,
+    };
+    const req = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...data,
+      }),
+    };
+    fetch(urlapi + "/api/SalesSlip/updateStatusSalesSlip", req)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") {
+          alert("Cập nhật trạng thái đơn nhập hàng thành công!!!");
+          this.setState({
+            deliveryStatus: "",
+          });
+        }
+        console.log("Response từ server:", data);
+        // cập nhật state nếu cần
+      })
+      .catch((error) => console.error("Lỗi POST:", error));
+  };
 
   render() {
     const {
@@ -160,8 +196,7 @@ export default class SalesSlipList extends Component {
       },
       {
         name: "Trạng thái nhận hàng",
-        selector: (row) =>
-          row.deliveryStatus ? "Đã nhận hàng" : "Chưa nhận hàng",
+        selector: (row) => this.getStatusText(row.deliveryStatus),
         sortable: true,
       },
       {
@@ -188,12 +223,37 @@ export default class SalesSlipList extends Component {
     );
 
     const itemColumns = [
-      { name: "STT", selector: (row, index) => index+1, width:"80px"},
-      { name: "Tên Cửa Hàng", selector: (row) => row.nameShop, sortable: true , width:"300px"},
-      { name: "Tên Sản Phẩm", selector: (row) => row.nameProduct, sortable: true, width:"300px" },
-      { name: "Màu", selector: (row) => row.color, sortable: true , width:"80px"},
-      { name: "Size", selector: (row) => row.size, sortable: true , width:"80px"},
-      { name: "Số Lượng", selector: (row) => row.quantity, sortable: true, width:"120px" },
+      { name: "STT", selector: (row, index) => index + 1, width: "80px" },
+      {
+        name: "Tên Cửa Hàng",
+        selector: (row) => row.nameShop,
+        sortable: true,
+        width: "300px",
+      },
+      {
+        name: "Tên Sản Phẩm",
+        selector: (row) => row.nameProduct,
+        sortable: true,
+        width: "300px",
+      },
+      {
+        name: "Màu",
+        selector: (row) => row.color,
+        sortable: true,
+        width: "80px",
+      },
+      {
+        name: "Size",
+        selector: (row) => row.size,
+        sortable: true,
+        width: "80px",
+      },
+      {
+        name: "Số Lượng",
+        selector: (row) => row.quantity,
+        sortable: true,
+        width: "120px",
+      },
       {
         name: "Đơn Giá",
         selector: (row) => row.price,
@@ -270,18 +330,23 @@ export default class SalesSlipList extends Component {
                   </div>
                   <div className="psl-slip-row">
                     <strong>Trạng thái:</strong>
-                    {selectedSlip.approveStatus === "Hoàn thành" ? (
-                      <span> Hoàn thành</span>
+                    {selectedSlip.deliveryStatus === "SCd004" &&
+                    this.state.deliveryStatus !== selectedSlip.deliveryStatus &&
+                    this.props.state_data.user_info.role_level >=
+                      role_manager ? (
+                      <span>
+                        {this.getStatusText(selectedSlip.deliveryStatus)}
+                      </span>
                     ) : (
                       <>
                         <select
                           className="form-control form-control-sm  select-slip"
-                          value={selectedSlip.approveStatus}
+                          value={selectedSlip.deliveryStatus}
                           onChange={this.handleStatusChange}
                         >
                           {statusOptions.map((status) => (
-                            <option key={status} value={status}>
-                              {status}
+                            <option key={status} value={status.value}>
+                              {status.text}
                             </option>
                           ))}
                         </select>
