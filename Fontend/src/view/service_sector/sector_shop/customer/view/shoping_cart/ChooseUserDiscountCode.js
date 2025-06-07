@@ -38,7 +38,11 @@ class ChooseUserDiscountCode extends Component {
           <div id="tab-content">
             <div id="tabaddress1" className="tab-pane fade in active">
               <div className="select_option-address">
-                <select name="change-tinh" className="change-tinh">
+                <select
+                  name="change-tinh"
+                  className="change-tinh"
+                  style={{ width: "100000px" }}
+                >
                   <option value="all">Chọn mã giảm giá(nếu có)</option>
                   {this.state.UserDiscountCodes.map((UserDiscountCode) => (
                     <option

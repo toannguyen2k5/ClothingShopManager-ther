@@ -26,6 +26,9 @@ class ShopingCart extends Component {
       },
     };
   }
+  componentDidMount() {
+    this.GetShopingCartItem();
+  }
   GetShopingCartItem = () => {
     fetch(
       urlapi +
@@ -60,55 +63,8 @@ class ShopingCart extends Component {
       })
       .catch((error) => console.error(error));
   };
-  handleSelectedRowsChange = (state) => {
-    const { ShopDeliveryData } = this.state;
-    state.selectedRows.map((item, index) => {
-      const exits = ShopDeliveryData.some((items) => items.idShop);
-      if (!exits) {
-        const params = new URLSearchParams();
-      }
-    });
-    console.log("Selected Rows: ", state.selectedRows);
-  };
   render() {
     console.log(this.props);
-    const { itemSearchText, shopingcart_items } = this.state;
-    const filteredItems = shopingcart_items.filter((item) => {
-      return (
-        item.status &&
-        (item.idProduct.toLowerCase().includes(itemSearchText.toLowerCase()) ||
-          item.nameProduct.toLowerCase().includes(itemSearchText.toLowerCase()))
-      );
-    });
-
-    const itemColumns = [
-      { name: "Mã sản phẩm", selector: (row) => row.idProduct, sortable: true },
-      { name: "Tên", selector: (row) => row.nameProduct, sortable: true },
-      { name: "Màu", selector: (row) => row.nameColor, sortable: true },
-      { name: "Kích thước", selector: (row) => row.nameSize, sortable: true },
-      { name: "Số lượng", selector: (row) => row.quantity, sortable: true },
-      {
-        name: "Unit Price",
-        selector: (row) => row.price,
-        format: (row) => row.price.toLocaleString() + " VND",
-        sortable: true,
-      },
-    ];
-    const shopColumns = [
-      {
-        name: "Shop ID",
-        selector: (row) => row.idShop,
-        sortable: true,
-        width: "150px",
-      },
-      {
-        name: "Name",
-        selector: (row) => row.nameShop,
-        sortable: true,
-        width: "300px",
-      },
-      { name: "address", selector: (row) => row.address, sortable: true },
-    ];
     return (
       <>
         <main>
@@ -175,6 +131,7 @@ class ShopingCart extends Component {
                           total={this.callBack}
                           idUser={this.props.state_data.user_info.id_user}
                           {...this.props}
+                          update={this.GetShopingCartItem}
                         />
                       </div>
                     </div>
@@ -186,6 +143,52 @@ class ShopingCart extends Component {
 
                     <div className="bg-while sidebar-checkout">
                       <div className="sidebar-order-wrap">
+                        <div className="checkout-buttons clearfix">
+                          <label for="note" className="note-label">
+                            Cửa Hàng
+                          </label>
+                          <div className="store_ship">
+                            <div className="title_ship"></div>
+                            <div id="tab-content">
+                              <div
+                                id="tabaddress1"
+                                className="tab-pane fade in active"
+                              >
+                                <div className="select_option-address">
+                                  <select
+                                    name="change-tinh"
+                                    className="change-tinh"
+                                    style={{ width: "100000px" }}
+                                  >
+                                    <option value="all">
+                                      Chọn mã giảm giá(nếu có)
+                                    </option>
+                                    {this.state.shops.map((shop, idx) => (
+                                      <option
+                                        key={shop.idShop}
+                                        value={shop.nameShop}
+                                      >
+                                        {shop.nameShop}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <label> địa chỉ </label>
+                                <input
+                                  type="text"
+                                  placeholder="Địa chỉ cửa hàng"
+                                  readOnly
+                                  disabled
+                                  value=""
+                                  style={{
+                                    width: "1000px",
+                                    backgroundColor: "InactiveCaption",
+                                  }}
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <div className="order_title">
                           <h4>Tổng giá trị đơn hàng</h4>
                         </div>
@@ -293,73 +296,6 @@ class ShopingCart extends Component {
             </div>
           </section>
         </main>
-
-        <div className="">
-          {this.state.showModal && (
-            <div
-              className="psl-modal-overlay"
-              onClick={() => {
-                this.setState({ showModal: false });
-              }}
-            >
-              <div
-                className="psl-modal-content"
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  width: "100%",
-                  height: "530px",
-                  overflowY: "auto",
-                }}
-              >
-                <button
-                  className="psl-modal-close"
-                  onClick={() => {
-                    this.setState({ showModal: false });
-                  }}
-                >
-                  ×
-                </button>
-                <h3>Chọn cửa hàng</h3>
-
-                {this.state.showModal && (
-                  <div className="psl-slip-info">
-                    <DataTable
-                      columns={shopColumns}
-                      data={this.state.shops}
-                      pagination
-                      paginationPerPage={5}
-                      paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
-                      highlightOnHover
-                      pointerOnHover
-                      subHeader
-                      selectableRows
-                      onSelectedRowsChange={this.handleSelectedRowsChange}
-                    />
-                  </div>
-                )}
-                <DataTable
-                  columns={itemColumns}
-                  data={filteredItems}
-                  pagination
-                  paginationPerPage={5}
-                  paginationRowsPerPageOptions={[5, 10, 15, 20, 50]}
-                  highlightOnHover
-                  pointerOnHover
-                  subHeader
-                  subHeaderComponent={
-                    <input
-                      type="text"
-                      placeholder="Tìm kiếm sản phẩm..."
-                      className="psl-search"
-                      value={itemSearchText}
-                      onChange={this.handleItemSearch}
-                    />
-                  }
-                />
-              </div>
-            </div>
-          )}
-        </div>
       </>
     );
   }

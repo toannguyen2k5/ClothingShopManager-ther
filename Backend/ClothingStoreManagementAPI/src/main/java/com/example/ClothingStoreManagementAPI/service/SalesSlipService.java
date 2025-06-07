@@ -566,4 +566,13 @@ public class SalesSlipService {
 		}
 		return result;
 	}
-}
+	public List<Integer> GetShopByInventory(String idShop,List<String> idDetailProducts){
+		List<Integer> result = new ArrayList<>();
+		for(String idDetailProduct : idDetailProducts ) {
+			InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(idShop, idDetailProduct);
+			if(InventoryShop!= null) result.add(InventoryShop.getQuantity());
+			else result.add(0);
+		}
+		return result;
+	}
+}	

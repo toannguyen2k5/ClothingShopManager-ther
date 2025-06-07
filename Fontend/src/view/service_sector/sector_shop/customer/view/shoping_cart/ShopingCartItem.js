@@ -126,7 +126,7 @@ class ShopingCartItem extends Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
-          this.setState({ shopingcart_items: items });
+          this.setState({ shopingcart_items: items }, this.props.update());
         }
         console.log(data);
       })
@@ -143,7 +143,10 @@ class ShopingCartItem extends Component {
       .then((data) => {
         if (data.status && data.status === "200") {
           ShopingCartItems.splice(index, 1);
-          this.setState({ shopingcart_items: ShopingCartItems });
+          this.setState(
+            { shopingcart_items: ShopingCartItems },
+            this.props.update()
+          );
         }
         console.log(data);
       })
