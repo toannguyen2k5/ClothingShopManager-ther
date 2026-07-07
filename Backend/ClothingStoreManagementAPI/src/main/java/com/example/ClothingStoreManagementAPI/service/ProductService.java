@@ -1,5 +1,5 @@
 package com.example.ClothingStoreManagementAPI.service;
-
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,7 @@ public class ProductService {
 	private EntityManager entityManager;
 	@Autowired
 	private ImageService ImageService;
+	@Transactional(readOnly = true)
 	public List<ShowProductDTO> SellectAll(int limit , int offset){
 		try {
 			Query query = entityManager.createQuery(
@@ -48,13 +49,14 @@ public class ProductService {
 				    "LEFT JOIN DetailProduct dp ON dp.idProduct = p.idProduct " +
 				    "LEFT JOIN InventoryShop is ON is.idDetail = dp.idDetail " +
 				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true " +
-				    "LEFT JOIN DiscountEvent d ON d.idProduct = p.idProduct " +
+				    "LEFT JOIN DiscountEvent d ON d.idProduct = p.idProduct AND (d.eventDeadline IS NULL OR d.eventDeadline >= :today) " +
 				    "LEFT JOIN ProductImage pi ON pi.idProduct = p.idProduct AND pi.isMain = true " +
 				    "WHERE p.status = true " +
 				    "GROUP BY p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
 				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status",
 				    ShowProductDTO.class
 				);
+			query.setParameter("today", LocalDate.now()); // 👈 thiếu dòng này
 			if (offset > 0) {
                 query.setFirstResult(offset);
                 }
@@ -68,6 +70,7 @@ public class ProductService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<ShowProductDTO> SellectInfor(String select,int limit , int offset){
 		try {
 			Query query = entityManager.createQuery(
@@ -106,6 +109,7 @@ public class ProductService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<ShowProductDTO> SellectByCategory(String select,int limit , int offset){
 		try {
 			Query query = entityManager.createQuery(
@@ -142,6 +146,7 @@ public class ProductService {
 			return null;
 		}
 	}
+	@Transactional
 	public String InserProduct (Product Product, MultipartFile mainImage, List<MultipartFile> subImages) {
 		try {
 			String idcurrent = productRepository.SelectMaxId();
@@ -158,6 +163,7 @@ public class ProductService {
 			return "";
 		}
 	}
+	@Transactional
 	public boolean InserProduct (Product Product) {
 		try {
 			String idcurrent = productRepository.SelectMaxId();

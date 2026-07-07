@@ -23,7 +23,7 @@ public class Price {
     private LocalDate dateUpdate;
 
     @Column(name = "price",columnDefinition = "INT UNSIGNED",nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(name = "status", nullable = false)
     private boolean status;

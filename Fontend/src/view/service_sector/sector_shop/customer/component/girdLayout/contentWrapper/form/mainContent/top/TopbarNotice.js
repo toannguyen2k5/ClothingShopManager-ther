@@ -18,28 +18,21 @@ class TopbarNotice extends Component {
       })
       .catch((err) => console.error(err));
   };
-  render() {
+render() {
     return (
-      <div id="topbar">
-        <div className="marquee-topbar">
-          {this.state.codes &&
-            this.state.codes.map((code, indx) => {
-              return (
-                <>
-                  <div className="item">
-                    <a>
-                      <p>
-                        <strong>{code.description}</strong>
-                      </p>
-                    </a>
-                  </div>
-                </>
-              );
-            })}
+        <div id="topbar">
+            <div className="marquee-topbar">
+                {this.state.codes?.map((code) => (
+                    <div key={code.idEvent} className="item">
+                        <a>
+                            <p><strong>{code.description}</strong></p>
+                        </a>
+                    </div>
+                ))}
+            </div>
         </div>
-      </div>
     );
-  }
+}
 }
 
 export default TopbarNotice;

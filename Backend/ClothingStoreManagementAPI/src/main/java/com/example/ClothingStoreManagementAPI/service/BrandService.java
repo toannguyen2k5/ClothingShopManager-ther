@@ -20,7 +20,7 @@ public class BrandService {
     private Common common;
     @Autowired
     private EntityManager entityManager;
-
+    @Transactional(readOnly = true)
     public String SelectIdBrand(String nameBrand) {
         try {
             return brandRepository.SelectIdBrand(nameBrand);
@@ -29,7 +29,7 @@ public class BrandService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<Brand> SelectAllBrand(int limit, int offset) {
         try {
             Query query = entityManager.createQuery("SELECT b FROM Brand b", Brand.class);
@@ -45,7 +45,7 @@ public class BrandService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<Brand> SellectBrand(String query, int limit, int offset) {
         try {
             Query query1 = entityManager.createQuery("SELECT b FROM Brand b WHERE b.nameBrand like :query or b.description like :query", Brand.class);
@@ -62,7 +62,7 @@ public class BrandService {
             return null;
         }
     }
-
+    @Transactional
     public boolean InsertBrand(Brand brand) {
         try {
             if (SellectBrand(brand.getNameBrand(), 1, 0).size() > 0) {

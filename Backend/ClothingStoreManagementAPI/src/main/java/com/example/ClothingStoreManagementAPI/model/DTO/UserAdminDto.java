@@ -18,12 +18,12 @@ import lombok.Setter;
 public class UserAdminDto {
 	private String idUser;
 	private String username;
-	private boolean status;
+	private Boolean status;
 	private Role role;
 	private String fullName;
 	private String address;
 	private LocalDate birthDay;
-	private boolean gender;
+	private Boolean gender;
 	private String email;
 	private String phoneNumber;
 }

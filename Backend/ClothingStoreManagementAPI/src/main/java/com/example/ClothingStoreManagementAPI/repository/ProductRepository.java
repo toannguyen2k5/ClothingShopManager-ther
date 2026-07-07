@@ -17,23 +17,34 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 	@Query("SELECT p FROM Product p WHERE p.nameProduct = :nameProduct")
 	List<Product> SelectByName (@Param("nameProduct") String nameProduct);
 	// xem chi tiết sản phẩm dự trên thuộc tính id
-	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.DetailProductDTO(" +
-		       "p.idProduct,p.nameProduct,pc.nameCategory, pm.nameMaterial, b.nameBrand, s.nameStyle,pe.price, p.description) " +
-		       "FROM Product p " +
-		       "INNER JOIN ProductCategory pc ON p.idCategory = pc.idCategory " +
-		       "INNER JOIN ProductMaterial pm ON p.idMaterial = pm.idMaterial " +
-		       "INNER JOIN Brand b ON p.idBrand = b.idBrand " +
-		       "INNER JOIN Style s ON s.idStyle = p.idStyle " +
-		       "INNER JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true "+
-		       "WHERE p.idProduct = :idProduct")
+	@Query("""
+			SELECT new com.example.ClothingStoreManagementAPI.model.DTO.DetailProductDTO(
+			    p.idProduct,
+			    p.nameProduct,
+			    pc.nameCategory,
+			    pm.nameMaterial,
+			    b.nameBrand,
+			    s.nameStyle,
+			    COALESCE(pe.price, 0),
+			    p.description
+			)
+			FROM Product p
+			LEFT JOIN ProductCategory pc ON p.idCategory = pc.idCategory
+			LEFT JOIN ProductMaterial pm ON p.idMaterial = pm.idMaterial
+			LEFT JOIN Brand b ON p.idBrand = b.idBrand
+			LEFT JOIN Style s ON s.idStyle = p.idStyle
+			LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true
+			WHERE p.idProduct = :idProduct
+			""")
 	DetailProductDTO selectDetailProduct(@Param("idProduct") String idProduct);
 	// tìm kiếm đường dẫn ảnh dựa trên mã sản phẩm
 	@Query("SELECT pi FROM ProductImage pi WHERE pi.idProduct = :idProduct")
 	List<ProductImage> SelectPathsByIdProduct(@Param("idProduct") String idProduct);
-	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ColorSizeDTO(c.nameColor, s.nameSize) "
+	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ColorSizeDTO(c.nameColor, s.nameSize , i.quantity) "
             + "FROM DetailProduct d "
             + "INNER JOIN Color c On d.idColor = c.idColor "
             + "INNER JOIN Size s On  d.idSize = s.idSize "
+            + "INNER JOIN InventoryShop i On i.idDetail = d.idDetail "
             + "WHERE d.idProduct = :idProduct")
 	List<ColorSizeDTO> SelectColorSizeByIdProduct(@Param("idProduct") String idProduct);
 	// updtae sản phẩm

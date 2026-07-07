@@ -8,12 +8,14 @@ import com.example.ClothingStoreManagementAPI.model.Entity.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RegisterService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public UserRegisterDTO FindInforByPhoneNumber(String phoneNumber) {
 		try {
 			Users user = userRepository.findByNumberPhone(phoneNumber);
@@ -24,6 +26,7 @@ public class RegisterService {
 			return null;
 		}
 	}
+	@Transactional
 	public ResultStatus CreateOrUppdateInfor(Users user) {
 		try {
 			if(user.getIdUser() != null) {

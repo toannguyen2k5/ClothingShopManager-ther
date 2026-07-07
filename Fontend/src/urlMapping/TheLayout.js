@@ -47,14 +47,15 @@ export default class TheLayout extends Component {
       if (
         extractcode(localStorage.getItem("state_data")) !=
         JSON.stringify(this.props.state_data)
-      )
+      ){
         this.props.actions.revert_state();
         try {
           state_data = JSON.parse(extractcode(localStorage.getItem("state_data")));
         } catch (e) {
-          console.error("Không thể parse JSON:", extractcode(localStorage.getItem("state_data")));
+          localStorage.removeItem("state_data");
+          console.error("Không thể parse JSON : " + e.message);
         }
-      
+      }
     }
 
     return (

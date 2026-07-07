@@ -20,7 +20,7 @@ public class DiscountEventService {
     private Common common;
     @Autowired
     private EntityManager entityManager;
-
+    @Transactional(readOnly = true)
     public List<DiscountEvent> SellectAllDiscountEvent(int limit, int offset) {
         try {
             Query query = entityManager.createNativeQuery("SELECT * FROM DiscountEvent", DiscountEvent.class);
@@ -34,7 +34,7 @@ public class DiscountEventService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<DiscountEvent> SellectDiscountEvent(String query, int limit, int offset) {
         try {
             Query query1 = entityManager.createQuery("SELECT d FROM DiscountEvent d WHERE (d.idProduct like :query or d.description like :query or d.eventCode like :query) and d.eventDeadline > :now", DiscountEvent.class);
@@ -50,7 +50,7 @@ public class DiscountEventService {
             return null;
         }
     }
-
+    @Transactional
     public boolean InsetDiscountEvent(DiscountEvent discountEvent) {
         try {
             if (SellectDiscountEvent(discountEvent.getEventCode(), 1, 0).size() > 0) {

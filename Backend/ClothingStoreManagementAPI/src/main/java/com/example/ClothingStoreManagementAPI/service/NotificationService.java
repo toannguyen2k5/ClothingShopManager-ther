@@ -10,6 +10,7 @@ public class NotificationService {
 	@Autowired
 	private NotificationRepository NotificationRepository;
 	private Common common;
+	@Transactional(readOnly = true)
 	public List<Notification> SelectNotification(String idUser) {
 		try {
 			return NotificationRepository.SelectNotification(idUser);
@@ -19,6 +20,7 @@ public class NotificationService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertNotification(Notification Notification){
 		try {
 			String idcurrent = NotificationRepository.SelectMaxId();

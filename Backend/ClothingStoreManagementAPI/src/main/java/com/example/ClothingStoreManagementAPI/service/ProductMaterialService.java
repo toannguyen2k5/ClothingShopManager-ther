@@ -22,7 +22,7 @@ public class ProductMaterialService {
     private Common common;
     @Autowired
     private EntityManager entityManager;
-
+    @Transactional(readOnly = true)
     public String SelectIdMaterial(String nameProductMaterial) {
         try {
             return ProductMaterialRepository.SelectidMaterial(nameProductMaterial);
@@ -31,7 +31,7 @@ public class ProductMaterialService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<ProductMaterial> SelectAllProductMaterial(int limit, int offset) {
         try {
             Query query = entityManager.createQuery("SELECT p FROM ProductMaterial p", ProductMaterial.class);
@@ -45,7 +45,7 @@ public class ProductMaterialService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<ProductMaterial> SellectProductMaterial(String query, int limit, int offset) {
         try {
             Query query1 = entityManager.createQuery("SELECT idMaterial, nameMaterial, description FROM ProductMaterial WHERE nameMaterial like :query or description like :query", ProductMaterial.class);
@@ -62,7 +62,7 @@ public class ProductMaterialService {
             return null;
         }
     }
-
+    @Transactional
     public boolean InsertProductMaterial(ProductMaterial ProductMaterial) {
         try {
             if (SelectIdMaterial(ProductMaterial.getNameMaterial()) != null) {

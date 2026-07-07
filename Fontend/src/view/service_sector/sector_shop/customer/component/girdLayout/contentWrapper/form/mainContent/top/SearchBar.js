@@ -30,7 +30,7 @@ class SearchBar extends Component {
             <div className="search-inner">
               <input
                 name="q"
-                autocomplete="off"
+                autoComplete="off"
                 className="searchinput input-search search-input"
                 type="text"
                 size="20"

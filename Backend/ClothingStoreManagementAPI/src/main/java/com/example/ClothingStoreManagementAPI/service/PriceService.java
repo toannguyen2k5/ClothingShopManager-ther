@@ -11,6 +11,7 @@ public class PriceService {
 	private PriceRepository PriceRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public String SelectMaxId() {
 		try{
 			return PriceRepository.SelectMaxId();
@@ -20,6 +21,7 @@ public class PriceService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public int FindPriceCurrent ( String idProduct) {
 		try{
 			return PriceRepository.SellectPriceCurrent(idProduct);
@@ -29,6 +31,7 @@ public class PriceService {
 			return 0;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<Price> SelectPrice(String idProduct) {
 		try {
 			return PriceRepository.searchPrices(idProduct);
@@ -38,6 +41,7 @@ public class PriceService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertPrice(Price Price){
 		try {
 				PriceRepository.UpdatePriceStatus(Price.getIdProduct());

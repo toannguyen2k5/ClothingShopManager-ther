@@ -2,6 +2,7 @@ package com.example.ClothingStoreManagementAPI.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.ClothingStoreManagementAPI.repository.*;
 import com.example.ClothingStoreManagementAPI.model.DTO.*;
@@ -23,6 +24,7 @@ public class ShoppingCartService {
 	private DetailProductRepository detailProductRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public ShoppingCartDTO GetShoppingCartDTO(String idUser , String idDetail) {
 		try {
 			ShoppingCart shoppingCart = shoppingCartRepository.SelectShoppingCart(idUser, idDetail);
@@ -37,6 +39,7 @@ public class ShoppingCartService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<ShoppingCartItemDTO> SellectShoppingCart(String idUser){
 		try {
 			return shoppingCartRepository.SelectShoppingCartByidUser(idUser,LocalDate.now());
@@ -46,6 +49,7 @@ public class ShoppingCartService {
 			return null;
 		}
 	}
+	@Transactional
 	public Map<Boolean , String> AddToCart(ShoppingCartIncreaseData shoppingCartIncreaseData) {
 		try {
 			// kiểm tra xem có đủ hàng tồn kho không ?
@@ -56,7 +60,7 @@ public class ShoppingCartService {
 				// kiểm tra xem đúng loại hàng này đã được thêm vô giỏ hàng trước đó hay không
 				ShoppingCartDTO shoppingCartDTO = GetShoppingCartDTO(shoppingCartIncreaseData.getIdUser(), idDetail);
 				if(shoppingCartDTO !=null) {
-					if(shoppingCartDTO.isStatus()) {
+					if(shoppingCartDTO.getStatus()) {
 						if(shoppingCartDTO.getQuantity() + shoppingCartIncreaseData.getQuantity()<= QuantityInventory) {
 							// cap nhat so luong
 							shoppingCartRepository.save(new ShoppingCart(shoppingCartDTO.getIdShoppingCart(),shoppingCartIncreaseData.getIdUser(),idDetail,shoppingCartDTO.getQuantity() + shoppingCartIncreaseData.getQuantity(),true));
@@ -115,6 +119,45 @@ public class ShoppingCartService {
 		try {
 			shoppingCartRepository.deleteById(idShoppingCart);
 			return !shoppingCartRepository.existsById(idShoppingCart);
+		}
+		catch(Exception e) {
+			System.out.print("InsertDetailProduct, Error : " + e.getMessage());
+			return false;
+		}
+	}
+	@Transactional
+	public boolean updateStatusBuyNow(String idUser,String idProduct ,String nameSize ,String nameColor) {
+		try {
+			List<ShoppingCartItemDTO> ShoppingCartItemDTOs = shoppingCartRepository.SelectShoppingCartByidUser(idUser,LocalDate.now());
+			for(ShoppingCartItemDTO ShoppingCartItemDTO : ShoppingCartItemDTOs) {
+				this.UpdateStatus(false, ShoppingCartItemDTO.getIdShoppingCart());
+			}
+			String idDetail = detailProductRepository.SelectIdDetailProduct(idProduct,colorRepository.SelectIdColor(nameColor),sizeRepository.SelectIdSize(nameSize));
+			Long QuantityInventory = inventoryShopReponsitory.SelectInventoryShop(idDetail);
+			if(QuantityInventory == null || QuantityInventory < 1) return false;
+			else {
+				// kiểm tra xem đúng loại hàng này đã được thêm vô giỏ hàng trước đó hay không
+				ShoppingCartDTO shoppingCartDTO = GetShoppingCartDTO(idUser, idDetail);
+				if(shoppingCartDTO !=null) {
+					if(shoppingCartDTO.getQuantity() + 1 <= QuantityInventory) {
+						// cap nhat so luong
+						shoppingCartRepository.save(new ShoppingCart(shoppingCartDTO.getIdShoppingCart(),idUser,idDetail,shoppingCartDTO.getQuantity() + 1,true));
+						shoppingCartRepository.flush();
+						ShoppingCart ShoppingCart = shoppingCartRepository.findById(shoppingCartDTO.getIdShoppingCart()).orElse(null);
+						if(ShoppingCart == null || ShoppingCart.getQuantity() == 1) return false;
+						else return true;
+					}
+					else return false;
+				}
+				else {
+					String idcurrent = shoppingCartRepository.SelectMaxId();
+					String idShoppingCartNext = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(ShoppingCart.class);
+					shoppingCartRepository.save(new ShoppingCart(idShoppingCartNext,idUser,idDetail,1,true));
+					shoppingCartRepository.flush();
+					if(shoppingCartRepository.existsById(idShoppingCartNext)) return true;
+					else return false;
+				}
+			}
 		}
 		catch(Exception e) {
 			System.out.print("InsertDetailProduct, Error : " + e.getMessage());

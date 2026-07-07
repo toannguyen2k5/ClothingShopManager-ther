@@ -56,12 +56,12 @@ public class UserController {
 		user.setIdUser(request.getIdUser());
 		user.setUsername(request.getUsername());
 		user.setPassword(request.getPassword());
-		user.setStatus(request.isStatus());
+		user.setStatus(request.getStatus());
 		user.setRole(Role.valueOf(request.getRole()));
 		user.setFullName(request.getFullName());
 		user.setAddress(request.getAddress());
 		user.setBirthDay(request.getBirthDay());
-		user.setGender(request.isGender());
+		user.setGender(request.getGender());
 		user.setEmail(request.getEmail());
 		user.setPhoneNumber(request.getPhoneNumber());
 

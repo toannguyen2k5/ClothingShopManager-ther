@@ -17,8 +17,8 @@ public class DetailPurchaseSlipDTO {
 	
 	private String idProduct;
 	private String nameProduct;
-	private int price;
-	private int quantity;
+	private Integer price;
+	private Integer quantity;
 	private String color;
 	private String size;
 }

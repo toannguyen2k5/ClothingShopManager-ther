@@ -27,11 +27,17 @@ public class UserDiscountCode {
     @Column(name="idCreater",length = 45, nullable = false)
     private String idCreater;  // PK
     
-    @Column(name="discountOrPrice")
-    private double discountOrPrice;
+    @Column(name="type",length = 45)
+    private String type;
+    
+    @Column(name="discount")
+    private int discount;
 
     @Column(name = "minimumOrderValue",columnDefinition = "INT UNSIGNED",nullable = false)
     private int minimumOrderValue;
+    
+    @Column(name = "maxDiscountValue")
+    private int maxDiscountValue;
 
     @Column(name="expiry",nullable = false)
     private LocalDate expiry;

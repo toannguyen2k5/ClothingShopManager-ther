@@ -11,6 +11,7 @@ public class ProductImageService {
 	private ProductImageRepository ProductImageRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public List<ProductImage> SellectProductImageByIdProduct(String idProduct) {
 		try {
 			return ProductImageRepository.SellectProductImageByIdProduct(idProduct);
@@ -20,6 +21,7 @@ public class ProductImageService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertProductImage(ProductImage ProductImage){
 		try {
 			String idcurrent = ProductImageRepository.SelectMaxId();

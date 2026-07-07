@@ -1,10 +1,14 @@
 package com.example.ClothingStoreManagementAPI.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.ClothingStoreManagementAPI.model.DTO.InventoryDTO;
 import com.example.ClothingStoreManagementAPI.model.Entity.InventoryShop;
 import com.example.ClothingStoreManagementAPI.repository.InventoryShopReponsitory;
 @Service
@@ -13,7 +17,20 @@ public class InventoryShopService {
 	private InventoryShopReponsitory inventoryShopReponsitory;
 	@Autowired
 	private Common common;
+	public List<InventoryDTO> mapToInventoryDTO(List<Object[]> rows) {
+	    List<InventoryDTO> result = new ArrayList<>();
+	    for (Object[] row : rows) {
+	        result.add(new InventoryDTO(
+	            (String) row[0],                           // idShop
+	            (String) row[1],                           // nameShop
+	            ((Number) row[2]).intValue(),              // quantity
+	            (String) row[3]                            // address
+	        ));
+	    }
+	    return result;
+	}
 	// tìm kiếm tổng số lượng hàng tồn kho theo mã sản phẩm
+	@Transactional(readOnly = true)
 	public Long SelectQuantityInventory (String idDetail) {
 		try {
 			return inventoryShopReponsitory.SelectInventoryShop(idDetail);
@@ -23,6 +40,7 @@ public class InventoryShopService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertInventory (InventoryShop InventoryShop) {
 		try {
 			String idcurrent = inventoryShopReponsitory.SelectMaxId();
@@ -37,6 +55,7 @@ public class InventoryShopService {
 			return false;
 		}
 	}
+	@Transactional
 	public Long UpdateInventory (long quantity , String idShop , String idDetail) {
 		try {
 			return inventoryShopReponsitory.UpdateInventoryShop(quantity, idShop, idDetail);

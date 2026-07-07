@@ -19,7 +19,7 @@ public class ShowProductDTO{
 	private Integer price;
 	private Float decrease;
 	private String path;
-	private boolean status;
+	private Boolean status;
 	private Long quantity;
 	private String discription;
 }

@@ -15,8 +15,8 @@ public class DetailProductv2DTO {
 	private String numberSeri;
 	private String nameSize;
     private LocalDate dayImport;
-    private boolean status;
-    private boolean sellStatus;
+    private Boolean status;
+    private Boolean sellStatus;
     private String nameColor;
     private Long quantity;
 }

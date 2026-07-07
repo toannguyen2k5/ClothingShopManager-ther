@@ -21,7 +21,7 @@ public class ColorService {
     private Common common;
     @Autowired
     private EntityManager entityManager;
-
+    @Transactional(readOnly = true)
     public String SelectIdColor(String nameColor) {
         try {
             return colorRepository.SelectIdColor(nameColor);
@@ -30,7 +30,7 @@ public class ColorService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<Color> SelectAllColor(int limit, int offset) {
         try {
             Query query = entityManager.createQuery("SELECT c FROM Color c", Color.class);
@@ -44,7 +44,7 @@ public class ColorService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<Color> SellectColor(String query, int limit, int offset) {
         try {
             Query query1 = entityManager.createQuery("SELECT c.idColor , c.nameColor, c.description FROM Color c WHERE c.nameColor like :query or c.description like :query", Color.class);
@@ -61,7 +61,7 @@ public class ColorService {
             return null;
         }
     }
-
+    @Transactional
     public boolean InsertColor(Color Color) {
         try {
             if (SelectIdColor(Color.getNameColor()) != null) {

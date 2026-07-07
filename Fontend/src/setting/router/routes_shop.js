@@ -29,6 +29,12 @@ const InforUser = React.lazy(() =>
     "../../view/service_sector/sector_shop/customer/view/infor_user/InforUser"
   )
 );
+const Checkout = React.lazy(() =>
+  import(
+    "../../view/service_sector/sector_shop/customer/view/CheckOut/Checkout"
+  )
+);
+
 export const routes_shop = [
   {
     path: "/",
@@ -84,6 +90,13 @@ export const routes_shop = [
     exact: true,
     name: "Form Home",
     component: Cust_Home,
+    file_name: "",
+  },
+  {
+    path: "/shop/checkout",
+    exact: true,
+    name: "Checkout",
+    component: Checkout,
     file_name: "",
   },
 ];

@@ -1,0 +1,304 @@
+/* ============================================================
+   Information.css
+   ============================================================ */
+
+:root {
+  --info-primary: #2f6fed;
+  --info-primary-hover: #2559c7;
+  --info-danger: #e5484d;
+  --info-danger-hover: #c93f43;
+  --info-text: #1f2430;
+  --info-text-muted: #6b7280;
+  --info-border: #e4e7ec;
+  --info-bg-card: #ffffff;
+  --info-bg-page: #f6f7fb;
+  --info-success-bg: #e7f7ee;
+  --info-success-text: #1a9c5c;
+  --info-inactive-bg: #fdeceb;
+  --info-inactive-text: #d0342c;
+  --info-radius: 12px;
+  --info-radius-sm: 8px;
+}
+
+/* ---------- Khung tổng ---------- */
+.accounts-right {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  background: var(--info-bg-page);
+  box-sizing: border-box;
+}
+
+.accounts.style-bg {
+  background: var(--info-bg-card);
+  border: 1px solid var(--info-border);
+  border-radius: var(--info-radius);
+  padding: 28px 32px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.accounts_title h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--info-text);
+  text-align: center;
+}
+
+.accounts_title p {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: var(--info-text-muted);
+  text-align: center;
+}
+
+.accounts_main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---------- Profile summary ---------- */
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--info-border);
+}
+
+.profile-avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--info-border);
+}
+
+.profile-info h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--info-text);
+}
+
+.profile-info p {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--info-text-muted);
+}
+
+/* ---------- Layout grid ---------- */
+.profile-card {
+  width: 100%;
+}
+
+.account_view,
+#update_customer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px 32px;
+}
+
+.account_col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Email + Giới tính + Nút chiếm full width */
+.account_col_seeq,
+.account_col:has(.col_main_submit) {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Label ---------- */
+.account_main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.account_main label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--info-text-muted);
+}
+.account_main input[type="text"],
+.account_main input[type="date"] {
+  width: 100%;
+  border: 1px solid var(--info-border);
+  border-radius: var(--info-radius-sm);
+}
+
+/* ---------- Chế độ xem (view mode) ---------- */
+.view_value {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--info-radius-sm);
+  background: var(--info-bg-page);
+  border: 1px solid var(--info-border);
+  font-size: 14px;
+  color: var(--info-text);
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- Chế độ chỉnh sửa (form inputs) ---------- */
+#update_customer input[type="text"],
+#update_customer input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid var(--info-border);
+  border-radius: var(--info-radius-sm);
+  font-size: 14px;
+  color: var(--info-text);
+  background: var(--info-bg-card);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 42px;
+}
+
+#update_customer input[type="text"]:focus,
+#update_customer input[type="date"]:focus {
+  border-color: var(--info-primary);
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
+}
+
+#update_customer input:disabled {
+  background: var(--info-bg-page);
+  color: var(--info-text-muted);
+  cursor: not-allowed;
+}
+
+/* ---------- Giới tính (radio) ---------- */
+.genders {
+  display: flex;
+  gap: 20px;
+  padding: 10px 14px;
+  background: var(--info-bg-page);
+  border: 1px solid var(--info-border);
+  border-radius: var(--info-radius-sm);
+  min-height: 42px;
+  align-items: center;
+  width: fit-content;
+}
+
+.gender {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gender input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gender label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--info-text);
+}
+
+.gender .sp_input {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--info-border);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease;
+}
+
+.gender input[type="radio"]:checked + label .sp_input {
+  border-color: var(--info-primary);
+}
+
+.gender input[type="radio"]:checked + label .sp_input::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--info-primary);
+}
+
+/* ---------- Khu vực nút bấm ---------- */
+.col_main_submit {
+  margin-top: 8px;
+}
+
+.form_actions {
+  display: flex;
+  gap: 12px;
+}
+
+.updateAccount,
+.cancelAccount {
+  padding: 10px 28px;
+  border: none;
+  border-radius: var(--info-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+  white-space: nowrap;   /* ← fix bị vỡ chữ */
+  min-width: 100px;
+}
+
+.updateAccount {
+  background: var(--info-primary);
+  color: #ffffff;
+}
+
+.updateAccount:hover {
+  background: var(--info-primary-hover);
+}
+
+.cancelAccount {
+  background: var(--info-bg-page);
+  color: var(--info-text);
+  border: 1px solid var(--info-border);
+}
+
+.cancelAccount:hover {
+  background: #eef0f4;
+}
+
+.updateAccount:active,
+.cancelAccount:active {
+  transform: scale(0.98);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .accounts.style-bg {
+    padding: 20px;
+  }
+
+  .account_view,
+  #update_customer {
+    grid-template-columns: 1fr;
+  }
+
+  .account_col_seeq,
+  .account_col:has(.col_main_submit) {
+    grid-column: 1;
+  }
+
+  .profile-summary {
+    flex-wrap: wrap;
+  }
+}

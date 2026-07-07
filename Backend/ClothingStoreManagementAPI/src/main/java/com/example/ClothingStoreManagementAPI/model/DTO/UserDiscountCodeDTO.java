@@ -16,7 +16,7 @@ public class UserDiscountCodeDTO {
     private String nameCreater;
     private String idUser;
     private String nameUser;
-    private double discountOrPrice;
-    private int minimumOrderValue;
+    private Integer discountOrPrice;
+    private Integer minimumOrderValue;
     private LocalDate expiry;
 }

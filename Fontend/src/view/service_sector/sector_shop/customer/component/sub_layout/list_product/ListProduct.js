@@ -15,6 +15,7 @@ class ListProduct extends Component {
         >
           {this.props.list_product.map((item, index) => (
             <ItemProductV2
+              key = {item.idProduct}
               product={{
                 ...item,
                 nameProduct: item.nameProduct,
@@ -22,7 +23,7 @@ class ListProduct extends Component {
                 price: item?.price * (1 - item?.decrease) || 0,
                 oldPrice: item?.price || 0,
                 sale: item?.decrease * 100 || 0,
-                idProduct: item.idProduct,
+                idProduct: item.idProduct
               }}
               {...this.props}
             />

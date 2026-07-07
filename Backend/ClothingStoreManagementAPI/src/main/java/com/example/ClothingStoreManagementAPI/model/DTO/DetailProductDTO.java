@@ -7,7 +7,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class DetailProductDTO {
-	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,int price,String description) {
+	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,Integer price,String description) {
 		this.idProduct = idProduct;
 		this.nameProduct = nameProduct;
 		this.nameCategory = nameCategory;
@@ -23,7 +23,7 @@ public class DetailProductDTO {
 	private String nameMaterial;
 	private String nameBrand;
 	private String nameStyle;
-	private int price;
+	private Integer price;
 	private String description;
 	private DiscountEvent DiscountEvent;
 	private List<ProductImage> Images = new ArrayList<>();

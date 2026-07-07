@@ -6,6 +6,6 @@ import lombok.*;
 @Setter
 public class ShoppingCartDTO {
 	private String idShoppingCart;
-	private int quantity;
-	private boolean status;
+	private Integer quantity;
+	private Boolean status;
 }

@@ -20,7 +20,6 @@ class DetailProduct extends Component {
     };
   }
   componentDidMount() {
-    console.log("Get Data");
     fetch(
       urlapi +
         "/api/detailproduct/sellect/detailProperty?idProduct=" +
@@ -29,7 +28,7 @@ class DetailProduct extends Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
-          console.log("data : ", data);
+          console.log("detailProperty : ", data);
           this.setState({ product: data.data });
         }
         console.log(data);
@@ -161,7 +160,7 @@ class DetailProduct extends Component {
                       </div>
                       <div className="d-flex product-info">
                         <div className="product-info__l d-flex">
-                          <div className="pro-type">
+                          <div className="pro-type" style = {{backgroundColor : "#f5f5f5" , padding : "5px 10px" , borderRadius : "5px"}}>
                             <span>Loại: </span>
                             <a
                               className="title"
@@ -175,7 +174,7 @@ class DetailProduct extends Component {
                             </a>
                           </div>
                           <span className="line-info">|</span>
-                          <div className="pro-sku ProductSku">
+                          <div className="pro-sku ProductSku" style = {{backgroundColor : "#f5f5f5" , padding : "5px 10px" , borderRadius : "5px"}}>
                             <span>MSP:</span>
                             <span className="sku-number title">
                               {this.state.product?.idProduct || "idProduct"}

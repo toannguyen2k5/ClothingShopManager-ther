@@ -15,9 +15,9 @@ public interface UserDiscountCodeRepository extends JpaRepository<UserDiscountCo
 	// chỉnh sửa nhà cung cấp
 	@Query("SELECT u FROM UserDiscountCode u WHERE u.idUser = :idUser ")
 	List<UserDiscountCode> SellectUserDiscountCode (@Param("idUser") String idUser);
-	@Query("SELECT u FROM UserDiscountCode u WHERE u.idUser = :idUser AND u.minimumOrderValue > :minimumOrderValue")
+	@Query("SELECT u FROM UserDiscountCode u WHERE u.idUser = :idUser AND u.minimumOrderValue <= :minimumOrderValue")
 	List<UserDiscountCode> SellectUserDiscountCode (@Param("idUser") String idUser,@Param("minimumOrderValue") int minimumOrderValue);
 	@Modifying
-	@Query("UPDATE UserDiscountCode u SET u.code=:code,u.idUser=:idUser, u.discountOrPrice = :discountOrPrice,u.minimumOrderValue = :minimumOrderValue,u.expiry=:expiry WHERE u.discountCode = :discountCode")
-	int UpdateUserDiscountCode(@Param("discountCode") String discountCode,@Param("code") String code ,@Param("idUser") String idUser  ,@Param("discountOrPrice") double discountOrPrice ,@Param("minimumOrderValue") int minimumOrderValue,@Param("expiry") LocalDate expiry);
+	@Query("UPDATE UserDiscountCode u SET u.code=:code,u.idUser=:idUser, u.discount = :discount,u.minimumOrderValue = :minimumOrderValue,u.expiry=:expiry WHERE u.discountCode = :discountCode")
+	int UpdateUserDiscountCode(@Param("discountCode") String discountCode,@Param("code") String code ,@Param("idUser") String idUser  ,@Param("discount") double discount ,@Param("minimumOrderValue") int minimumOrderValue,@Param("expiry") LocalDate expiry);
 }

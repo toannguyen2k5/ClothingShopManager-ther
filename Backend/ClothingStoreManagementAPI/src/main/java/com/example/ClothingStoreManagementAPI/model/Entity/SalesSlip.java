@@ -48,7 +48,7 @@ public class SalesSlip {
     @Column(name = "proof", length = 255)
     private String proof;
     
-    @Column(name = "discountCode", length = 45)
+    @Column(name = "discountCode", length = 45 , nullable = true)
     private String discountCode;
     
     @Column(name = "deliveryDate")

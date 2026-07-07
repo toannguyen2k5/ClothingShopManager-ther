@@ -28,6 +28,10 @@ export default class Signup extends Component {
     this.state = {
       first_name_dk: "",
       last_name_dk: "",
+      full_name: "",
+      province: "",
+      district: "",
+      address: "",
       email_dk: "",
       password_dk: "",
       password_dk_1: "",
@@ -341,67 +345,53 @@ export default class Signup extends Component {
               </h1>
             </header>
             <div className="auth-content">
-              <p className="text-center">SIGNUP TO GET INSTANT ACCESS</p>
-              <form
-                id="signup-form"
-                action="/index.html"
-                method="GET"
-                novalidate="novalidate"
-              >
+              <p className="text-center">
+                Tạo tài khoản để bắt đầu mua sắm
+              </p>
+
+              <form>
+
+                {/* Họ và tên */}
                 <div className="form-group">
-                  <label htmlFor="firstname">Full Name</label>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <input
-                        type="text"
-                        className="form-control underlined"
-                        name="firstname"
-                        id="firstname"
-                        placeholder="Enter first name"
-                        required=""
-                        value={this.state.first_name_dk}
-                        onChange={this.enter_first_name_dk.bind(this)}
+                  <label>Họ và tên</label>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nhập họ và tên"
+                    value={this.state.full_name}
+                    onChange={(e) =>
+                      this.setState({
+                        full_name: e.target.value,
+                      })
+                    }
+                  />
+
+                  {this.state.status_input_name ? (
+                    <small className="form-text text-danger">
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: this.state.err_input_name,
+                        }}
                       />
-                    </div>
-                    <div className="col-sm-5">
-                      <input
-                        type="text"
-                        className="form-control underlined"
-                        name="lastname"
-                        id="lastname"
-                        placeholder="Enter last name"
-                        required=""
-                        value={this.state.last_name_dk}
-                        onChange={this.enter_last_name_dk.bind(this)}
-                      />
-                    </div>
-                    <div className="col-sm-12">
-                      {this.state.status_input_name ? (
-                        <small id="passHelp" className="form-text text-danger">
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: this.state.err_input_name,
-                            }}
-                          />
-                        </small>
-                      ) : null}
-                    </div>
-                  </div>
+                    </small>
+                  ) : null}
                 </div>
+
+                {/* Email */}
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label>Email</label>
+
                   <input
                     type="email"
-                    className="form-control underlined"
-                    name="email"
-                    id="email"
-                    placeholder="Enter email address"
-                    required=""
+                    className="form-control"
+                    placeholder="Nhập email"
                     value={this.state.email_dk}
                     onChange={this.enter_email_dk.bind(this)}
                   />
+
                   {this.state.status_input_email ? (
-                    <small id="emailHelp" className="form-text text-danger">
+                    <small className="form-text text-danger">
                       <p
                         dangerouslySetInnerHTML={{
                           __html: this.state.err_input_email,
@@ -410,99 +400,145 @@ export default class Signup extends Component {
                     </small>
                   ) : null}
                 </div>
+
+                {/* Địa chỉ */}
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label>Địa chỉ</label>
+
                   <div className="row">
-                    <div className="col-sm-6">
+
+                    <div className="col">
                       <input
-                        type="password"
-                        className="form-control underlined"
-                        name="password"
-                        id="password"
-                        placeholder="Enter password"
-                        required=""
-                        value={this.state.password_dk}
-                        onChange={this.enter_password_dk.bind(this)}
-                      />
-                      &nbsp;
-                    </div>
-                    <div className="col-sm-6">
-                      <input
-                        type="password"
-                        className="form-control underlined"
-                        name="retype_password"
-                        id="retype_password"
-                        placeholder="Re-type password"
-                        required=""
-                        value={this.state.password_dk_1}
-                        onChange={this.enter_password_dk_1.bind(this)}
+                        type="text"
+                        className="form-control"
+                        placeholder="Tỉnh / Thành phố"
+                        value={this.state.province}
+                        onChange={(e) =>
+                          this.setState({
+                            province: e.target.value,
+                          })
+                        }
                       />
                     </div>
-                    <div className="col-sm-12">
-                      {this.state.status_input_pass ? (
-                        <small id="passHelp" className="form-text text-danger">
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: this.state.err_input_pass,
-                            }}
-                          />
-                        </small>
-                      ) : null}
+
+                    <div className="col">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Quận / Huyện"
+                        value={this.state.district}
+                        onChange={(e) =>
+                          this.setState({
+                            district: e.target.value,
+                          })
+                        }
+                      />
                     </div>
+
                   </div>
+
+                  <br />
+
+                  <textarea
+                    className="form-control"
+                    placeholder="Số nhà, tên đường, thôn, tổ dân phố..."
+                    value={this.state.address}
+                    onChange={(e) =>
+                      this.setState({
+                        address: e.target.value,
+                      })
+                    }
+                  />
                 </div>
+
+                {/* Mật khẩu */}
+                <div className="form-group">
+                  <label>Mật khẩu</label>
+
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Nhập mật khẩu"
+                    value={this.state.password_dk}
+                    onChange={this.enter_password_dk.bind(this)}
+                  />
+                </div>
+
+                {/* Nhập lại mật khẩu */}
+                <div className="form-group">
+                  <label>Nhập lại mật khẩu</label>
+
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Nhập lại mật khẩu"
+                    value={this.state.password_dk_1}
+                    onChange={this.enter_password_dk_1.bind(this)}
+                  />
+
+                  {this.state.status_input_pass ? (
+                    <small className="form-text text-danger">
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: this.state.err_input_pass,
+                        }}
+                      />
+                    </small>
+                  ) : null}
+                </div>
+
+                {/* OTP */}
                 {this.state.show_input_otp ? (
                   <div className="form-group">
-                    <label htmlFor="password">OTP</label>
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <input
-                          type="text"
-                          className="form-control underlined"
-                          name="otp"
-                          id="otp"
-                          placeholder="Enter OTP"
-                          required=""
-                          value={this.state.re_otp}
-                          onChange={this.enter_otp.bind(this)}
-                        />
-                        &nbsp;
-                      </div>
+                    <label>Mã OTP</label>
 
-                      <div className="col-sm-12">
-                        {this.state.status_input_otp ? (
-                          <small
-                            id="passHelp"
-                            className="form-text text-danger"
-                          >
-                            <p
-                              dangerouslySetInnerHTML={{
-                                __html: this.state.err_input_otp,
-                              }}
-                            />
-                          </small>
-                        ) : null}
-                      </div>
-                    </div>
+                    <input
+                      type="text"
+                      id="otp"
+                      className="form-control"
+                      placeholder="Nhập mã OTP"
+                      value={this.state.re_otp}
+                      onChange={this.enter_otp.bind(this)}
+                    />
+
+                    {this.state.status_input_otp ? (
+                      <small className="form-text text-danger">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: this.state.err_input_otp,
+                          }}
+                        />
+                      </small>
+                    ) : null}
                   </div>
                 ) : null}
+
+                {/* Button */}
                 <div className="form-group">
                   <button
                     type="submit"
-                    className="btn btn-block btn-primary"
+                    className="btn"
                     onClick={this.btnDangKi.bind(this)}
                   >
-                    {this.state.show_input_otp ? "Sign Up" : "Confirm Email"}
+                    {this.state.show_input_otp
+                      ? "ĐĂNG KÝ"
+                      : "XÁC NHẬN EMAIL"}
                   </button>
                 </div>
-                <div className="form-group">
-                  <p className="text-muted text-center">
-                    Already have an account? <a href="/login">Login</a>
+
+                <div className="text-muted">
+                  <p>
+                    Đã có tài khoản?
+                    <a href="/login"> Đăng nhập</a>
                   </p>
-                  <p className="text-muted text-center">
-                    Back to <a href="/home">Home</a>
+
+                  <p>
+                    <a href="/home">
+                      ← Về trang chủ
+                    </a>
                   </p>
                 </div>
+
               </form>
             </div>
           </div>

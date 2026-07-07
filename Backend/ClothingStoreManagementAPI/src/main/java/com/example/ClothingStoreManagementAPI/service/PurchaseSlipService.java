@@ -45,7 +45,7 @@ public class PurchaseSlipService {
 	private UserRepository UserRepository;
 	@Autowired
 	private SupplierRepository SupplierRepository;
-
+	@Transactional(readOnly = true)
 	public String SelectMaxId() {
 		try {
 			return PurchaseSlipRepository.SelectMaxId();
@@ -54,7 +54,7 @@ public class PurchaseSlipService {
 			return null;
 		}
 	}
-
+	@Transactional(readOnly = true)
 	public List<PurchaseSlipDTO> SellectAll(int offset, int limit) {
 		try {
 			List<PurchaseSlipDTO> result = new ArrayList<>();
@@ -79,7 +79,7 @@ public class PurchaseSlipService {
 			return null;
 		}
 	}
-
+	@Transactional(readOnly = true)
 	public List<DetailPurchaseSlipDTO> SellectDetailPurchaseSlip(String idPurchaseSlip) {
 		try {
 			List<DetailPurchaseSlipDTO> result = new ArrayList<>();
@@ -107,6 +107,7 @@ public class PurchaseSlipService {
 	}
 
 	// tìm kiếm thông tin đơn hàng bằng mã khách hàng , ngày , mã người tạo
+	@Transactional(readOnly = true)
 	public List<PurchaseSlip> SelectPurchaseSlipByidSupplier(String idSupplier) {
 		try {
 			return PurchaseSlipRepository.SelectPurchaseSlipByidSupplier(idSupplier);
@@ -115,7 +116,7 @@ public class PurchaseSlipService {
 			return null;
 		}
 	}
-
+	@Transactional(readOnly = true)
 	public List<PurchaseSlip> SellectPurchaseSlipByDate(LocalDate createDate) {
 		try {
 			return PurchaseSlipRepository.SellectPurchaseSlipByDate(createDate);
@@ -124,7 +125,7 @@ public class PurchaseSlipService {
 			return null;
 		}
 	}
-
+	@Transactional(readOnly = true)
 	public List<PurchaseSlip> SellectPurchaseSlipByIdCreater(String IdCreater) {
 		try {
 			return PurchaseSlipRepository.SellectPurchaseSlipByIdCreater(IdCreater);
@@ -135,6 +136,7 @@ public class PurchaseSlipService {
 	}
 
 	// tạo phiếu
+	@Transactional
 	public boolean InsertPurchaseSlip(PurchaseSlip PurchaseSlip, List<ShopReceiveData> ShopReceiveDatas) {
 		String newIdPurchaseSlip = "";
 		Stack<String> idListShops = new Stack<String>();

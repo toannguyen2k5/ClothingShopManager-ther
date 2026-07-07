@@ -6,6 +6,7 @@ import jakarta.mail.internet.*;
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ForgetPassService {
 	@Autowired
@@ -54,6 +55,7 @@ public class ForgetPassService {
 		}
 		else return false;
 	}
+	@Transactional
 	public boolean resetpass(String iduser,String pass) {
 		try {
 			return userRepository.updatepass(iduser, pass) > 0;

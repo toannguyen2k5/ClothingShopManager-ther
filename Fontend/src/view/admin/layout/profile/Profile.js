@@ -111,6 +111,7 @@ class Profile extends Component {
         role: user.role,
         roleLevel: user.role_level,
         avatar: this.state.infoUser.pathAvatar,
+        phone_number: user.phone_number,
       };
       this.props.actions.login_success(user_info);
     }

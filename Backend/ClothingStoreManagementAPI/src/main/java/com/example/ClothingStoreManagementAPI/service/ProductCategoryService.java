@@ -21,7 +21,7 @@ public class ProductCategoryService {
     private Common common;
     @Autowired
     private EntityManager entityManager;
-
+    @Transactional(readOnly = true)
     public String SelectIdProductCategory(String nameProductCategory) {
         try {
             return ProductCategoryRepository.SelectIdProductCategory(nameProductCategory);
@@ -30,7 +30,7 @@ public class ProductCategoryService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<ProductCategory> SelectAllProductCategory(int limit, int offset) {
         try {
             Query query = entityManager.createQuery("SELECT p FROM ProductCategory p", ProductCategory.class);
@@ -44,7 +44,7 @@ public class ProductCategoryService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
     public List<ProductCategory> SellectProductCategory(String query, int limit, int offset) {
         try {
             Query query1 = entityManager.createQuery("SELECT P FROM ProductCategory P WHERE nameCategory like :query or description like :query", ProductCategory.class);
@@ -61,7 +61,7 @@ public class ProductCategoryService {
             return null;
         }
     }
-
+    @Transactional
     public String InsertProductCategory(ProductCategory ProductCategory) {
         try {
             if (SelectIdProductCategory(ProductCategory.getNameCategory()) != null) {

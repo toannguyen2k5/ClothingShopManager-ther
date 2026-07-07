@@ -3,15 +3,44 @@ import { urlapi } from "../../../../../../setting/store/const";
 class ViewInfoBuyProduct extends Component {
   constructor(props) {
     super(props);
+    const item_first = this.props.ColorSize.find(
+      (item) => item?.nameSize != null  && item?.nameColor != null);
     this.state = {
-      quantity: 1,
-      nameSize: null,
-      nameColor: null,
+      quantity_selected: 1,
+      nameSize: item_first?.nameSize || null,
+      nameColor: item_first?.nameColor || null,
+      quantity: item_first?.quantity || null
     };
   }
   handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "nameColor") {
+      this.props.ColorSize.map((item) => {
+        if (item.nameColor === value && item.nameSize === this.state.nameSize) {
+          this.setState({ nameColor: value ,  quantity: item.quantity });
+        }
+      });
+    }
     this.setState({ [name]: value });
+  };
+  increase = () => {
+    if(this.state?.quantity === null){
+      alert("bạn chưa chọn màu sắc hoặc kích thước");
+      return;
+    }
+    if(!this.state.nameSize || !this.state.nameColor){
+      alert("bạn chưa chọn màu sắc hoặc kích thước");
+      return;
+    }
+    if(this.state.quantity_selected < this.state.quantity){
+      this.setState({ quantity_selected: this.state.quantity_selected + 1 });
+    }
+    else alert("sản phẩm có size và màu sắc này chỉ còn " + this.state.quantity + " sản phẩm");
+  };
+  decrease = () => {
+    if (this.state.quantity_selected > 1) {
+      this.setState({ quantity_selected: this.state.quantity_selected - 1 });
+    }
   };
   AddToCart = () => {
     console.log(this.props);
@@ -31,7 +60,7 @@ class ViewInfoBuyProduct extends Component {
             nameColor: this.state.nameColor,
             nameSize: this.state.nameSize,
             idProduct: this.props.idProduct,
-            quantity: this.state.quantity,
+            quantity: this.state.quantity_selected,
           }),
         };
         fetch(urlapi + "/api/shoppingcart/addToCart", req)
@@ -43,9 +72,31 @@ class ViewInfoBuyProduct extends Component {
           .catch((error) => console.error("Lỗi POST:", error));
       }
     } else {
-      alert("vui lòng đăng nhập tài khoản !");
+      alert("Đăng nhập để thêm sản phẩm vào giỏ hàng !");
+      this.props.history.push("/login");
     }
   };
+  buyNow = () => {
+    if (this.props.state_data.user_info.id_user) {
+      const req = "?idUser=" + this.props.state_data.user_info.id_user +
+            "&idProduct=" + this.props.idProduct +
+            "&nameSize=" + this.state.nameSize +
+            "&nameColor=" + this.state.nameColor
+      fetch(urlapi + "/api/shoppingcart/updateStatusBuyNow" + req)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Response từ server:", data);
+              alert(data.Messenger);
+              if(data.status === "200"){
+                this.props.history.push("/shop/shoping_cart");
+              }
+            })
+            .catch((error) => console.error("Lỗi POST:", error));
+    } else {
+      alert("Đăng nhập để mua sản phẩm !");
+      this.props.history.push("/login");
+    }
+  }
   render() {
     console.log("state :", this.state);
     return (
@@ -89,7 +140,6 @@ class ViewInfoBuyProduct extends Component {
                           textAlign: "center",
                         }}
                       >
-                        <option value="">Choose...</option>
                         {this.props.ColorSize.map((item, index) => (
                           <option key={index} value={item.nameSize}>
                             {item.nameSize}
@@ -126,7 +176,6 @@ class ViewInfoBuyProduct extends Component {
                           textAlign: "center",
                         }}
                       >
-                        <option value="">Choose...</option>
                         {this.state.nameSize &&
                           this.props.ColorSize.map(
                             (item, index) =>
@@ -150,10 +199,7 @@ class ViewInfoBuyProduct extends Component {
               <input
                 type="button"
                 defaultValue="–"
-                onClick={() => {
-                  this.state.quantity > 1 &&
-                    this.setState({ quantity: this.state.quantity - 1 });
-                }}
+                onClick={this.decrease}
                 className="qty-btn qtyminus"
               />
               <input
@@ -161,16 +207,14 @@ class ViewInfoBuyProduct extends Component {
                 type="text"
                 id="quantity"
                 name="quantity"
-                value={this.state.quantity}
+                value={this.state.quantity_selected}
                 min="1"
                 className="quantity-selector"
               />
               <input
                 type="button"
                 defaultValue="+"
-                onClick={() => {
-                  this.setState({ quantity: this.state.quantity + 1 });
-                }}
+                onClick={this.increase}
                 className="qty-btn qtyplus"
               />
             </div>
@@ -207,6 +251,7 @@ class ViewInfoBuyProduct extends Component {
                     id="buy-now"
                     name="add"
                     data-id="1056846128"
+                    onClick={this.buyNow}
                   >
                     <span>Mua ngay</span>
                   </button>

@@ -12,6 +12,7 @@ public class DetailPurchaseSlipService {
 	private DetailPurchaseSlipRepository DetailPurchaseSlipRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public String SelectMaxId() {
 		try{
 			return DetailPurchaseSlipRepository.SelectMaxId();
@@ -21,9 +22,11 @@ public class DetailPurchaseSlipService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<DetailPurchaseSlip> SellectDetailPurchaseSlip(String idList){
 		return DetailPurchaseSlipRepository.SellectDetailPurchaseSlip(idList);
 	}
+	@Transactional
 	public boolean InsertDetailPurchaseSlip(DetailPurchaseSlip DetailPurchaseSlip) {
 		try{
 			String idcurrent = DetailPurchaseSlipRepository.SelectMaxId();

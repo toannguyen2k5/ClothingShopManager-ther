@@ -13,4 +13,5 @@ public class InventoryDTO {
 	private String idShop;
 	private String nameShop;
 	private Integer quantity;
+	private String address;
 }

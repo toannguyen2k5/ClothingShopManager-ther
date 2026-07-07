@@ -12,6 +12,7 @@ public class ListOfReceivingStoresService {
 	private ListOfReceivingStoresRepository ListOfReceivingStoresRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public List<ListOfReceivingStores> SellectListOfReceivingStores(String idPurchaseSlip){
 		try {
 			return ListOfReceivingStoresRepository.SellectListOfReceivingStores(idPurchaseSlip);
@@ -21,6 +22,7 @@ public class ListOfReceivingStoresService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertListOfReceivingStores(ListOfReceivingStores ListOfReceivingStores) {
 		try {
 			String idcurrent = ListOfReceivingStoresRepository.SelectMaxId();

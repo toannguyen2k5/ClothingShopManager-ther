@@ -47,4 +47,8 @@ public class ShoppingCartController {
 	public ResponseEntity<?> UpdateShoppingCart(@RequestParam boolean status ,@RequestParam String idShoppingCart){
 		return ResponseEntity.ok(common.ReturnReponse(shoppingCartService.UpdateStatus(status,idShoppingCart), "Update", "shoppingcart"));
 	}
+	@GetMapping("/updateStatusBuyNow")
+	public ResponseEntity<?> updateStatusBuyNow(@RequestParam String idUser,@RequestParam String idProduct , @RequestParam String nameSize , @RequestParam String nameColor){
+		return ResponseEntity.ok(common.ReturnReponse(shoppingCartService.updateStatusBuyNow(idUser,idProduct,nameSize,nameColor), "Update", "shoppingcart for buy now"));
+	}
 }

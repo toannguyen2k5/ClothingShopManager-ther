@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CartData {
 	private String idDetail;
+	private String productName;
 	private int quantity;
 	private int price;
 }

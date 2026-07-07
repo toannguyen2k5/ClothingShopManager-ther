@@ -9,13 +9,13 @@ public class ShoppingCartItemDTO {
 	private String idUser;
 	private String idDetail;
 	private String idProduct;
-	private int quantity;
-	private boolean status;
+	private Integer quantity;
+	private Boolean status;
 	private String path;
 	private String nameProduct;
 	private String nameSize;
 	private String nameColor;
 	private Float decrease;
 	private Integer quantityLimit;
-	private int price;
+	private Integer price;
 }

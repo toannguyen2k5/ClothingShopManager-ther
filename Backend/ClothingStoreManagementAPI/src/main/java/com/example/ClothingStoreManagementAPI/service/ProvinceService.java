@@ -1,6 +1,7 @@
 package com.example.ClothingStoreManagementAPI.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ClothingStoreManagementAPI.model.ConstData.Province;
 import com.example.ClothingStoreManagementAPI.repository.ProvinceRepository;
@@ -11,6 +12,7 @@ public class ProvinceService {
 	@Autowired
 	private ProvinceRepository ProvinceRepository;
 	// lấy thông tin tất cả các tỉnh
+	@Transactional(readOnly = true)
 	public List<Province> SellectAll (){
 		try {
 			return ProvinceRepository.findAll();

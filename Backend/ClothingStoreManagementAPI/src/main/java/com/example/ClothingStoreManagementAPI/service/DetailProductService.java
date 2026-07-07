@@ -28,6 +28,8 @@ public class DetailProductService {
 	private Common common;
 	@Autowired
 	private DiscountEventService DiscountEventService;
+	@Autowired
+	private InventoryShopService InventoryShopService;
 	public Map<Integer,String> ReturnDictionary(List<String> lists){
 		Map<Integer,String> Dictionary = new HashMap<>();
 		int index =0;
@@ -37,6 +39,7 @@ public class DetailProductService {
 		return Dictionary;
 	}
 	// tìm kiếm mã detai
+	@Transactional(readOnly = true)
 	public String SelectIdDetailProduct (String idProduct, String idColor , String idSize) {
 		try {
 			return detailProductRepository.SelectIdDetailProduct(idProduct, idColor, idSize);
@@ -46,6 +49,7 @@ public class DetailProductService {
 			return "";
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<DetailProductv2DTO> GetDetailProductv2DTO(String GetDetaiById){
 		List<DetailProductv2DTO> result = new ArrayList<>();
 		List<DetailProduct> DetailProducts = detailProductRepository.GetDetaiById(GetDetaiById);
@@ -57,21 +61,34 @@ public class DetailProductService {
 		}
 		return result;
 	}
+	@Transactional(readOnly = true)
 	public List<InventoryDTO> GetInventoryDTO(String idDetail){
-		List<InventoryDTO> result = new ArrayList<>();
-		List<Shop> shops = InventoryShopReponsitory.SelecShopByIdDetail(idDetail);
-		for(Shop shop : shops) {
-			InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(shop.getIdShop(),idDetail);
-			result.add(new InventoryDTO(shop.getIdShop(), shop.getNameShop(),InventoryShop.getQuantity()));
-		}
-		return result;
+		List<InventoryDTO> shops = InventoryShopService.mapToInventoryDTO(InventoryShopReponsitory.SelecShopByIdDetail(idDetail));
+		return shops;
 	}
 	// tìm kiếm danh sách DetailProductDTO dựa trên mã sản phẩm
+	@Transactional(readOnly = true)
 	public DetailProductDTO SelectDetail(String idProduct) {
 		try {
+			// lấy thông tin cơ bản
 			DetailProductDTO result = productRepository.selectDetailProduct(idProduct);
 			result.setImages(productRepository.SelectPathsByIdProduct(idProduct));
-			result.setColorSize(productRepository.SelectColorSizeByIdProduct(idProduct));
+			// lấy kích thước , màu sắc , số lượng
+			List<ColorSizeDTO> ColorSizeDTOs = productRepository.SelectColorSizeByIdProduct(idProduct);
+			int i = 0;
+			while (i < ColorSizeDTOs.size()) {              // ✅ dùng 
+			    for (int j = i + 1; j < ColorSizeDTOs.size(); j++) {   // ✅ dùng 
+			        if (ColorSizeDTOs.get(i).compare(ColorSizeDTOs.get(j))) {
+			            ColorSizeDTOs.get(i).setQuantity(
+			                ColorSizeDTOs.get(i).getQuantity() + ColorSizeDTOs.get(j).getQuantity()
+			            );
+			            ColorSizeDTOs.remove(j);
+			            j--;
+			        }
+			    }
+			    i++;
+			}
+			result.setColorSize(ColorSizeDTOs);
 			List<DiscountEvent> DiscountEvent = DiscountEventService.SellectDiscountEvent(idProduct, 1, 0);
 			if(DiscountEvent != null && DiscountEvent.size() >0) result.setDiscountEvent(DiscountEvent.get(0));
 			return result;
@@ -82,6 +99,7 @@ public class DetailProductService {
 		}
 	}
 	// thêm chi tiết hoặc cập nhật sản phẩm 
+	@Transactional
 	public String InsertDetailProduct(DetailProduct DetailProduct) {
 		try {
 			String idcurrent = detailProductRepository.SelectMaxId();

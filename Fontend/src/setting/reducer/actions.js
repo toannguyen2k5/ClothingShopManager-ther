@@ -9,6 +9,7 @@ export function login_success(user) {
     full_name: user.fullName,
     role: user.role,
     role_level: user.roleLevel,
+    phone_number: user.phoneNumber,
   };
   return {
     type: types.login_success,

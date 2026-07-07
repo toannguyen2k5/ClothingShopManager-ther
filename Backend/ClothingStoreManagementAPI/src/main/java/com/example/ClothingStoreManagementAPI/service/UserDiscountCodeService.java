@@ -24,7 +24,7 @@ public class UserDiscountCodeService {
 				String nameCreater = UserRepository.SellectFullName(UserDiscountCode.getIdCreater());
 				String nameUser = UserRepository.SellectFullName(UserDiscountCode.getIdUser());
 				result.add(new UserDiscountCodeDTO(UserDiscountCode.getDiscountCode(),UserDiscountCode.getCode(),nameCreater,UserDiscountCode.getIdUser(),nameUser
-						,UserDiscountCode.getDiscountOrPrice(),UserDiscountCode.getMinimumOrderValue(),UserDiscountCode.getExpiry()));
+						,UserDiscountCode.getDiscount(),UserDiscountCode.getMinimumOrderValue(),UserDiscountCode.getExpiry()));
 			}
 			return result;
 		}
@@ -68,7 +68,7 @@ public class UserDiscountCodeService {
 	@Transactional
 	public boolean UpdateUserDiscountCode(UserDiscountCode UserDiscountCode) {
 		try {
-			return UserDiscountCodeRepository.UpdateUserDiscountCode(UserDiscountCode.getDiscountCode(),UserDiscountCode.getCode(),UserDiscountCode.getIdUser(),UserDiscountCode.getDiscountOrPrice(),
+			return UserDiscountCodeRepository.UpdateUserDiscountCode(UserDiscountCode.getDiscountCode(),UserDiscountCode.getCode(),UserDiscountCode.getIdUser(),UserDiscountCode.getDiscount(),
 					UserDiscountCode.getMinimumOrderValue(),UserDiscountCode.getExpiry())>0;
 		}
 		catch(Exception e) {

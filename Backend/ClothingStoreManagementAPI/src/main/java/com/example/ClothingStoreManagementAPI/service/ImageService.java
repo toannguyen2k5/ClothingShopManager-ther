@@ -69,7 +69,7 @@ public class ImageService {
 			return null;
 		}
 	}
-
+	@Transactional
 	public List<String> InserImage(String path, List<MultipartFile> addimages, String id, String ScopeName,
 			boolean isMain) {
 		List<String> uploadedFileNames = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ImageService {
 			return null;
 		}
 	}
-
+	@Transactional
 	public boolean DeleteImage(HashMap<String, String> deleimages, String ScopeName) {
 		try {
 			HashSet<Boolean> result = new HashSet<>();
@@ -112,7 +112,7 @@ public class ImageService {
 			return false;
 		}
 	}
-
+	
 	public List<String> selectImagesById(String id, String path) {
 		List<String> matchedImages = new ArrayList<>();
 

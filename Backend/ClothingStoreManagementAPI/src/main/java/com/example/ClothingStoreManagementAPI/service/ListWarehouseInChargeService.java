@@ -13,6 +13,7 @@ public class ListWarehouseInChargeService {
 	private ListWarehouseInChargeRepository ListWarehouseInChargeRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public List<Shop> SellectListWarehouseInCharge(String idUser) {
 		try {
 			return ListWarehouseInChargeRepository.SellectListWarehouseInCharge(idUser);
@@ -22,6 +23,7 @@ public class ListWarehouseInChargeService {
 			return null;
 		}
 	}
+	@Transactional
 	public boolean InsertListWarehouseInCharge(ListWarehouseInCharge ListWarehouseInCharge) {
 		try {
 			String idcurrent = ListWarehouseInChargeRepository.SelectMaxId();

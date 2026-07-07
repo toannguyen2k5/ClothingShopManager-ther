@@ -6,6 +6,7 @@ import AddressUser from "./AddressUser";
 import ResetPass from "./ResetPass";
 import DiscountUser from "./DiscountUser";
 import OrderUser from "./OrderUser";
+import "./UserInfor.css";
 class InforUser extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,7 @@ class InforUser extends Component {
       <>
         <div className="layout-info-account">
           <div className="container">
-            <div className="title-login-account text-center">
+            <div className="account-header text-center">
               <img
                 width="30"
                 height="30"
@@ -48,18 +49,27 @@ class InforUser extends Component {
                 <div className="AccountSidebar hidden-xs">
                   <div className="title_account">
                     <div className="content_account">
-                      <h2 className="name_account">Hi,</h2>
-                      <p></p>
+                      <img
+                        className="avatar-user"
+                        src="https://ui-avatars.com/api/?name=User"
+                        alt=""
+                      />
+
+                      <h2 className="name_account">
+                        {this.props.user?.fullName}
+                      </h2>
+
+                      <p>Quản lý tài khoản của bạn</p>
                     </div>
                   </div>
                   <div className="AccountContent">
                     <div className="AccountList">
                       <ul className="list-unstyled">
                         <li
-                          className="current"
-                          onClick={() => {
-                            this.setState({ selectedMenu: "profile" });
-                          }}
+                          className={
+                            this.state.selectedMenu === "profile" ? "menu-item active" : "menu-item"
+                          }
+                          onClick={() => this.setState({ selectedMenu: "profile" })}
                           style={{ cursor: "pointer" }}
                         >
                           <a>
@@ -70,6 +80,9 @@ class InforUser extends Component {
                           </a>
                         </li>
                         <li
+                          className={
+                            this.state.selectedMenu === "orders" ? "menu-item active" : "menu-item"
+                          }
                           onClick={() => {
                             this.setState({ selectedMenu: "orders" });
                           }}
@@ -83,6 +96,9 @@ class InforUser extends Component {
                           </a>
                         </li>
                         <li
+                          className={
+                            this.state.selectedMenu === "address" ? "menu-item active" : "menu-item"
+                          }
                           onClick={() => {
                             this.setState({ selectedMenu: "address" });
                           }}
@@ -99,6 +115,9 @@ class InforUser extends Component {
 
                         <li
                           id="voucher-content-acccount"
+                          className={
+                            this.state.selectedMenu === "vouchers" ? "menu-item active" : "menu-item"
+                          }
                           onClick={() => {
                             this.setState({ selectedMenu: "vouchers" });
                           }}
@@ -119,6 +138,9 @@ class InforUser extends Component {
                         </li>
 
                         <li
+                          className={
+                            this.state.selectedMenu === "reset" ? "menu-item active" : "menu-item"
+                          }
                           onClick={() => {
                             this.setState({ selectedMenu: "reset" });
                           }}

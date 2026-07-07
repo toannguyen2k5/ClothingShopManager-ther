@@ -11,6 +11,7 @@ public class ListOfDeliveryStoresService {
 	private ListOfDeliveryStoresRepository ListOfDeliveryStoresRepository;
 	@Autowired
 	private Common common;
+	@Transactional(readOnly = true)
 	public String SelectMaxId() {
 		try{
 			return ListOfDeliveryStoresRepository.SelectMaxId();
@@ -20,6 +21,7 @@ public class ListOfDeliveryStoresService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public List<ListOfDeliveryStores> SellectListOfDeliveryStores(String idSalesSlip){
 		try {
 			return ListOfDeliveryStoresRepository.SellectListOfDeliveryStores(idSalesSlip);
@@ -29,6 +31,7 @@ public class ListOfDeliveryStoresService {
 			return null;
 		}
 	}
+	@Transactional(readOnly = true)
 	public String InsertListOfDeliveryStores(ListOfDeliveryStores ListOfDeliveryStores) {
 		try {
 			String idcurrent = ListOfDeliveryStoresRepository.SelectMaxId();
