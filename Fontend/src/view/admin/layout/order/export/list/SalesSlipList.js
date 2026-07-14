@@ -21,6 +21,7 @@ export default class SalesSlipList extends Component {
         { value: "SCd002", text: "Đã duyệt" },
         { value: "SCd003", text: "Đang giao hàng" },
         { value: "SCd004", text: "hoàn thành" },
+        { value: "SCd005", text: "Đã hủy" },
       ],
       selectedStatus: "",
     };

@@ -21,5 +21,8 @@ public class ShowUserDTO {
     private String username;
     private Long totalOrders;
     private Long cancelledOrders;
+    private Long deliveringOrders;
+    private Long deliveredOrders;
     private Long totalValue;
+    private String pathAvatar;
 }

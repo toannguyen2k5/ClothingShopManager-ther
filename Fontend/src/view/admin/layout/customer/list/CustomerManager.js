@@ -30,7 +30,7 @@ class CustomerManager extends Component {
         contextMenuY: 0,
         selectedRow: null,
       },
-      path_image_new: null,
+      image_avatar_new: null,
       path_image_old: null,
     };
   }
@@ -50,9 +50,12 @@ class CustomerManager extends Component {
         createdAt: "",
         totalOrders: 0,
         cancelledOrders: 0,
+        deliveringOrders: 0,
+        deliveredOrders: 0,
         totalValue: 0,
+        pathAvatar: "",
       },
-      path_image_new: null,
+      image_avatar_new: null,
       path_image_old: null,
     });
   };
@@ -89,7 +92,10 @@ class CustomerManager extends Component {
             username: Client?.username || "",
             totalOrders: Client.totalOrders,
             cancelledOrders: Client.cancelledOrders,
+            deliveringOrders: Client.deliveringOrders,
+            deliveredOrders: Client.deliveredOrders,
             totalValue: Client.totalValue,
+            pathAvatar: Client?.pathAvatar || "",
           }));
           this.setState({ customers: Clients, ListCustomers: Clients });
         }
@@ -176,7 +182,7 @@ class CustomerManager extends Component {
       .catch((error) => console.error("Lỗi POST:", error));
   };
   editClient = () => {
-    const { currentCustomer,path_image_new,path_image_old } = this.state;
+    const { currentCustomer,image_avatar_new,path_image_old } = this.state;
 
     const usersData = {
       idUser: currentCustomer.id,
@@ -194,9 +200,9 @@ class CustomerManager extends Component {
     };
 
     // deleimages: HashMap<String, String> — ví dụ { "1": "url_anh_1.jpg", "2": "url_anh_2.jpg" }
-    const deleImages = path_image_old || {};
+    const deleImages = {path_image_old} || {};
     // addimages: các File mới người dùng vừa chọn (mảng File object)
-    const addImages = path_image_new || [];
+    const addImages = image_avatar_new || [];
 
     const formData = new FormData();
 
@@ -252,7 +258,7 @@ class CustomerManager extends Component {
             ...prevState.currentCustomer,
             pathAvatar: e.target.result, // cập nhật để <img> avatar tự re-render
           },
-          path_image_new: e.target.result
+          image_avatar_new: [file], // lưu file mới để gửi lên server khi submit
         }));
       };
       reader.readAsDataURL(file);
@@ -375,7 +381,7 @@ class CustomerManager extends Component {
             <div className="modal-overlay-min">
               <div className="img-container">
                 <img
-                  src={currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
+                  src={(currentCustomer?.pathAvatar.startsWith("upload")? urlapi + "/api/Image/" :"") + currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
                   alt="Avatar"
                 />
                 <input type="button" value={isEditing ? "Đổi ảnh đại diện" : "Chọn ảnh đại diện"} id="btnChonAnh" onClick={this.handleAvatarChange} />
@@ -580,7 +586,7 @@ class CustomerManager extends Component {
             <div className="modal-overlay-min">
               <div className="img-container">
                 <img
-                  src={currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
+                  src={(currentCustomer?.pathAvatar.startsWith("upload")? urlapi + "/api/Image/" :"") +currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
                   alt="Avatar"
                 />
               </div>
@@ -662,7 +668,7 @@ class CustomerManager extends Component {
                     </label>
                     <input
                       type="text"
-                      defaultValue={currentCustomer?.totalOrders || ""}
+                      defaultValue={String(currentCustomer?.totalOrders) +" đơn" || ""}
                       disabled
                     />
                   </div>
@@ -673,7 +679,7 @@ class CustomerManager extends Component {
                       </label>
                       <input
                         type="text"
-                        defaultValue={currentCustomer?.totalCancelledOrders || ""}
+                        defaultValue={String(currentCustomer?.cancelledOrders)+ " đơn" || ""}
                         disabled
                         style={{ width: "43%" }}
                       />
@@ -684,7 +690,7 @@ class CustomerManager extends Component {
                       </label>
                       <input
                         type="text"
-                        defaultValue={currentCustomer?.totalShippedOrders || ""}
+                        defaultValue={String(currentCustomer?.deliveringOrders)+ " đơn" || ""}
                         disabled
                         style={{ width: "50%" }}
                       />
@@ -695,7 +701,7 @@ class CustomerManager extends Component {
                       </label>
                       <input
                         type="text"
-                        defaultValue={currentCustomer?.totalDeliveredOrders || ""}
+                        defaultValue={String(currentCustomer?.deliveredOrders)+ " đơn" || ""}
                         disabled
                         style={{ width: "50%" }}
                       />
@@ -707,7 +713,7 @@ class CustomerManager extends Component {
                     </label>
                     <input
                       type="text"
-                      defaultValue={currentCustomer?.totalOrderValue || ""}
+                      defaultValue={String(currentCustomer?.totalValue) + " VNĐ" || ""}
                       disabled
                     />
                   </div>

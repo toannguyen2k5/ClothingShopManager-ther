@@ -36,13 +36,18 @@ public class UserService {
 					.createQuery("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowUserDTO("
 							+ "u.idUser, u.fullName, u.email, u.phoneNumber, u.address, "
 							+ "u.gender, u.birthDay, u.username, "
-							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveryStatus THEN 1 ELSE 0 END), "
-							+ "SUM(CASE WHEN ss.deliveryStatus != :deliveryStatus THEN 1 ELSE 0 END), "
-							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveryStatus THEN ss.totalBill ELSE 0 END)) " + "FROM Users u "
-							+ "LEFT JOIN SalesSlip ss ON ss.idClient = u.idUser " + "WHERE u.role = customer "
+							+ "SUM(CASE WHEN ss.idClient = u.idUser THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :cancelStatus THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveringStatus THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveriedStatus THEN 1 ELSE 0 END), "
+							+ "SUM(CASE WHEN ss.deliveryStatus = :deliveriedStatus THEN ss.totalBill ELSE 0 END), "
+							+ "u.pathAvatar) " + "FROM Users u "
+							+ "LEFT JOIN SalesSlip ss ON ss.idClient = u.idUser " + "WHERE u.role = 'customer' "
 							+ "GROUP BY u.idUser, u.fullName, u.email, u.phoneNumber, u.address, "
 							+ "u.gender, u.birthDay, u.username", ShowUserDTO.class);
-			query.setParameter("deliveryStatus", "SCd004");
+			query.setParameter("deliveriedStatus", "SCd004");
+			query.setParameter("cancelStatus", "SCd005");
+			query.setParameter("deliveringStatus", "SCd003");
 			return query.getResultList();
 		} catch (Exception e) {
 			System.out.print("ShowAllClient, Error : " + e.getMessage());
@@ -124,7 +129,7 @@ public class UserService {
 					Users.isStatus(), Users.getRole(), Users.getFullName(), Users.getAddress(), Users.getBirthDay(),
 					Users.getGender(), Users.getEmail(), Users.getPhoneNumber(), Users.getPathAvatar()) > 0;
 		} catch (Exception e) {
-			System.out.print("UpdateColor, Error : " + e.getMessage());
+			System.out.print("UpdateUser, Error : " + e.getMessage());
 			return false;
 		}
 	}
