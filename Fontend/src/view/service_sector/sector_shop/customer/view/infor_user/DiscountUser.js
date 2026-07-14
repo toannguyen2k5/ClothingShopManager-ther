@@ -16,7 +16,6 @@ class DiscountUser extends Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Dữ liệu nhận được:", data);
         if (data.status && data.status == "200") {
           this.setState({ promos: data.data });
         }

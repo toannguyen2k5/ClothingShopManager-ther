@@ -42,7 +42,6 @@ export default class UpdateProduct extends Component {
     fetch(`${urlapi}/api/product/sellectAll/all/all/`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Dữ liệu nhận được:", data);
         if (data.status && data.status == "200") {
           this.setState({ allInforProducts: data.data });
           if (data.status === "200") {
@@ -213,37 +212,32 @@ export default class UpdateProduct extends Component {
       const matchedMaterial = this.state.Materials.find(
         (m) => m.nameMaterial === product.nameMaterial
       );
-      if (matchedMaterial) {
-        this.setState({ Material: matchedMaterial });
-      }
+      // Luôn set (kể cả khi không tìm thấy) và fallback về "" thay vì undefined,
+      // để tránh crash Object.keys(undefined) khi render <select>.
+      this.setState({ Material: matchedMaterial || "" });
 
       const matchedCategory = this.state.categories.find(
         (m) => m.nameCategory === product.nameCategory
       );
-      if (matchedCategory) {
-        this.setState({ category: matchedCategory });
-      }
+      this.setState({ category: matchedCategory || "" });
 
       const matchedStyle = this.state.styles.find(
         (m) => m.nameStyle === product.nameStyle
       );
-      if (matchedStyle) {
-        this.setState({ style: matchedStyle });
-      }
+      this.setState({ style: matchedStyle || "" });
 
       const matchedSupplier = this.state.suppliers.find(
         (m) => m.nameSupplier === product.nameSupplier
       );
-      if (matchedStyle) {
-        this.setState({ supplier: matchedSupplier });
-      }
+      // Trước đây check nhầm điều kiện `matchedStyle` -> khiến supplier
+      // có thể bị set thành undefined dù không liên quan gì tới style.
+      this.setState({ supplier: matchedSupplier || "" });
 
       const matchedBrand = this.state.manufacturers.find(
         (m) => m.nameBrand === product.nameBrand
       );
-      if (matchedStyle) {
-        this.setState({ manufacturer: matchedBrand });
-      }
+      // Tương tự, trước đây check nhầm điều kiện `matchedStyle`.
+      this.setState({ manufacturer: matchedBrand || "" });
     }
   };
   handleChangeProduct = (e) => {
@@ -412,6 +406,7 @@ export default class UpdateProduct extends Component {
           <label>
             Description:
             <textarea
+              style={{ width: "100%", height: "300px" }}
               name="description"
               value={description}
               onChange={this.handleChange}

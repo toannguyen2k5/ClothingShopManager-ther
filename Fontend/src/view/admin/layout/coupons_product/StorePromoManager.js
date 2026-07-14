@@ -41,7 +41,6 @@ export default class StorePromoManager extends Component {
     fetch(`${urlapi}/api/UserDiscountCode/sellectAll`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Dữ liệu nhận được:", data);
         if (data.status && data.status == "200") {
           this.setState({ promos: data.data });
         }

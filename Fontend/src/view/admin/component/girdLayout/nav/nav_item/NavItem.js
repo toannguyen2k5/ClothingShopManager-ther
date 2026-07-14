@@ -54,6 +54,7 @@ class NavItem extends Component {
                       }
                       href={nav_sub_item.nav_to}
                       onClick={(e) => {
+                        console.log("nav_sub_item", nav_sub_item);
                         if (nav_sub_item.nav_sub_arr.length !== 0) {
                           e.preventDefault();
                           this.props.actions.current_nav({

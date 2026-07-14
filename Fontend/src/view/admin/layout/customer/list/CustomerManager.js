@@ -11,6 +11,7 @@ class CustomerManager extends Component {
       ListCustomers: [],
       searchQuery: "",
       showModal: false,
+      editModal: false,
       isEditing: false,
       currentCustomer: {
         id: null,
@@ -24,12 +25,18 @@ class CustomerManager extends Component {
         totalOrders: 0,
         cancelledOrders: 0,
         totalValue: 0,
+        showContextMenu: false,
+        contextMenuX: 0,
+        contextMenuY: 0,
+        selectedRow: null,
       },
+      path_image_new: null,
+      path_image_old: null,
     };
   }
   openAddModal = () => {
     this.setState({
-      showModal: true,
+      editModal: true,
       isEditing: false,
       currentCustomer: {
         id: null,
@@ -45,16 +52,27 @@ class CustomerManager extends Component {
         cancelledOrders: 0,
         totalValue: 0,
       },
+      path_image_new: null,
+      path_image_old: null,
     });
   };
   openEditModal = () => {
     if (this.state.currentCustomer && this.state.currentCustomer.id != null) {
       this.setState({
-        showModal: true,
+        editModal: true,
         isEditing: true,
+        path_image_old: this.state.currentCustomer.pathAvatar,
+        path_image_new: null,
       });
     } else alert("bạn chưa chọn dòng dữ liệu muốn sửa !");
   };
+  openShowModal = () => {
+    if (this.state.currentCustomer && this.state.currentCustomer.id != null) {
+      this.setState({
+        showModal: true,
+      });
+    }
+  }
   componentDidMount() {
     fetch(urlapi + "/api/Users/ShowAllClient")
       .then((response) => response.json())
@@ -78,7 +96,16 @@ class CustomerManager extends Component {
         console.log(data);
       })
       .catch((error) => console.error(error));
+    document.addEventListener("click", this.closeContextMenu);
   }
+  componentWillUnmount() {
+    document.removeEventListener("click", this.closeContextMenu);
+  }
+  closeContextMenu = () => {
+    this.setState({
+      showContextMenu: false,
+    });
+  };
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -102,7 +129,7 @@ class CustomerManager extends Component {
         customers: customers.map((cust) =>
           cust.id === currentCustomer.id ? currentCustomer : cust
         ),
-        showModal: false,
+        editModal: false,
       });
     } else {
       const newCustomer = {
@@ -111,7 +138,7 @@ class CustomerManager extends Component {
       };
       this.setState({
         customers: [...customers, newCustomer],
-        showModal: false,
+        editModal: false,
       });
     }
   };
@@ -150,43 +177,89 @@ class CustomerManager extends Component {
   };
   editClient = () => {
     const { currentCustomer } = this.state;
-    const req = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idUser: currentCustomer.id,
-        username: null,
-        password: null,
-        status: true,
-        role: "customer",
-        fullName: currentCustomer.name,
-        address: currentCustomer.address,
-        birthDay: currentCustomer.dob,
-        gender: currentCustomer.gender === "nam",
-        email: currentCustomer.email,
-        phoneNumber: currentCustomer.phone,
-        pathAvatar: null,
-      }),
+
+    const usersData = {
+      idUser: currentCustomer.id,
+      username: null,
+      password: null,
+      status: true,
+      role: "customer",
+      fullName: currentCustomer.name,
+      address: currentCustomer.address,
+      birthDay: currentCustomer.dob,
+      gender: currentCustomer.gender === "nam",
+      email: currentCustomer.email,
+      phoneNumber: currentCustomer.phone,
+      pathAvatar: null,
     };
-    fetch(urlapi + "/api/Users/UpdateUser", req)
+
+    // deleimages: HashMap<String, String> — ví dụ { "1": "url_anh_1.jpg", "2": "url_anh_2.jpg" }
+    const deleImages = currentCustomer.deleImages || {};
+    // addimages: các File mới người dùng vừa chọn (mảng File object)
+    const addImages = currentCustomer.newImageFiles || [];
+
+    const formData = new FormData();
+
+    // Gửi Users dưới dạng 1 part JSON
+    formData.append(
+      "Users",
+      new Blob([JSON.stringify(usersData)], { type: "application/json" })
+    );
+
+    // deleimages: Spring bind @RequestParam Map<String,String> bằng cách gom
+    // TẤT CẢ các request param dạng key-value còn lại (không phải file, không phải "Users")
+    // -> nên append trực tiếp key/value, KHÔNG lồng "deleimages[key]"
+    Object.entries(deleImages).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    // addimages: mỗi file append cùng tên "addimages"
+    addImages.forEach((file) => {
+      formData.append("addimages", file);
+    });
+
+    fetch(urlapi + "/api/Users/UpdateUsers", {
+      method: "POST",
+      body: formData,
+      // KHÔNG set Content-Type thủ công — browser sẽ tự thêm boundary cho multipart/form-data
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
           this.componentDidMount();
           alert("Chỉnh sửa thông tin khách hàng thành công !");
-        } else alert("Chỉnh sửa thông tin khách hàng thất bại !");
+        } else {
+          alert("Chỉnh sửa thông tin khách hàng thất bại !");
+        }
         console.log("Response từ server:", data);
       })
       .catch((error) => console.error("Lỗi POST:", error));
-    console.log("data update :", req);
   };
   closeModal = () => {
-    this.setState({ showModal: false, isEditing: false });
+    this.setState({ editModal: false, isEditing: false, showModal: false });
+  };
+  handleAvatarChange = () => {
+    document.getElementById('imageInput').click();
+  };
+
+  handleFileSelected = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.setState((prevState) => ({
+          currentCustomer: {
+            ...prevState.currentCustomer,
+            pathAvatar: e.target.result, // cập nhật để <img> avatar tự re-render
+          },
+          path_image_new: e.target.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
   render() {
-    const { customers, searchQuery, showModal, currentCustomer, isEditing } =
+    const { customers, searchQuery, editModal, currentCustomer, isEditing, showModal } =
       this.state;
     const conditionalRowStyles = [
       {
@@ -206,7 +279,6 @@ class CustomerManager extends Component {
 
     const columns = [
       { name: "idUser", selector: (row) => row.id, width: "180px" },
-      { name: "Username", selector: (row) => row.username, width: "180px" },
       {
         name: "Họ tên",
         selector: (row) => row.name,
@@ -214,29 +286,14 @@ class CustomerManager extends Component {
         wrap: true,
         width: "150px",
       },
-      {
-        name: "Email",
-        selector: (row) => row.email,
-        sortable: true,
-        wrap: true,
-        width: "250px",
-      },
-      { name: "SĐT", selector: (row) => row.phone, wrap: true, width: "110px" },
+      { name: "SĐT", selector: (row) => row.phone, wrap: true, width: "150px" },
+      { name: "Giới tính", selector: (row) => row.gender, width: "100px" },
+      { name: "Ngày sinh", selector: (row) => row.dob, width: "100px" },
       {
         name: "Địa chỉ",
         selector: (row) => row.address,
         wrap: true,
-        width: "255px",
-      },
-      { name: "Giới tính", selector: (row) => row.gender },
-      { name: "Ngày sinh", selector: (row) => row.dob },
-      { name: "Đơn mua", selector: (row) => row.totalOrders, width: "100px" },
-      {
-        name: "Tổng giá trị",
-        selector: (row) => row.totalValue.toLocaleString() + "₫",
-        sortable: true,
-        right: true,
-        width: "150px",
+        width: "100%px",
       },
     ];
     return (
@@ -247,6 +304,11 @@ class CustomerManager extends Component {
         />
 
         <h2>Quản lý Khách hàng</h2>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "50px", marginBottom: "10px" }}>
+          <button onClick={this.openAddModal} className="add-btn">
+            Thêm khách hàng
+          </button>
+        </div>
         <div className="toolbar">
           <input
             type="text"
@@ -276,211 +338,393 @@ class CustomerManager extends Component {
               }
             );
           }}
+          onRowDoubleClicked={(row, event) => {
+            this.setState({
+              selectedRow: row,
+              showContextMenu: true,
+              contextMenuX: event.clientX,
+              contextMenuY: event.clientY,
+            });
+          }}
         />
-
-        {showModal && (
-          <div className="modal-overlay">
+        {
+          this.state.showContextMenu && (
             <div
-              className="modal modal-dialog modal-dialog-centered"
+              className="context-menu"
               style={{
-                width: "80%",
-                maxWidth: "1200px",
+                left: this.state.contextMenuX,
+                top: this.state.contextMenuY,
               }}
             >
-              <h3>{isEditing ? "Chỉnh sửa Khách hàng" : "Thêm Khách hàng"}</h3>
-              <form onSubmit={this.handleFormSubmit} className="form">
-                <label>
-                  Họ tên:
-                  <input
-                    type="text"
-                    defaultValue={currentCustomer?.name || ""}
-                    onChange={(e) => {
-                      this.setState((prevState) => ({
-                        currentCustomer: {
-                          ...prevState.currentCustomer,
-                          name: e.target.value,
-                        },
-                      }));
-                    }}
-                  />
-                </label>
-                <label>
-                  Email:
-                  <input
-                    type="text"
-                    defaultValue={currentCustomer?.email || ""}
-                    onChange={(e) => {
-                      this.setState((prevState) => ({
-                        currentCustomer: {
-                          ...prevState.currentCustomer,
-                          email: e.target.value,
-                        },
-                      }));
-                    }}
-                  />
-                </label>
-                <label>
-                  Địa chỉ:
-                  <ChooseAddress {...this.props} />
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <input
-                      type="button"
-                      value="Tạo địa chỉ"
-                      style={{
-                        height: "38px",
-                        width: "100px",
-                      }}
-                      onClick={() => {
-                        this.setState((prevState) => ({
-                          currentCustomer: {
-                            ...prevState.currentCustomer,
-                            address:
-                              this.props.state_data.data_page.data
-                                ?.detailaddress +
-                              ", " +
-                              this.props.state_data.data_page.data?.district +
-                              ", " +
-                              this.props.state_data.data_page.data?.province,
-                          },
-                        }));
-                      }}
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    disabled
-                    value={currentCustomer?.address || ""}
-                    onChange={(e) => {
-                      this.setState((prevState) => ({
-                        currentCustomer: {
-                          ...prevState.currentCustomer,
-                          address: e.target.value,
-                        },
-                      }));
-                    }}
-                  />
-                </label>
-                <div className="row">
+              <div onClick={this.openEditModal}>
+                ✏ Sửa thông tin
+              </div>
+
+              <div onClick={() => alert("Xóa khách hàng")}>
+                🗑 Xóa liên hệ
+              </div>
+
+              <div onClick={() => this.openShowModal()}>
+                👁 Xem thông tin chi tiết
+              </div>
+            </div>
+          )
+        }
+        {editModal && (
+          <div className="modal-overlay">
+            <div className="modal-overlay-min">
+              <div className="img-container">
+                <img
+                  src={currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
+                  alt="Avatar"
+                />
+                <input type="button" value={isEditing ? "Đổi ảnh đại diện" : "Chọn ảnh đại diện"} id="btnChonAnh" onClick={this.handleAvatarChange} />
+                <input type="file" id="imageInput" accept="image/*" style={{ display: "none" }} onChange={this.handleFileSelected} />
+              </div>
+              <div
+                className="modal modal-dialog modal-dialog-centered"
+                style={{
+                  width: "80%",
+                  maxWidth: "800px",
+                }}
+              >
+                <h3>{isEditing ? "Chỉnh sửa thông tin khách hàng" : "Thêm thông tin khách hàng"}</h3>
+                <form onSubmit={this.handleFormSubmit} className="form">
                   <label>
-                    Số điện thoại:
+                    Họ tên:
                     <input
                       type="text"
-                      defaultValue={currentCustomer?.phone || ""}
+                      defaultValue={currentCustomer?.name || ""}
                       onChange={(e) => {
                         this.setState((prevState) => ({
                           currentCustomer: {
                             ...prevState.currentCustomer,
-                            phone: e.target.value,
+                            name: e.target.value,
                           },
                         }));
                       }}
                     />
                   </label>
                   <label>
-                    Giới tính:
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "70px",
-                      }}
-                    >
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="nam"
-                          checked={this.state.currentCustomer?.gender === "nam"}
-                          onChange={(e) => {
-                            this.setState((prevState) => ({
-                              currentCustomer: {
-                                ...prevState.currentCustomer,
-                                gender: e.target.value,
-                              },
-                            }));
-                          }}
-                        />
-                        Nam
-                      </label>
-
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="nữ"
-                          checked={this.state.currentCustomer?.gender === "nữ"}
-                          onChange={(e) => {
-                            this.setState((prevState) => ({
-                              currentCustomer: {
-                                ...prevState.currentCustomer,
-                                gender: e.target.value,
-                              },
-                            }));
-                          }}
-                        />
-                        Nữ
-                      </label>
-                    </div>
-                  </label>
-                  <label>
-                    Ngày sinh:
+                    Email:
                     <input
-                      type="date"
-                      defaultValue={currentCustomer?.dob || ""}
+                      type="text"
+                      defaultValue={currentCustomer?.email || ""}
                       onChange={(e) => {
                         this.setState((prevState) => ({
                           currentCustomer: {
                             ...prevState.currentCustomer,
-                            dob: e.target.value,
+                            email: e.target.value,
                           },
                         }));
                       }}
                     />
                   </label>
-                </div>
-                <div className="modal-actions">
-                  <button
-                    type="submit"
-                    className="save-btn"
-                    onClick={
-                      this.state.isEditing ? this.editClient : this.addClient
-                    }
-                  >
-                    Lưu
-                  </button>
-                  <button
-                    type="button"
-                    onClick={this.closeModal}
-                    className="cancel-btn"
-                  >
-                    Hủy
-                  </button>
-                </div>
-              </form>
+                  <label>
+                    Địa chỉ:
+                    <ChooseAddress {...this.props} />
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <input
+                        type="button"
+                        value="Xác nhận địa chỉ"
+                        style={{
+                          height: "38px",
+                          width: "125px",
+                        }}
+                        onClick={() => {
+                          this.setState((prevState) => ({
+                            currentCustomer: {
+                              ...prevState.currentCustomer,
+                              address:
+                                this.props.state_data.data_page.data
+                                  ?.detailaddress +
+                                ", " +
+                                this.props.state_data.data_page.data?.district +
+                                ", " +
+                                this.props.state_data.data_page.data?.province,
+                            },
+                          }));
+                        }}
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      disabled
+                      value={currentCustomer?.address || ""}
+                      onChange={(e) => {
+                        this.setState((prevState) => ({
+                          currentCustomer: {
+                            ...prevState.currentCustomer,
+                            address: e.target.value,
+                          },
+                        }));
+                      }}
+                    />
+                  </label>
+                  <div className="row">
+                    <label>
+                      Số điện thoại:
+                      <input
+                        type="text"
+                        defaultValue={currentCustomer?.phone || ""}
+                        onChange={(e) => {
+                          this.setState((prevState) => ({
+                            currentCustomer: {
+                              ...prevState.currentCustomer,
+                              phone: e.target.value,
+                            },
+                          }));
+                        }}
+                      />
+                    </label>
+                    <label>
+                      Giới tính:
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: "70px",
+                        }}
+                      >
+                        <label
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="nam"
+                            checked={this.state.currentCustomer?.gender === "nam"}
+                            onChange={(e) => {
+                              this.setState((prevState) => ({
+                                currentCustomer: {
+                                  ...prevState.currentCustomer,
+                                  gender: e.target.value,
+                                },
+                              }));
+                            }}
+                          />
+                          Nam
+                        </label>
+
+                        <label
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="nữ"
+                            checked={this.state.currentCustomer?.gender === "nữ"}
+                            onChange={(e) => {
+                              this.setState((prevState) => ({
+                                currentCustomer: {
+                                  ...prevState.currentCustomer,
+                                  gender: e.target.value,
+                                },
+                              }));
+                            }}
+                          />
+                          Nữ
+                        </label>
+                      </div>
+                    </label>
+                    <label>
+                      Ngày sinh:
+                      <input
+                        type="date"
+                        defaultValue={currentCustomer?.dob || ""}
+                        onChange={(e) => {
+                          this.setState((prevState) => ({
+                            currentCustomer: {
+                              ...prevState.currentCustomer,
+                              dob: e.target.value,
+                            },
+                          }));
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="modal-actions">
+                    <button
+                      type="submit"
+                      className="save-btn"
+                      onClick={
+                        this.state.isEditing ? this.editClient : this.addClient
+                      }
+                    >
+                      Lưu
+                    </button>
+                    <button
+                      type="button"
+                      onClick={this.closeModal}
+                      className="cancel-btn"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "center", gap: "50px" }}>
-          <button onClick={this.openAddModal} className="add-btn">
-            Thêm khách hàng
-          </button>
-          <button onClick={this.openEditModal} className="add-btn">
-            Sửa thông tin
-          </button>
-        </div>
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-overlay-min">
+              <div className="img-container">
+                <img
+                  src={currentCustomer?.pathAvatar || "https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg"}
+                  alt="Avatar"
+                />
+              </div>
+              <div
+                className="modal modal-dialog modal-dialog-centered"
+                style={{
+                  width: "80%",
+                  maxWidth: "800px",
+                }}
+              >
+                <h3>Thông tin khách hàng</h3>
+                <form onSubmit={this.handleFormSubmit} className="form">
+                  <div className="group-info">
+                    <label>
+                      Họ tên:
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={currentCustomer?.name || "hiển thị tên lỗi"}
+                      disabled
+                    />
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div className="group-info">
+                      <label>
+                        giới tính:
+                      </label>
+                      <input
+                        type="text"
+                        style={{ width: "70%" }}
+                        defaultValue={currentCustomer?.gender || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <div className="group-info">
+                      <label>
+                        Ngày sinh:
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={currentCustomer?.dob || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div className="group-info">
+                    <label>
+                      Email:
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={currentCustomer?.email || ""}
+                      disabled
+                    />
+                  </div>
+                  <div className="group-info">
+                    <label>
+                      Địa chỉ:
+                    </label>
+                    <textarea
+                      defaultValue={currentCustomer?.address || ""}
+                      disabled
+                      style={{ width: "100%", height: "80px", borderRadius: "5px", padding: "5px", marginTop: "5px", }}
+                    />
+                  </div>
+                  <div className="group-info">
+                    <label>
+                      Số điện thoại:
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={currentCustomer?.phone || ""}
+                      disabled
+                    />
+                  </div>
+                  <div className="group-info">
+                    <label>
+                      tổng đơn hàng :
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={currentCustomer?.totalOrders || ""}
+                      disabled
+                    />
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div className="group-info">
+                      <label>
+                        đã hủy :
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={currentCustomer?.totalCancelledOrders || ""}
+                        disabled
+                        style={{ width: "43%" }}
+                      />
+                    </div>
+                    <div className="group-info">
+                      <label>
+                        đang giao :
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={currentCustomer?.totalShippedOrders || ""}
+                        disabled
+                        style={{ width: "50%" }}
+                      />
+                    </div>
+                    <div className="group-info">
+                      <label>
+                        đã giao :
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={currentCustomer?.totalDeliveredOrders || ""}
+                        disabled
+                        style={{ width: "50%" }}
+                      />
+                    </div>
+                  </div>
+                  <div className="group-info">
+                    <label>
+                      tổng giá trị đơn :
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={currentCustomer?.totalOrderValue || ""}
+                      disabled
+                    />
+                  </div>
+                  <div className="modal-actions">
+                    <button
+                      type="button"
+                      onClick={this.closeModal}
+                      className="cancel-btn"
+                    >
+                      đóng
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

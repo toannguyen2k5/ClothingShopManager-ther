@@ -121,7 +121,7 @@ public class UserService {
 				if (pathAvatar != null)
 					Users.setPathAvatar(pathAvatar.getFirst());
 			}
-			return UserRepository.UpdateUsers(Users.getIdUser(), Users.getUsername(), Users.getPassword(),
+			return UserRepository.UpdateUsers(Users.getIdUser(),
 					Users.isStatus(), Users.getRole(), Users.getFullName(), Users.getAddress(), Users.getBirthDay(),
 					Users.getGender(), Users.getEmail(), Users.getPhoneNumber(), Users.getPathAvatar()) > 0;
 		} catch (Exception e) {

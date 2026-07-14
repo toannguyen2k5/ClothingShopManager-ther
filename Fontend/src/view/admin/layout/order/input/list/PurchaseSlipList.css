@@ -38,10 +38,13 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 99999; /* nâng cao hơn navbar (thường 1030 với bootstrap fixed-top) để modal luôn nổi trên cùng */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: auto; /* phòng khi nội dung modal dài hơn viewport trên màn hình nhỏ */
+  padding: 24px 0;
+  box-sizing: border-box;
 }
 
 /* Modal content */
@@ -51,12 +54,11 @@
   border-radius: 12px;
   width: 80%; /* tăng chiều ngang */
   max-width: 1250px; /* giới hạn chiều ngang tối đa */
-  height: 80%; /* tăng chiều cao */
   max-height: 90vh; /* giới hạn chiều cao tối đa */
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   position: relative;
-  max-height: 90vh;
   overflow-y: auto;
+  margin: auto;
 }
 
 /* Close button */

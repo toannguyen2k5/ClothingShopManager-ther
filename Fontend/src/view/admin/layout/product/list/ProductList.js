@@ -45,7 +45,6 @@ class ProductListClass extends Component {
     fetch(`${urlapi}/api/product/sellectAll/all/all/`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Dữ liệu nhận được:", data);
         if (data.status && data.status == "200") {
           data.data.map((item, index) => {
             mockProducts = [

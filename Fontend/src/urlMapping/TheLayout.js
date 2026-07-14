@@ -30,8 +30,6 @@ export default class TheLayout extends Component {
       const { macAddress } = await response.json();
       this.props.actions.set_code_build_state(macAddress);
       //--------------------------------------------------------
-      console.log("TheLayout Line 27", this.props.state_data);
-      //--------------------------------------------------------
       this.setState({ reload: true });
     } catch (error) {
       console.log(error);
@@ -56,8 +54,8 @@ export default class TheLayout extends Component {
           console.error("Không thể parse JSON : " + e.message);
         }
       }
+      else state_data = this.props.state_data;
     }
-
     return (
       <React.Suspense fallback={loading}>
         <Switch>

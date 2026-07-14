@@ -30,7 +30,7 @@ public class RegisterService {
 	public ResultStatus CreateOrUppdateInfor(Users user) {
 		try {
 			if(user.getIdUser() != null) {
-				ResultStatus Result = userRepository.UpdateUsers(user.getIdUser(), user.getUsername(), user.getPassword(), user.isStatus(), user.getRole(), user.getFullName(),
+				ResultStatus Result = userRepository.UpdateUsers(user.getIdUser(), user.isStatus(), user.getRole(), user.getFullName(),
 						user.getAddress(), user.getBirthDay(), user.getGender(), user.getEmail(), user.getPhoneNumber(), user.getPathAvatar()) > 0 ?ResultStatus.none_error:ResultStatus.error;
 				return Result;
 			}

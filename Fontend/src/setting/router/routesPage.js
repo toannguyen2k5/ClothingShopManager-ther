@@ -89,7 +89,7 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: ProductForm,
-    role_level: 5,
+    role_level: 10,
   },
   {
     path: "/admin/manager/product/update/",

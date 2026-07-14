@@ -14,6 +14,7 @@ import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -93,10 +94,12 @@ public class UserController {
 	}
 
 	@PostMapping("/UpdateUsers")
-	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users, @RequestParam HashMap<String, String> deleimages,
-			@RequestParam List<MultipartFile> addimages) {
-		return ResponseEntity
-				.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, deleimages, addimages), "Update", "Users"));
+	public ResponseEntity<?> UpdateUsers(
+	        @RequestPart("Users") Users users,
+	        @RequestParam(required = false) HashMap<String, String> deleimages,
+	        @RequestParam(required = false) List<MultipartFile> addimages) {
+	    return ResponseEntity.ok(common.ReturnReponse(
+	            UsersService.UpdateUsers(users, deleimages, addimages), "Update", "Users"));
 	}
 
 	@PostMapping("/UpdateUser")

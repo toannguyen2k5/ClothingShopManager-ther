@@ -331,14 +331,15 @@ export default class SalesSlipList extends Component {
                   <div className="psl-slip-row">
                     <strong>Trạng thái:</strong>
                     {selectedSlip.deliveryStatus === "SCd004" &&
-                    this.state.deliveryStatus !== selectedSlip.deliveryStatus &&
-                    this.props.state_data.user_info.role_level >=
+                      this.state.deliveryStatus !== selectedSlip.deliveryStatus &&
+                      this.props.state_data.user_info.role_level >=
                       role_manager ? (
                       <span>
                         {this.getStatusText(selectedSlip.deliveryStatus)}
                       </span>
                     ) : (
                       <>
+                      {this.props.state_data.user_info.role_level >= role_manager ? (
                         <select
                           className="form-control form-control-sm  select-slip"
                           value={selectedSlip.deliveryStatus}
@@ -350,12 +351,19 @@ export default class SalesSlipList extends Component {
                             </option>
                           ))}
                         </select>
-                        <button
-                          className="btn btn-sm btn-success ml-2"
-                          onClick={this.handleUpdateStatus}
-                        >
-                          Update Trạng Thái
-                        </button>
+                      ):(
+                        <span>
+                          {this.getStatusText(selectedSlip.deliveryStatus)}
+                        </span>
+                      )}
+                        {this.props.state_data.user_info.role_level >= role_manager && (
+                          <button
+                            className="btn btn-sm btn-success ml-2"
+                            onClick={this.handleUpdateStatus}
+                          >
+                            Update Trạng Thái
+                          </button>
+                        )}
                       </>
                     )}
                   </div>

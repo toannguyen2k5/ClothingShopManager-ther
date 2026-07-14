@@ -13,10 +13,10 @@ import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 public class Users {
     
     @Id
-    @Column(name = "idUser", length = 45, nullable = false)
+    @Column(name = "idUser", length = 45)
     private String idUser;
     
-    @Column(name = "username", length = 45, unique = true)
+    @Column(name = "username", length = 45)
     private String username;
     
     @Column(name = "password", length = 45)

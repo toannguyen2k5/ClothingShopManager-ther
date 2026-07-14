@@ -28,7 +28,7 @@ export const nav = [
             nav_sub_name: "Cập nhật sản phẩm",
             nav_sub_to: "/admin/manager/product/update/",
             nav_sub_icon: "",
-            role_level: 10,
+            role_level: 5,
           },
         ],
       },
@@ -50,7 +50,7 @@ export const nav = [
           {
             id_sub_nav: "subnav004",
             nav_sub_name: "Danh sách đơn hàng",
-            nav_sub_to: "/admin/manager/order/export/list",
+            nav_sub_to: "/admin/manager/order/export/list/",
             nav_sub_icon: "",
             role_level: 5,
           },

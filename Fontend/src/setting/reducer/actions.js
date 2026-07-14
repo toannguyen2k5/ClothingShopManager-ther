@@ -1,7 +1,6 @@
 import * as types from "./actionTypes";
 
 export function login_success(user) {
-  console.log("user:", user);
   let user_info = {
     id_user: user.idUser,
     email: user.email,
