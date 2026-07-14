@@ -82,7 +82,6 @@ public class UserService {
 
 	public boolean InsertUsers(Users Users, List<MultipartFile> addimages) {
 		try {
-
 			String idcurrent = UserRepository.SelectMaxId();
 			String newId = idcurrent != null ? common.FindNextId(idcurrent) : common.GetFirstId(Users.class);
 			if (addimages != null && !addimages.isEmpty()) {

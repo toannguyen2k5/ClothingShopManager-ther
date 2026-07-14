@@ -176,7 +176,7 @@ class CustomerManager extends Component {
       .catch((error) => console.error("Lỗi POST:", error));
   };
   editClient = () => {
-    const { currentCustomer } = this.state;
+    const { currentCustomer,path_image_new,path_image_old } = this.state;
 
     const usersData = {
       idUser: currentCustomer.id,
@@ -194,9 +194,9 @@ class CustomerManager extends Component {
     };
 
     // deleimages: HashMap<String, String> — ví dụ { "1": "url_anh_1.jpg", "2": "url_anh_2.jpg" }
-    const deleImages = currentCustomer.deleImages || {};
+    const deleImages = path_image_old || {};
     // addimages: các File mới người dùng vừa chọn (mảng File object)
-    const addImages = currentCustomer.newImageFiles || [];
+    const addImages = path_image_new || [];
 
     const formData = new FormData();
 

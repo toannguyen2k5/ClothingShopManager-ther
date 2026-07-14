@@ -117,6 +117,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-left: 400px;
 }
 
 .account_main label {
@@ -143,8 +144,9 @@
   min-height: 42px;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 300px;
   box-sizing: border-box;
+  margin-left: 50px;
 }
 
 /* ---------- Chế độ chỉnh sửa (form inputs) ---------- */
