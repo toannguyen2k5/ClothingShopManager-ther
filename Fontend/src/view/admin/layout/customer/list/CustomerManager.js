@@ -149,8 +149,9 @@ class CustomerManager extends Component {
     }
   };
   addClient = () => {
-    const { currentCustomer } = this.state;
-    const req = {
+    const { currentCustomer,image_avatar_new } = this.state;
+
+    const usersData = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -170,13 +171,35 @@ class CustomerManager extends Component {
         pathAvatar: null,
       }),
     };
-    fetch(urlapi + "/api/Users/insertUser", req)
+    // addimages: các File mới người dùng vừa chọn (mảng File object)
+    const addImages = image_avatar_new || [];
+
+    const formData = new FormData();
+
+    // Gửi Users dưới dạng 1 part JSON
+    formData.append(
+      "Users",
+      new Blob([JSON.stringify(usersData)], { type: "application/json" })
+    );
+
+    // addimages: mỗi file append cùng tên "addimages"
+    addImages.forEach((file) => {
+      formData.append("addimages", file);
+    });
+
+    fetch(urlapi + "/api/Users/insert", {
+      method: "POST",
+      body: formData,
+      // KHÔNG set Content-Type thủ công — browser sẽ tự thêm boundary cho multipart/form-data
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
           this.componentDidMount();
           alert("Thêm thông tin khách hàng thành công !");
-        } else alert("Thêm thông tin khách hàng thất bại !");
+        } else {
+          alert("Thêm thông tin khách hàng thất bại !");
+        }
         console.log("Response từ server:", data);
       })
       .catch((error) => console.error("Lỗi POST:", error));
@@ -224,7 +247,7 @@ class CustomerManager extends Component {
       formData.append("addimages", file);
     });
 
-    fetch(urlapi + "/api/Users/UpdateUsers", {
+    fetch(urlapi + "/api/Users/Update", {
       method: "POST",
       body: formData,
       // KHÔNG set Content-Type thủ công — browser sẽ tự thêm boundary cho multipart/form-data

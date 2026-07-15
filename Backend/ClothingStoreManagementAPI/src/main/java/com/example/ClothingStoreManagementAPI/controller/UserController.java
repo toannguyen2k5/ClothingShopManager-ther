@@ -83,8 +83,8 @@ public class UserController {
 			return ResponseEntity.ok(common.ReturnReponse(null, null, null));
 	}
 
-	@PostMapping("/insertUsers")
-	public ResponseEntity<?> InsertUsers(@RequestBody Users Users, @RequestParam List<MultipartFile> addimages) {
+	@PostMapping("/insert")
+	public ResponseEntity<?> InsertUsers(@RequestPart("Users") Users Users, @RequestParam(required = false) List<MultipartFile> addimages) {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, addimages), "Insert", "Users"));
 	}
 
@@ -93,18 +93,13 @@ public class UserController {
 		return ResponseEntity.ok(common.ReturnReponse(UsersService.InsertUsers(Users, null), "Insert", "Users"));
 	}
 
-	@PostMapping("/UpdateUsers")
+	@PostMapping("/Update")
 	public ResponseEntity<?> UpdateUsers(
 	        @RequestPart("Users") Users users,
 	        @RequestParam(required = false) HashMap<String, String> deleimages,
 	        @RequestParam(required = false) List<MultipartFile> addimages) {
 	    return ResponseEntity.ok(common.ReturnReponse(
 	            UsersService.UpdateUsers(users, deleimages, addimages), "Update", "Users"));
-	}
-
-	@PostMapping("/UpdateUser")
-	public ResponseEntity<?> UpdateUsers(@RequestBody Users Users) {
-		return ResponseEntity.ok(common.ReturnReponse(UsersService.UpdateUsers(Users, null, null), "Update", "Users"));
 	}
 
 	@PutMapping("{id}/getInfo")
