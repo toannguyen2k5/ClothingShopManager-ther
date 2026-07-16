@@ -38,6 +38,10 @@ class ProductListClass extends Component {
       nameDetail: "",
       InventSearchText: "",
       InventShop: [],
+      showContextMenu: false,
+        contextMenuX: 0,
+        contextMenuY: 0,
+        selectedRow: null,
     };
   }
 
@@ -73,7 +77,11 @@ class ProductListClass extends Component {
         console.error("Lỗi khi fetch:", error);
       });
   }
-
+  closeContextMenu = () => {
+    this.setState({
+      showContextMenu: false,
+    });
+  };
   handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     const { allProducts, filterStatus } = this.state;
@@ -199,6 +207,36 @@ class ProductListClass extends Component {
     ];
     return (
       <>
+      {
+          this.state.showContextMenu && (
+            <div
+              className="context-menu"
+              style={{
+                left: this.state.contextMenuX,
+                top: this.state.contextMenuY,
+              }}
+            >
+              <div onClick={this.openEditModal}>
+                👁 xem tồn kho theo từng size,màu
+              </div>
+              <div onClick={this.openEditModal}>
+                ✏ đổi trạng thái bán
+              </div>
+
+              <div onClick={this.openEditModal}>
+                ✏ chỉnh sửa thông tin sản phẩm
+              </div>
+
+              <div onClick={() => alert("Xóa khách hàng")}>
+                🗑 Xóa sản phẩm
+              </div>
+
+              <div onClick={() => this.openShowModal()}>
+                👁 Xem thông tin sản phẩm chi tiết
+              </div>
+            </div>
+          )
+        }
         <div className="row">
           <div className="flex flex-wrap gap-4 mb-4">
             <select
@@ -229,7 +267,15 @@ class ProductListClass extends Component {
             highlightOnHover
             striped
             responsive
-            onRowClicked={(row) => this.handleRowClick(row)}
+            //onRowClicked={(row) => this.handleRowClick(row)}
+            onRowDoubleClicked={(row, event) => {
+            this.setState({
+              selectedRow: row,
+              showContextMenu: true,
+              contextMenuX: event.clientX,
+              contextMenuY: event.clientY,
+            });
+          }}
           />
         </div>
 

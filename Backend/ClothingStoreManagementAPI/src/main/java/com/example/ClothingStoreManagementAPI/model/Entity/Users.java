@@ -10,6 +10,8 @@ import com.example.ClothingStoreManagementAPI.model.Enum.Role;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor   // <-- bắt buộc phải có để Jackson khởi tạo object rỗng rồi set field
+@AllArgsConstructor
 public class Users {
     
     @Id

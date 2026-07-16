@@ -148,62 +148,53 @@ class CustomerManager extends Component {
       });
     }
   };
-  addClient = () => {
-    const { currentCustomer,image_avatar_new } = this.state;
+addClient = () => {
+  const { currentCustomer, image_avatar_new } = this.state;
 
-    const usersData = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idUser: null,
-        username: null,
-        password: null,
-        status: true,
-        role: "customer",
-        fullName: currentCustomer.name,
-        address: currentCustomer.address,
-        birthDay: currentCustomer.dob,
-        gender: currentCustomer.gender === "nam",
-        email: currentCustomer.email,
-        phoneNumber: currentCustomer.phone,
-        pathAvatar: null,
-      }),
-    };
-    // addimages: các File mới người dùng vừa chọn (mảng File object)
-    const addImages = image_avatar_new || [];
-
-    const formData = new FormData();
-
-    // Gửi Users dưới dạng 1 part JSON
-    formData.append(
-      "Users",
-      new Blob([JSON.stringify(usersData)], { type: "application/json" })
-    );
-
-    // addimages: mỗi file append cùng tên "addimages"
-    addImages.forEach((file) => {
-      formData.append("addimages", file);
-    });
-
-    fetch(urlapi + "/api/Users/insert", {
-      method: "POST",
-      body: formData,
-      // KHÔNG set Content-Type thủ công — browser sẽ tự thêm boundary cho multipart/form-data
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          this.componentDidMount();
-          alert("Thêm thông tin khách hàng thành công !");
-        } else {
-          alert("Thêm thông tin khách hàng thất bại !");
-        }
-        console.log("Response từ server:", data);
-      })
-      .catch((error) => console.error("Lỗi POST:", error));
+  const usersData = {
+    idUser: null,
+    username: null,
+    password: null,
+    status: true,
+    role: "customer",
+    fullName: currentCustomer.name,
+    address: currentCustomer.address,
+    birthDay: currentCustomer.dob,
+    gender: currentCustomer.gender === "nam",
+    email: currentCustomer.email,
+    phoneNumber: currentCustomer.phone,
+    pathAvatar: null,
   };
+
+  const addImages = image_avatar_new || [];
+
+  const formData = new FormData();
+
+  formData.append(
+    "Users",
+    new Blob([JSON.stringify(usersData)], { type: "application/json" })
+  );
+
+  addImages.forEach((file) => {
+    formData.append("addimages", file);
+  });
+
+  fetch(urlapi + "/api/Users/insert", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status && data.status === "200") {
+        this.componentDidMount();
+        alert("Thêm thông tin khách hàng thành công !");
+      } else {
+        alert("Thêm thông tin khách hàng thất bại !");
+      }
+      console.log("Response từ server:", data);
+    })
+    .catch((error) => console.error("Lỗi POST:", error));
+};
   editClient = () => {
     const { currentCustomer,image_avatar_new,path_image_old } = this.state;
 
