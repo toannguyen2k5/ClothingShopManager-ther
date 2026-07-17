@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { urlapi } from "../../../../../setting/store/const";
+import { role_customer, role_manager, role_admin, urlapi } from "../../../../../setting/store/const";
 import "./style.css";
 import { define_nav } from "../../../../../setting/store/const";
 import "../../../layout/order/input/list/PurchaseSlipList.css";
@@ -39,9 +39,11 @@ class ProductListClass extends Component {
       InventSearchText: "",
       InventShop: [],
       showContextMenu: false,
-        contextMenuX: 0,
-        contextMenuY: 0,
-        selectedRow: null,
+      contextMenuX: 0,
+      contextMenuY: 0,
+      selectedRow: null,
+      showModelDetail: false,
+      detail_product: null,
     };
   }
 
@@ -76,12 +78,35 @@ class ProductListClass extends Component {
       .catch((error) => {
         console.error("Lỗi khi fetch:", error);
       });
+    document.addEventListener("click", this.closeContextMenu);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("click", this.closeContextMenu);
   }
   closeContextMenu = () => {
     this.setState({
       showContextMenu: false,
     });
   };
+  handleOpenModelDetail = () => {
+    fetch(
+      urlapi +
+      "/api/detailproduct/sellect/detailProperty?idProduct=" +
+      this.state.selectedRow.id
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status === "200") {
+          this.setState({ showModelDetail: true, detail_product: data.data })
+          console.log("detailProperty : ", data);
+        }
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+  handleCloseModelDetail = () => {
+    this.setState({ showModelDetail: false })
+  }
   handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     const { allProducts, filterStatus } = this.state;
@@ -119,7 +144,7 @@ class ProductListClass extends Component {
         queryString.append("idProduct", row.id);
         fetch(
           urlapi +
-            `/api/detailproduct/sellect/alldetail?${queryString.toString()}`,
+          `/api/detailproduct/sellect/alldetail?${queryString.toString()}`,
           {
             method: "GET",
           }
@@ -147,7 +172,7 @@ class ProductListClass extends Component {
         queryString.append("idDetail", row.idDetail);
         fetch(
           urlapi +
-            `/api/detailproduct/sellect/invenofshop?${queryString.toString()}`,
+          `/api/detailproduct/sellect/invenofshop?${queryString.toString()}`,
           {
             method: "GET",
           }
@@ -172,6 +197,8 @@ class ProductListClass extends Component {
       InventSearchText,
       showModalShop,
       InventShop,
+      showModelDetail,
+      detail_product
     } = this.state;
     if (
       this.props.state_data.current_page.name !==
@@ -207,7 +234,7 @@ class ProductListClass extends Component {
     ];
     return (
       <>
-      {
+        {
           this.state.showContextMenu && (
             <div
               className="context-menu"
@@ -216,24 +243,27 @@ class ProductListClass extends Component {
                 top: this.state.contextMenuY,
               }}
             >
-              <div onClick={this.openEditModal}>
+              <div onClick={() => this.handleOpenModelDetail()}>
+                👁 Xem thông tin sản phẩm chi tiết
+              </div>
+              <div onClick={() => this.handleRowClick(this.state.selectedRow)}>
                 👁 xem tồn kho theo từng size,màu
               </div>
-              <div onClick={this.openEditModal}>
-                ✏ đổi trạng thái bán
-              </div>
-
+              {this.props.state_data.user_info.role_level >= role_manager && (
+                <div onClick={this.openEditModal}>
+                  ✏ đổi trạng thái bán
+                </div>
+              )}
               <div onClick={this.openEditModal}>
                 ✏ chỉnh sửa thông tin sản phẩm
               </div>
 
-              <div onClick={() => alert("Xóa khách hàng")}>
-                🗑 Xóa sản phẩm
-              </div>
+              {this.props.state_data.user_info.role_level >= role_admin && (
+                <div onClick={() => alert("Xóa khách hàng")}>
+                  🗑 Xóa sản phẩm
+                </div>
+              )}
 
-              <div onClick={() => this.openShowModal()}>
-                👁 Xem thông tin sản phẩm chi tiết
-              </div>
             </div>
           )
         }
@@ -267,18 +297,17 @@ class ProductListClass extends Component {
             highlightOnHover
             striped
             responsive
-            //onRowClicked={(row) => this.handleRowClick(row)}
             onRowDoubleClicked={(row, event) => {
-            this.setState({
-              selectedRow: row,
-              showContextMenu: true,
-              contextMenuX: event.clientX,
-              contextMenuY: event.clientY,
-            });
-          }}
+              this.setState({
+                selectedRow: row,
+                showContextMenu: true,
+                contextMenuX: event.clientX,
+                contextMenuY: event.clientY,
+              });
+            }}
           />
         </div>
-
+      // đoạn này là để show tồn kho ứng với size , màu
         <div className="">
           {showModalDetail && (
             <div
@@ -380,6 +409,147 @@ class ProductListClass extends Component {
                     />
                   }
                 />
+              </div>
+            </div>
+          )}
+        </div>
+        // đoạn này để hiện chi tiết sản phẩm
+        <div className="">
+          {showModelDetail && (
+            <div
+              className="psl-modal-overlay"
+              onClick={() => {
+                this.setState({ showModelDetail: false });
+              }}
+            >
+              <div
+                className="psl-modal-content"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  height: "700px",
+                  overflowY: "auto",
+                }}
+              >
+                <button
+                  className="psl-modal-close"
+                  onClick={() => {
+                    this.setState({ showModelDetail: false });
+                  }}
+                >
+                  ×
+                </button>
+                <div className="container-detail">
+                  <div className="container-hafl">
+                    <div className="image-main">
+                      <img href=""></img>
+                    </div>
+                    <div className="image-second">
+                      <img href="">
+                      </img>
+                    </div>
+                  </div>
+                  <div className="container-hafl">
+                    <h2>Thông tin sản phẩm</h2>
+                    <div className="block-input">
+                      <label>mã sản phẩm</label>
+                      <input
+                        type="text"
+                        defaultValue={detail_product?.idProduct || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <div className="block-input">
+                      <label>tên sản phẩm</label>
+                      <input
+                        type="text"
+                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <div className="block-input">
+                      <label>tên sản phẩm</label>
+                      <input
+                        type="text"
+                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <div className="container-detail">
+                      <div className="block-input">
+                        <label>loại sản phẩm</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.nameStyle || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                      <div className="block-input">
+                        <label>chất liệu</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.nameMaterial || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div className="container-detail">
+                      <div className="block-input">
+                        <label>phân loại sản phẩm</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.nameCategory || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                      <div className="block-input">
+                        <label>tên thương hiệu</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.nameBrand || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div className="container-detail">
+                      <div className="block-input">
+                        <label>giá gốc</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.price || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                      <div className="block-input">
+                        <label>giá sau khuyến mãi</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.price || "hiển thị tên lỗi"}
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div className="block-input">
+                      <label>thông tin khuyến mãi</label>
+                      <input
+                        type="text"
+                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <div className="block-input">
+                      <label>số lượng</label>
+                      <input
+                        type="text"
+                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
+                        disabled
+                      />
+                    </div>
+                    <label></label>
+                    <label>trạng thái bán</label>
+                    <label>mô tả sản phẩm</label>
+                  </div>
+                </div>
               </div>
             </div>
           )}
