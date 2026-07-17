@@ -190,4 +190,14 @@ public class ProductService {
 			return false;
 		}
 	}
+	@Transactional
+	public boolean UpdateSaleStatus (String idProduct,boolean status) {
+		try {
+			return productRepository.UpdateSaleStatus(idProduct,status)>0;
+		}
+		catch(Exception e) {
+			System.out.print("UpdateProduct, Error : " + e.getMessage());
+			return false;
+		}
+	}
 }

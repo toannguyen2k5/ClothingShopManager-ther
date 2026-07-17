@@ -7,16 +7,17 @@ import "../../../layout/order/input/list/PurchaseSlipList.css";
 let mockProducts = [];
 
 const columns = [
-  { name: "STT", selector: (row, index) => row.index, sortable: true },
-  { name: "Thương Hiệu", selector: (row) => row.id_ncc },
-  { name: "Tên Sản Phẩm", selector: (row) => row.ten_san_pham, sortable: true },
-  { name: "Style", selector: (row) => row.id_style },
-  { name: "Danh Mục", selector: (row) => row.id_danh_muc },
-  { name: "Trạng Thái Bán", selector: (row) => (row.trang_thai ? "✔️" : "❌") },
-  { name: "Số Lượng", selector: (row) => row.so_luong },
+  { name: "STT", selector: (row, index) => row.index, sortable: true, grow: 1 },
+  { name: "Tên Sản Phẩm", selector: (row) => row.ten_san_pham, sortable: true, grow: 4 },
+  { name: "Thương Hiệu", selector: (row) => row.id_ncc, grow: 1 },
+  { name: "Style", selector: (row) => row.id_style, grow: 1 },
+  { name: "Danh Mục", selector: (row) => row.id_danh_muc, grow: 1 },
+  { name: "Trạng Thái Bán", selector: (row) => (row.trang_thai ? "✔️" : "❌"), grow: 1 },
+  { name: "Số Lượng", selector: (row) => row.so_luong, grow: 1 },
   {
     name: "Giá Bán",
     selector: (row) => `${row.gia_ban.toLocaleString()}đ`,
+    grow: 1,
   },
 ];
 
@@ -87,6 +88,54 @@ class ProductListClass extends Component {
     this.setState({
       showContextMenu: false,
     });
+  };
+  handleToggleSaleStatus = async () => {
+    const { selectedRow } = this.state;
+    if (!selectedRow) return;
+
+    const res = await fetch(
+      `${urlapi}/api/product/updateSaleStatus?idProduct=${selectedRow.id}&status=${!selectedRow.trang_thai}`,
+      {
+        method: "POST"
+      }
+    );
+
+    const data = await res.json();
+    if (data.status && data.status === "200") {
+      fetch(`${urlapi}/api/product/sellectAll/all/all/`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status && data.status == "200") {
+          data.data.map((item, index) => {
+            mockProducts = [
+              ...mockProducts,
+              {
+                index: index + 1,
+                id: item.idProduct,
+                id_ncc: item.nameBrand,
+                ten_san_pham: item.nameProduct,
+                id_style: item.nameStyle,
+                id_danh_muc: item.nameCategory,
+                trang_thai: item.status,
+                so_luong: item.quantity || 0,
+                gia_ban: item.price || 0,
+              },
+            ];
+          });
+          this.setState({
+            allProducts: mockProducts,
+            filteredProducts: mockProducts,
+          });
+        }
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi fetch:", error);
+      });
+      alert("Đã thay đổi trạng thái bán thành công!");
+    }else {
+      alert("Thay đổi trạng thái bán thất bại!");
+    }
   };
   handleOpenModelDetail = () => {
     fetch(
@@ -250,7 +299,7 @@ class ProductListClass extends Component {
                 👁 xem tồn kho theo từng size,màu
               </div>
               {this.props.state_data.user_info.role_level >= role_manager && (
-                <div onClick={this.openEditModal}>
+                <div onClick={this.handleToggleSaleStatus}>
                   ✏ đổi trạng thái bán
                 </div>
               )}
@@ -303,7 +352,7 @@ class ProductListClass extends Component {
                 showContextMenu: true,
                 contextMenuX: event.clientX,
                 contextMenuY: event.clientY,
-              });
+              }, console.log("selectedRow : ", this.state.selectedRow));
             }}
           />
         </div>
@@ -442,11 +491,24 @@ class ProductListClass extends Component {
                 <div className="container-detail">
                   <div className="container-hafl">
                     <div className="image-main">
-                      <img href=""></img>
+                      {detail_product?.images?.filter((img) => img.main).map((img, index) => (
+                        <img
+                          key={index}
+                          src={urlapi + "/api/Image/" + img.path || "/path/to/default-image.jpg"}
+                          alt="Product Image"
+                          style={{ width: "80%", height: "auto", borderRadius: "10px" }}
+                        />
+                      ))}
                     </div>
                     <div className="image-second">
-                      <img href="">
-                      </img>
+                      {detail_product?.images?.filter((img) => !img.main).map((img, index) => (
+                        <img
+                          key={index}
+                          src={urlapi + "/api/Image/" + img.path || "/path/to/default-image.jpg"}
+                          alt="Product Image"
+                          style={{ width: "auto", height: "115px", borderRadius: "10px", marginRight: "5px" }}
+                        />
+                      ))}
                     </div>
                   </div>
                   <div className="container-hafl">
@@ -455,7 +517,7 @@ class ProductListClass extends Component {
                       <label>mã sản phẩm</label>
                       <input
                         type="text"
-                        defaultValue={detail_product?.idProduct || "hiển thị tên lỗi"}
+                        defaultValue={detail_product?.idProduct || "không có thông tin"}
                         disabled
                       />
                     </div>
@@ -463,15 +525,7 @@ class ProductListClass extends Component {
                       <label>tên sản phẩm</label>
                       <input
                         type="text"
-                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
-                        disabled
-                      />
-                    </div>
-                    <div className="block-input">
-                      <label>tên sản phẩm</label>
-                      <input
-                        type="text"
-                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
+                        defaultValue={detail_product?.nameProduct || "không có thông tin"}
                         disabled
                       />
                     </div>
@@ -480,7 +534,7 @@ class ProductListClass extends Component {
                         <label>loại sản phẩm</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.nameStyle || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.nameStyle || "không có thông tin"}
                           disabled
                         />
                       </div>
@@ -488,7 +542,7 @@ class ProductListClass extends Component {
                         <label>chất liệu</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.nameMaterial || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.nameMaterial || "không có thông tin"}
                           disabled
                         />
                       </div>
@@ -498,7 +552,7 @@ class ProductListClass extends Component {
                         <label>phân loại sản phẩm</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.nameCategory || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.nameCategory || "không có thông tin"}
                           disabled
                         />
                       </div>
@@ -506,7 +560,7 @@ class ProductListClass extends Component {
                         <label>tên thương hiệu</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.nameBrand || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.nameBrand || "không có thông tin"}
                           disabled
                         />
                       </div>
@@ -516,7 +570,7 @@ class ProductListClass extends Component {
                         <label>giá gốc</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.price || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.price || "không có thông tin"}
                           disabled
                         />
                       </div>
@@ -524,36 +578,85 @@ class ProductListClass extends Component {
                         <label>giá sau khuyến mãi</label>
                         <input
                           type="text"
-                          defaultValue={detail_product?.price || "hiển thị tên lỗi"}
+                          defaultValue={detail_product?.discountEvent ? detail_product?.price * (1 - detail_product?.discountEvent?.decrease) : detail_product?.price || "không có thông tin"}
                           disabled
                         />
                       </div>
                     </div>
-                    <div className="block-input">
-                      <label>thông tin khuyến mãi</label>
-                      <input
-                        type="text"
-                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
-                        disabled
-                      />
+                    <label style={{
+                      width: "200px",
+                      fontWeight: "bold"
+                    }}>thông tin khuyến mãi</label>
+                    <textarea
+                      type="text"
+                      defaultValue={detail_product?.discountEvent?.description || "không có thông tin"}
+                      disabled
+                      style={{ width: "100%", height: "75px", borderRadius: "10px", marginLeft: "20px", marginBottom: "10px" }}
+                    />
+                    <div className="container-detail">
+                      <div className="block-input">
+                        <label>tổng số lượng</label>
+                        <input
+                          type="text"
+                          defaultValue={this.state.selectedRow.so_luong || "không có thông tin"}
+                          disabled
+                        />
+                      </div>
+                      <div className="block-input">
+                        <label>trạng thái bán</label>
+                        <input
+                          type="text"
+                          defaultValue={detail_product?.status ? "đang bán" : "ngừng bán" || "không có thông tin"}
+                          disabled
+                        />
+                      </div>
                     </div>
-                    <div className="block-input">
-                      <label>số lượng</label>
-                      <input
-                        type="text"
-                        defaultValue={detail_product?.nameProduct || "hiển thị tên lỗi"}
-                        disabled
-                      />
-                    </div>
-                    <label></label>
-                    <label>trạng thái bán</label>
-                    <label>mô tả sản phẩm</label>
+                    <label style={{
+                      width: "200px",
+                      fontWeight: "bold"
+                    }}>mô tả sản phẩm</label>
+                    <textarea
+                      type="text"
+                      defaultValue={detail_product?.description || "không có thông tin"}
+                      disabled
+                      style={{ width: "100%", height: "75px", borderRadius: "10px", marginLeft: "20px" }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
+      // chỉnh sửa sản phẩm
+        {/* <div className="">
+          {showModelDetail && (
+            <div
+              className="psl-modal-overlay"
+              onClick={() => {
+                this.setState({ showModelDetail: false });
+              }}
+            >
+              <div
+                className="psl-modal-content"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  height: "700px",
+                  overflowY: "auto",
+                }}
+              >
+                <button
+                  className="psl-modal-close"
+                  onClick={() => {
+                    this.setState({ showModelDetail: false });
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+        </div> */}
       </>
     );
   }

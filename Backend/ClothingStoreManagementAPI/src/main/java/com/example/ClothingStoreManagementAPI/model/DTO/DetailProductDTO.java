@@ -7,7 +7,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class DetailProductDTO {
-	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,Integer price,String description) {
+	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,Integer price,String description,Boolean status) {
 		this.idProduct = idProduct;
 		this.nameProduct = nameProduct;
 		this.nameCategory = nameCategory;
@@ -16,6 +16,7 @@ public class DetailProductDTO {
 		this.nameStyle = nameStyle;
 		this.price = price;
 		this.description = description;
+		this.status = status;
 	}
 	private String idProduct;
 	private String nameProduct;
@@ -25,6 +26,7 @@ public class DetailProductDTO {
 	private String nameStyle;
 	private Integer price;
 	private String description;
+	private Boolean status;
 	private DiscountEvent DiscountEvent;
 	private List<ProductImage> Images = new ArrayList<>();
 	private List<ColorSizeDTO> ColorSize = new ArrayList<>();

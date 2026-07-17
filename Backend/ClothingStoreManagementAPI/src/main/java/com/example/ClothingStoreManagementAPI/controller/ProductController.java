@@ -107,4 +107,8 @@ public class ProductController {
 	public ResponseEntity<?> UpdateProduct(@RequestBody Product product){
 		return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateProduct(product,null,null,true), "Update", "product"));
 	}
+	@PostMapping("updateSaleStatus")
+	public ResponseEntity<?> updateSaleStatus(@RequestParam String idProduct,@RequestParam boolean status ){
+		return ResponseEntity.ok(common.ReturnReponse(ProductService.UpdateSaleStatus(idProduct,status), "Update", "product"));
+	}
 }

@@ -26,7 +26,8 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 			    b.nameBrand,
 			    s.nameStyle,
 			    COALESCE(pe.price, 0),
-			    p.description
+			    p.description,
+			    p.status
 			)
 			FROM Product p
 			LEFT JOIN ProductCategory pc ON p.idCategory = pc.idCategory
@@ -54,4 +55,7 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 	int UpdateProduct (@Param("idProduct") String idProduct,@Param("nameProduct") String nameProduct,@Param("idStyle") String idType,
 			@Param("idMaterial") String idMaterial,@Param("idBrand") String idBrand,@Param("idCategory") String idCategory,@Param("status") boolean status,
 			@Param("description") String description);
+	@Modifying
+	@Query("UPDATE Product p SET p.status =:status WHERE p.idProduct =:idProduct")
+	int UpdateSaleStatus (@Param("idProduct") String idProduct,@Param("status") boolean status);
 }
