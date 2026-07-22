@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.Entity.Size;
 import com.example.ClothingStoreManagementAPI.model.Entity.Style;
 import java.util.List;
 
@@ -36,13 +37,19 @@ public class StyleController {
         List<Style> Styles = StyleService.SellectStyle(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(Styles, "Sellect", "Style"));
     }
+    
+    @GetMapping("/sellectById")
+    public ResponseEntity<?> SellectBrand(@RequestParam String id) {
+    	Style Style = StyleService.SellectSizeById(id);
+        return ResponseEntity.ok(common.ReturnReponse(Style, "Sellect", "brand"));
+    }
 
     @PostMapping("/insertStyle")
     public ResponseEntity<?> InsertStyle(@RequestBody Style Style) {
         return ResponseEntity.ok(common.ReturnReponse(StyleService.InsertStyle(Style), "Insert", "Style"));
     }
 
-    @PostMapping("/updateStyle")
+    @PostMapping("/update")
     public ResponseEntity<?> UpdateStyle(@RequestBody Style Style) {
         return ResponseEntity.ok(common.ReturnReponse(StyleService.UpdateStyle(Style), "Update", "Style"));
     }

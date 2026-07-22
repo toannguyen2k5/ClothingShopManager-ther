@@ -7,7 +7,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 public class DetailProductDTO {
-	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,Integer price,String description,Boolean status) {
+	public DetailProductDTO(String idProduct,String nameProduct,String nameCategory,String nameMaterial,String nameBrand,String nameStyle,Integer price,String description,Boolean status,String nameSupplier) {
 		this.idProduct = idProduct;
 		this.nameProduct = nameProduct;
 		this.nameCategory = nameCategory;
@@ -17,6 +17,7 @@ public class DetailProductDTO {
 		this.price = price;
 		this.description = description;
 		this.status = status;
+		this.nameSupplier = nameSupplier;
 	}
 	private String idProduct;
 	private String nameProduct;
@@ -24,6 +25,7 @@ public class DetailProductDTO {
 	private String nameMaterial;
 	private String nameBrand;
 	private String nameStyle;
+	private String nameSupplier;
 	private Integer price;
 	private String description;
 	private Boolean status;

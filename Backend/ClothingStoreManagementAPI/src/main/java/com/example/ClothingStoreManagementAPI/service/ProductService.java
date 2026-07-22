@@ -34,8 +34,9 @@ public class ProductService {
 	@Autowired
 	private ImageService ImageService;
 	@Transactional(readOnly = true)
-	public List<ShowProductDTO> SellectAll(int limit , int offset){
+	public List<ShowProductDTO> SellectAll(int limit , int offset , int role_level){
 		try {
+			String find_all = role_level == 0 ? "WHERE p.status = true " : "";
 			Query query = entityManager.createQuery(
 				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowProductDTO(" +
 				    "p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
@@ -51,7 +52,7 @@ public class ProductService {
 				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true " +
 				    "LEFT JOIN DiscountEvent d ON d.idProduct = p.idProduct AND (d.eventDeadline IS NULL OR d.eventDeadline >= :today) " +
 				    "LEFT JOIN ProductImage pi ON pi.idProduct = p.idProduct AND pi.isMain = true " +
-				    "WHERE p.status = true " +
+				    find_all +
 				    "GROUP BY p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
 				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status",
 				    ShowProductDTO.class
@@ -183,7 +184,7 @@ public class ProductService {
 		try {
 			if(addimages!=null && !addimages.isEmpty())ImageService.uploadImages(deleimages, addimages, "product", Product.getIdProduct(),IsMain);
 			return productRepository.UpdateProduct(Product.getIdProduct(),Product.getNameProduct(),Product.getIdStyle(),Product.getIdMaterial(),
-					Product.getIdBrand(),Product.getIdCategory(),Product.isStatus(),Product.getDescription())>0;
+					Product.getIdBrand(),Product.getIdCategory(),Product.isStatus(),Product.getDescription(),Product.getIdSupplier())>0;
 		}
 		catch(Exception e) {
 			System.out.print("UpdateProduct, Error : " + e.getMessage());

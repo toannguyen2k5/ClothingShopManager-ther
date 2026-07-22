@@ -511,6 +511,7 @@ export default class PurchaseSlipManager extends Component {
                       <i className="bi bi-search"></i>
                     </button>
                     <ModalProduct
+                      {...this.props}
                       isOpen={this.state.isOpenModalProduct}
                       onClose={() =>
                         this.setState({ isOpenModalProduct: false })

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.Entity.Brand;
 import com.example.ClothingStoreManagementAPI.model.Entity.Color;
 import java.util.List;
 
@@ -35,13 +36,17 @@ public class ColorController {
         List<Color> colors = colorService.SellectColor(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(colors, "Sellect", "color"));
     }
-
+    @GetMapping("/sellectById")
+    public ResponseEntity<?> SellectBrand(@RequestParam String id) {
+    	Color color = colorService.SellectColorById(id);
+        return ResponseEntity.ok(common.ReturnReponse(color, "Sellect", "brand"));
+    }
     @PostMapping("/insertColor")
     public ResponseEntity<?> InsertColor(@RequestBody Color color) {
         return ResponseEntity.ok(common.ReturnReponse(colorService.InsertColor(color), "Insert", "color"));
     }
 
-    @PostMapping("/updateAll")
+    @PostMapping("/update")
     public ResponseEntity<?> UpdateColor(@RequestBody Color color) {
         return ResponseEntity.ok(common.ReturnReponse(colorService.UpdateColor(color), "Update", "color"));
     }

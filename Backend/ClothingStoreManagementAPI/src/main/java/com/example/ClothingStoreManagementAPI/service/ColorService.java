@@ -61,6 +61,17 @@ public class ColorService {
             return null;
         }
     }
+    @Transactional(readOnly = true)
+    public Color SellectColorById(String id) {
+        try {
+        	Optional<Color> color = colorRepository.findById(id);
+        	if(!color.isEmpty()) return color.get();
+        	else return null;
+        } catch (Exception e) {
+            System.out.print("SellectBrand, Error : " + e.getMessage());
+            return null;
+        }
+    }
     @Transactional
     public boolean InsertColor(Color Color) {
         try {

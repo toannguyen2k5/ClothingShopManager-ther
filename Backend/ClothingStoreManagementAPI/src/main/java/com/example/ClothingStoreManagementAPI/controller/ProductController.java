@@ -33,11 +33,11 @@ public class ProductController {
 	private Common common;
 	// khi người dùng vào trang web để xem sản phẩm
 	@GetMapping("sellectAll/{param_offset}/{param_limit}/")
-	public ResponseEntity<?> SellectAll(@PathVariable String param_limit, @PathVariable String param_offset) {
+	public ResponseEntity<?> SellectAll(@PathVariable String param_limit, @PathVariable String param_offset , @RequestParam int role_level) {
     	int limit, offset;
     	limit = CommonUtil.tryParseInt(param_limit);
     	offset = CommonUtil.tryParseInt(param_offset);
-		List<ShowProductDTO> ProductDTOs = ProductService.SellectAll(limit, offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectAll(limit, offset,role_level);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
     }
 	// khi người dùng tìm kiếm thông tin hàng hóa

@@ -35,13 +35,17 @@ public class BrandController {
         List<Brand> brands = brandService.SellectBrand(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(brands, "Sellect", "brand"));
     }
-
+    @GetMapping("/sellectById")
+    public ResponseEntity<?> SellectBrand(@RequestParam String id) {
+    	Brand brand = brandService.SellectBrandById(id);
+        return ResponseEntity.ok(common.ReturnReponse(brand, "Sellect", "brand"));
+    }
     @PostMapping("/insertBrand")
     public ResponseEntity<?> InsertBrand(@RequestBody Brand brand) {
         return ResponseEntity.ok(common.ReturnReponse(brandService.InsertBrand(brand), "Insert", "brand"));
     }
 
-    @PostMapping("/updateBrand")
+    @PostMapping("/update")
     public ResponseEntity<?> UpdateBrand(@RequestBody Brand brand) {
         return ResponseEntity.ok(common.ReturnReponse(brandService.UpdateBrand(brand), "Insert", "brand"));
     }

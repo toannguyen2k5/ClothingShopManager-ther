@@ -4,6 +4,7 @@ import { role_customer, role_manager, role_admin, urlapi } from "../../../../../
 import "./style.css";
 import { define_nav } from "../../../../../setting/store/const";
 import "../../../layout/order/input/list/PurchaseSlipList.css";
+import UpdateProduct from "../update/UpdateProduct.js";
 let mockProducts = [];
 
 const columns = [
@@ -44,12 +45,13 @@ class ProductListClass extends Component {
       contextMenuY: 0,
       selectedRow: null,
       showModelDetail: false,
+      showEditModal: false,
       detail_product: null,
     };
   }
 
   componentDidMount() {
-    fetch(`${urlapi}/api/product/sellectAll/all/all/`)
+    fetch(`${urlapi}/api/product/sellectAll/all/all/?role_level=${this.props.state_data.user_info.role_level}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status == "200") {
@@ -96,47 +98,46 @@ class ProductListClass extends Component {
     const res = await fetch(
       `${urlapi}/api/product/updateSaleStatus?idProduct=${selectedRow.id}&status=${!selectedRow.trang_thai}`,
       {
-        method: "POST"
+        method: "POST",
       }
     );
 
     const data = await res.json();
-    if (data.status && data.status === "200") {
-      fetch(`${urlapi}/api/product/sellectAll/all/all/`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status == "200") {
-          data.data.map((item, index) => {
-            mockProducts = [
-              ...mockProducts,
-              {
-                index: index + 1,
-                id: item.idProduct,
-                id_ncc: item.nameBrand,
-                ten_san_pham: item.nameProduct,
-                id_style: item.nameStyle,
-                id_danh_muc: item.nameCategory,
-                trang_thai: item.status,
-                so_luong: item.quantity || 0,
-                gia_ban: item.price || 0,
-              },
-            ];
-          });
-          this.setState({
-            allProducts: mockProducts,
-            filteredProducts: mockProducts,
-          });
-        }
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi fetch:", error);
-      });
+
+    if (data.status === "200") {
+      const res2 = await fetch(`${urlapi}/api/product/sellectAll/all/all/?role_level=${this.props.state_data.user_info.role_level}`);
+      const data2 = await res2.json();
+
+      if (data2.status === "200") {
+        const products = data2.data.map((item, index) => ({
+          index: index + 1,
+          id: item.idProduct,
+          id_ncc: item.nameBrand,
+          ten_san_pham: item.nameProduct,
+          id_style: item.nameStyle,
+          id_danh_muc: item.nameCategory,
+          trang_thai: item.status,
+          so_luong: item.quantity || 0,
+          gia_ban: item.price || 0,
+        }));
+
+        this.setState({
+          allProducts: products,
+          filteredProducts: products,
+        });
+      }
+
       alert("Đã thay đổi trạng thái bán thành công!");
-    }else {
+    } else {
       alert("Thay đổi trạng thái bán thất bại!");
     }
   };
+  handleOpenEditModal = () => {
+    this.setState({ showEditModal: true });
+  }
+  handeCloseEditModal = () => {
+    this.setState({ showEditModal: false });
+  }
   handleOpenModelDetail = () => {
     fetch(
       urlapi +
@@ -247,7 +248,8 @@ class ProductListClass extends Component {
       showModalShop,
       InventShop,
       showModelDetail,
-      detail_product
+      detail_product,
+      showEditModal,
     } = this.state;
     if (
       this.props.state_data.current_page.name !==
@@ -303,12 +305,12 @@ class ProductListClass extends Component {
                   ✏ đổi trạng thái bán
                 </div>
               )}
-              <div onClick={this.openEditModal}>
+              <div onClick={this.handleOpenEditModal}>
                 ✏ chỉnh sửa thông tin sản phẩm
               </div>
 
               {this.props.state_data.user_info.role_level >= role_admin && (
-                <div onClick={() => alert("Xóa khách hàng")}>
+                <div onClick={() => alert("Chức năng xóa sản phẩm chưa được triển khai")}>
                   🗑 Xóa sản phẩm
                 </div>
               )}
@@ -325,8 +327,8 @@ class ProductListClass extends Component {
               style={{ float: "left" }}
             >
               <option value="">Tất cả trạng thái</option>
-              <option value="Còn hàng">Còn hàng</option>
-              <option value="Hết hàng">Hết hàng</option>
+              <option value="Còn hàng">Đang bán</option>
+              <option value="Hết hàng">Ngưng bán</option>
             </select>
             <input
               type="text"
@@ -356,7 +358,6 @@ class ProductListClass extends Component {
             }}
           />
         </div>
-      // đoạn này là để show tồn kho ứng với size , màu
         <div className="">
           {showModalDetail && (
             <div
@@ -462,7 +463,6 @@ class ProductListClass extends Component {
             </div>
           )}
         </div>
-        // đoạn này để hiện chi tiết sản phẩm
         <div className="">
           {showModelDetail && (
             <div
@@ -627,14 +627,11 @@ class ProductListClass extends Component {
             </div>
           )}
         </div>
-      // chỉnh sửa sản phẩm
-        {/* <div className="">
-          {showModelDetail && (
+        <div className="">
+          {showEditModal && (
             <div
               className="psl-modal-overlay"
-              onClick={() => {
-                this.setState({ showModelDetail: false });
-              }}
+              onClick={this.handeCloseEditModal}
             >
               <div
                 className="psl-modal-content"
@@ -647,16 +644,18 @@ class ProductListClass extends Component {
               >
                 <button
                   className="psl-modal-close"
-                  onClick={() => {
-                    this.setState({ showModelDetail: false });
-                  }}
+                  onClick={this.handeCloseEditModal}
                 >
                   ×
                 </button>
+                <UpdateProduct {...this.props}
+                  idProduct={this.state.selectedRow.id}
+                  onClose={this.handeCloseEditModal}
+                />
               </div>
             </div>
           )}
-        </div> */}
+        </div>
       </>
     );
   }

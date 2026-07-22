@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.Entity.Color;
 import com.example.ClothingStoreManagementAPI.model.Entity.ProductMaterial;
 
 import java.util.HashMap;
@@ -38,13 +39,19 @@ public class ProductMaterialController {
         List<ProductMaterial> ProductMaterials = ProductMaterialService.SellectProductMaterial(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(ProductMaterials, "Sellect", "ProductMaterial"));
     }
-
+    
+    @GetMapping("/sellectById")
+    public ResponseEntity<?> SellectBrand(@RequestParam String id) {
+    	ProductMaterial ProductMaterial = ProductMaterialService.SellectProductMaterialById(id);
+        return ResponseEntity.ok(common.ReturnReponse(ProductMaterial, "Sellect", "brand"));
+    }
+    
     @PostMapping("/insertProductMaterial")
     public ResponseEntity<?> InsertProductMaterial(@RequestBody ProductMaterial ProductMaterial) {
         return ResponseEntity.ok(common.ReturnReponse(ProductMaterialService.InsertProductMaterial(ProductMaterial), "Insert", "ProductMaterial"));
     }
 
-    @PostMapping("/updateProductMaterial")
+    @PostMapping("/update")
     public ResponseEntity<?> UpdateProductMaterial(@RequestBody ProductMaterial ProductMaterial) {
         return ResponseEntity.ok(common.ReturnReponse(ProductMaterialService.UpdateProductMaterial(ProductMaterial), "Update", "ProductMaterial"));
     }

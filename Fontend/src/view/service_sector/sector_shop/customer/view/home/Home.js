@@ -21,7 +21,7 @@ class Home extends Component {
     document.title = "Demo";
   }
   GetProducts() {
-    fetch(urlapi + `/api/product/sellectAll/${this.state.quantity}/10/`)
+    fetch(urlapi + `/api/product/sellectAll/${this.state.quantity}/10/?role_level=${this.props.state_data.user_info.role_level}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {

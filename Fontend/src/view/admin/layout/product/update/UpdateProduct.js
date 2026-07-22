@@ -9,18 +9,10 @@ export default class UpdateProduct extends Component {
       // basic product info
       name: "",
       description: "",
-      color: "",
-      colors: [],
-      size: "",
-      sizes: [],
-      variants: [],
-      // modal state
-      showVariantModal: false,
-      editingIndex: null,
-      variantForm: { seri: "", color: "", size: "" },
+      product: {},
 
-      Material: "",
-      Materials: [],
+      material: "",
+      materials: [],
       style: "",
       styles: [],
       category: "",
@@ -29,109 +21,60 @@ export default class UpdateProduct extends Component {
       suppliers: [],
       manufacturer: "",
       manufacturers: [],
-
-      inputValue: "",
-      suggestions: [],
-      allProducts: [],
-      allInforProducts: [],
     };
   }
 
-  componentDidMount() {
-    // lấy dữ liệu product
-    fetch(`${urlapi}/api/product/sellectAll/all/all/`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status == "200") {
-          this.setState({ allInforProducts: data.data });
-          if (data.status === "200") {
-            const allProducts = data.data.map((product) => product.idProduct);
-            this.setState({ allInforProducts: data.data, allProducts });
-          }
-        }
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi fetch:", error);
-      });
-    // lấy colors
-    fetch(urlapi + "/api/color/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ colors: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy sizes
-    fetch(urlapi + "/api/Size/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ sizes: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy danh mục
-    fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ categories: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy nhà cung cấp
-    fetch(urlapi + "/api/Supplier/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ suppliers: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy thương hiệu
-    fetch(urlapi + "/api/Brand/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ manufacturers: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy style
-    fetch(urlapi + "/api/Style/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ styles: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-    // lấy chất liệu
-    fetch(urlapi + "/api/ProductMaterial/sellectAll/all/all/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status && data.status === "200") {
-          console.log("data : ", data);
-          this.setState({ Materials: data.data });
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error(error));
-  }
+componentDidMount = async () => {
+    const [
+        productRes,
+        categoryRes,
+        supplierRes,
+        brandRes,
+        styleRes,
+        MaterialRes
+    ] = await Promise.all([
+        fetch(urlapi + "/api/detailproduct/sellect/detailProperty?idProduct=" + this.props.idProduct),
+        fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/"),
+        fetch(urlapi + "/api/Supplier/sellectAll/all/all/"),
+        fetch(urlapi + "/api/Brand/sellectAll/all/all/"),
+        fetch(urlapi + "/api/Style/sellectAll/all/all/"),
+        fetch(urlapi + "/api/ProductMaterial/sellectAll/all/all/")
+    ]);
+
+    const productData = await productRes.json();
+    const categoryData = await categoryRes.json();
+    const supplierData = await supplierRes.json();
+    const brandData = await brandRes.json();
+    const styleData = await styleRes.json();
+    const materialData = await MaterialRes.json();
+
+    const product = productData.data;
+    console.log("productData : ", productData);
+    const materials = materialData.data;
+    console.log("materialData : ", materialData);
+    const styles = styleData.data;
+    const categories = categoryData.data;
+    const suppliers = supplierData.data;
+    const manufacturers = brandData.data;
+
+    this.setState({
+        product,
+        name: product.nameProduct,
+        description: product.description,
+
+        materials,
+        styles,
+        categories,
+        suppliers,
+        manufacturers,
+
+        material: materials.find(x => x.nameMaterial === product.nameMaterial),
+        style: styles.find(x => x.nameStyle === product.nameStyle),
+        category: categories.find(x => x.nameCategory === product.nameCategory),
+        supplier: suppliers.find(x => x.nameSupplier === product.nameSupplier),
+        manufacturer: manufacturers.find(x => x.nameBrand === product.nameBrand),
+    });
+}
 
   handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -140,41 +83,6 @@ export default class UpdateProduct extends Component {
       else this.setState({ subImages: Array.from(files).slice(0, 10) });
     } else this.setState({ [name]: value });
   };
-
-  // openVariantModal = (idx = null) => {
-  //   if (idx !== null)
-  //     this.setState({
-  //       editingIndex: idx,
-  //       variantForm: { ...this.state.variants[idx] },
-  //     });
-  //   else
-  //     this.setState({
-  //       editingIndex: null,
-  //       variantForm: { seri: "", color: "", size: "" },
-  //     });
-  //   this.setState({ showVariantModal: true });
-  // };
-
-  // closeVariantModal = () => this.setState({ showVariantModal: false });
-
-  // handleVariantChange = (e) => {
-  //   const { name, value } = e.target;
-  //   this.setState((prev) => ({
-  //     variantForm: { ...prev.variantForm, [name]: value },
-  //   }));
-  // };
-
-  // saveVariant = () => {
-  //   const { editingIndex, variantForm, variants } = this.state;
-  //   if (editingIndex === null)
-  //     this.setState({ variants: [...variants, variantForm] });
-  //   else {
-  //     const vs = [...variants];
-  //     vs[editingIndex] = variantForm;
-  //     this.setState({ variants: vs });
-  //   }
-  //   this.closeVariantModal();
-  // };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -197,56 +105,6 @@ export default class UpdateProduct extends Component {
     );
     this.setState({ [field]: selected || "" });
   };
-
-  handleSelect = (item) => {
-    this.setState({ inputValue: item, suggestions: [] });
-    const product = this.state.allInforProducts.find(
-      (p) => p.idProduct === item
-    );
-    if (product) {
-      this.setState({
-        name: product.nameProduct,
-        description: product.discription,
-      });
-
-      const matchedMaterial = this.state.Materials.find(
-        (m) => m.nameMaterial === product.nameMaterial
-      );
-      // Luôn set (kể cả khi không tìm thấy) và fallback về "" thay vì undefined,
-      // để tránh crash Object.keys(undefined) khi render <select>.
-      this.setState({ Material: matchedMaterial || "" });
-
-      const matchedCategory = this.state.categories.find(
-        (m) => m.nameCategory === product.nameCategory
-      );
-      this.setState({ category: matchedCategory || "" });
-
-      const matchedStyle = this.state.styles.find(
-        (m) => m.nameStyle === product.nameStyle
-      );
-      this.setState({ style: matchedStyle || "" });
-
-      const matchedSupplier = this.state.suppliers.find(
-        (m) => m.nameSupplier === product.nameSupplier
-      );
-      // Trước đây check nhầm điều kiện `matchedStyle` -> khiến supplier
-      // có thể bị set thành undefined dù không liên quan gì tới style.
-      this.setState({ supplier: matchedSupplier || "" });
-
-      const matchedBrand = this.state.manufacturers.find(
-        (m) => m.nameBrand === product.nameBrand
-      );
-      // Tương tự, trước đây check nhầm điều kiện `matchedStyle`.
-      this.setState({ manufacturer: matchedBrand || "" });
-    }
-  };
-  handleChangeProduct = (e) => {
-    const value = e.target.value;
-    const filtered = this.state.allProducts.filter((item) =>
-      item.toLowerCase().includes(value.toLowerCase())
-    );
-    this.setState({ inputValue: value, suggestions: filtered });
-  };
   saveProduct = () => {
     const req = {
       method: "POST",
@@ -254,23 +112,25 @@ export default class UpdateProduct extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        idProduct: this.state.inputValue,
+        idProduct: this.props.idProduct,
         nameProduct: this.state.name,
         idStyle: this.state.style.idStyle,
-        idMaterial: this.state.Material.idMaterial,
+        idMaterial: this.state.material.idMaterial,
         idBrand: this.state.manufacturer.idBrand,
         idCategory: this.state.category.idCategory,
         idSupplier: this.state.supplier.idSupplier,
-        status: true,
+        status: this.state.product.status,
         description: this.state.description,
       }),
     };
+    console.log("Request body:", req.body);
     fetch(urlapi + "/api/product/updateProductNoImage", req)
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
           this.componentDidMount();
           alert("Sửa thông tin quần áo thành công !");
+          this.props.onClose(); // Close the modal after successful update
         } else alert("Sửa thông tin quần áo thất bại !");
         console.log("Response từ server:", data);
       })
@@ -283,12 +143,9 @@ export default class UpdateProduct extends Component {
       supplier,
       manufacturer,
       description,
-      variants,
-      showVariantModal,
-      variantForm,
       style,
-      Material,
-      Materials,
+      material,
+      materials,
       styles,
       categories,
       suppliers,
@@ -303,34 +160,11 @@ export default class UpdateProduct extends Component {
             <div style={{ position: "relative", width: "300px" }}>
               <input
                 type="text"
-                value={this.state.inputValue}
-                onChange={this.handleChangeProduct}
+                value={this.props.idProduct}
+                onChange={this.handleChange}
                 placeholder="Nhập mã sản phẩm"
+                disable
               />
-              {this.state.suggestions.length > 0 && (
-                <ul
-                  style={{
-                    position: "absolute",
-                    background: "#fff",
-                    border: "1px solid #ccc",
-                    listStyle: "none",
-                    padding: 0,
-                    margin: 0,
-                    width: "100%",
-                    zIndex: 10,
-                  }}
-                >
-                  {this.state.suggestions.map((item, index) => (
-                    <li
-                      key={index}
-                      onClick={() => this.handleSelect(item)}
-                      style={{ padding: "8px", cursor: "pointer" }}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
           </div>
 
@@ -349,7 +183,7 @@ export default class UpdateProduct extends Component {
               onChange={(e) =>
                 this.handleSelectObject(e, "category", categories)
               }
-              value={category[Object.keys(category)[0]] || ""}
+              value={category ? category[Object.keys(category)[0]] : ""}
             >
               <option value="">--Chọn--</option>
               {this.renderOption(categories)}
@@ -359,7 +193,7 @@ export default class UpdateProduct extends Component {
             Style:
             <select
               onChange={(e) => this.handleSelectObject(e, "style", styles)}
-              value={style[Object.keys(style)[0]] || ""}
+              value={style ? style[Object.keys(style)[0]] : ""}
             >
               <option value="">--Chọn--</option>
               {this.renderOption(styles)}
@@ -371,7 +205,7 @@ export default class UpdateProduct extends Component {
               onChange={(e) =>
                 this.handleSelectObject(e, "supplier", suppliers)
               }
-              value={supplier[Object.keys(supplier)[0]] || ""}
+              value={supplier ? supplier[Object.keys(supplier)[0]] : ""}
             >
               <option value="">--Chọn--</option>
               {this.renderOption(suppliers)}
@@ -382,12 +216,12 @@ export default class UpdateProduct extends Component {
             Chất Liệu:
             <select
               onChange={(e) =>
-                this.handleSelectObject(e, "Material", Materials)
+                this.handleSelectObject(e, "material", materials)
               }
-              value={Material[Object.keys(Material)[0]] || ""}
+              value={material ? material[Object.keys(material)[0]] : ""}
             >
               <option value="">--Chọn--</option>
-              {this.renderOption(Materials)}
+              {this.renderOption(materials)}
             </select>
           </label>
           <label>
@@ -396,13 +230,12 @@ export default class UpdateProduct extends Component {
               onChange={(e) =>
                 this.handleSelectObject(e, "manufacturer", manufacturers)
               }
-              value={manufacturer[Object.keys(manufacturer)[0]] || ""}
+              value={manufacturer ? manufacturer[Object.keys(manufacturer)[0]] : ""}
             >
               <option value="">--Chọn--</option>
               {this.renderOption(manufacturers)}
             </select>
           </label>
-          {/* selects for category, supplier, manufacturer, discount */}
           <label>
             Description:
             <textarea
@@ -412,50 +245,6 @@ export default class UpdateProduct extends Component {
               onChange={this.handleChange}
             />
           </label>
-
-          {/* <div className="variant-section">
-            <h3>Variants</h3>
-            <button type="button" onClick={() => this.openVariantModal()}>
-              Add Variant
-            </button>
-            <table className="variant-table">
-              <thead>
-                <tr>
-                  <th>Seri</th>
-                  <th>Color</th>
-                  <th>Size</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {variants.map((v, i) => (
-                  <tr key={i}>
-                    <td>{v.seri}</td>
-                    <td>{v.color}</td>
-                    <td>{v.size}</td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() => this.openVariantModal(i)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          this.setState({
-                            variants: variants.filter((_, j) => j !== i),
-                          })
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div> */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button
               type="submit"
@@ -466,44 +255,6 @@ export default class UpdateProduct extends Component {
             </button>
           </div>
         </form>
-
-        {showVariantModal && (
-          <div className="up-modal">
-            <div className="up-modal-content">
-              <h4>
-                {this.state.editingIndex === null ? "Add" : "Edit"} Variant
-              </h4>
-              <label>
-                Seri:
-                <input
-                  name="seri"
-                  value={variantForm.seri}
-                  onChange={this.handleVariantChange}
-                />
-              </label>
-              <label>
-                Color:
-                <input
-                  name="color"
-                  value={variantForm.color}
-                  onChange={this.handleVariantChange}
-                />
-              </label>
-              <label>
-                Size:
-                <input
-                  name="size"
-                  value={variantForm.size}
-                  onChange={this.handleVariantChange}
-                />
-              </label>
-              <div className="up-modal-actions">
-                <button onClick={this.saveVariant}>Save</button>
-                <button onClick={this.closeVariantModal}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

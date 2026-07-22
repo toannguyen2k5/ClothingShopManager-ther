@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.ClothingStoreManagementAPI.common.CommonUtil;
+import com.example.ClothingStoreManagementAPI.model.Entity.ProductMaterial;
 import com.example.ClothingStoreManagementAPI.model.Entity.Size;
 import com.example.ClothingStoreManagementAPI.service.Common;
 import com.example.ClothingStoreManagementAPI.service.SizeService;
@@ -38,13 +39,19 @@ public class SizeController {
         List<Size> Sizes = SizeService.SellectSize(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(Sizes, "Sellect", "Size"));
     }
+    
+    @GetMapping("/sellectById")
+    public ResponseEntity<?> SellectBrand(@RequestParam String id) {
+    	Size Size = SizeService.SellectSizeById(id);
+        return ResponseEntity.ok(common.ReturnReponse(Size, "Sellect", "brand"));
+    }
 
     @PostMapping("/insertSize")
     public ResponseEntity<?> InsertSize(@RequestBody Size Size) {
         return ResponseEntity.ok(common.ReturnReponse(SizeService.InsertSize(Size), "Insert", "Size"));
     }
 
-    @PostMapping("/updateSize")
+    @PostMapping("/update")
     public ResponseEntity<?> UpdateSize(@RequestBody Size Size) {
         return ResponseEntity.ok(common.ReturnReponse(SizeService.UpdateSize(Size), "Update", "Size"));
     }

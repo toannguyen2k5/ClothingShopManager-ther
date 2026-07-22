@@ -20,6 +20,9 @@ const ProductForm = React.lazy(() =>
 const UpdateProduct = React.lazy(() =>
   import("../../view/admin/layout/product/update/UpdateProduct")
 );
+const PropertyManager = React.lazy(() =>
+  import("../../view/admin/layout/product/property/Property")
+);
 const PurchaseSlipManager = React.lazy(() =>
   import("../../view/admin/layout/order/input/new/PurchaseSlipManager")
 );
@@ -92,10 +95,10 @@ export const routes_admin = [
     role_level: 10,
   },
   {
-    path: "/admin/manager/product/update/",
+    path: "/admin/manager/product/property/",
     exact: true,
     name: "Form Search",
-    component: UpdateProduct,
+    component: PropertyManager,
     role_level: 5,
   },
   {

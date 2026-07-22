@@ -62,6 +62,17 @@ public class ProductMaterialService {
             return null;
         }
     }
+    @Transactional(readOnly = true)
+    public ProductMaterial SellectProductMaterialById(String id) {
+        try {
+        	Optional<ProductMaterial> ProductMaterial = ProductMaterialRepository.findById(id);
+        	if(!ProductMaterial.isEmpty()) return ProductMaterial.get();
+        	else return null;
+        } catch (Exception e) {
+            System.out.print("SellectBrand, Error : " + e.getMessage());
+            return null;
+        }
+    }
     @Transactional
     public boolean InsertProductMaterial(ProductMaterial ProductMaterial) {
         try {

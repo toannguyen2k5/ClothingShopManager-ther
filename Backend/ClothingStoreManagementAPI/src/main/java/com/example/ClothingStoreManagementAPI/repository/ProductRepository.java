@@ -27,7 +27,8 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 			    s.nameStyle,
 			    COALESCE(pe.price, 0),
 			    p.description,
-			    p.status
+			    p.status,
+			    sup.nameSupplier
 			)
 			FROM Product p
 			LEFT JOIN ProductCategory pc ON p.idCategory = pc.idCategory
@@ -35,6 +36,7 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 			LEFT JOIN Brand b ON p.idBrand = b.idBrand
 			LEFT JOIN Style s ON s.idStyle = p.idStyle
 			LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true
+			LEFT JOIN Supplier sup ON sup.idSupplier = p.idSupplier
 			WHERE p.idProduct = :idProduct
 			""")
 	DetailProductDTO selectDetailProduct(@Param("idProduct") String idProduct);
@@ -50,11 +52,11 @@ public interface ProductRepository extends JpaRepository<Product, String>{
 	List<ColorSizeDTO> SelectColorSizeByIdProduct(@Param("idProduct") String idProduct);
 	// updtae sản phẩm
 	@Modifying
-	@Query("UPDATE Product p SET p.nameProduct=:nameProduct , p.idStyle=:idStyle, p.idMaterial =:idMaterial , p.idBrand =:idBrand , p.idCategory =:idCategory,\r\n"
+	@Query("UPDATE Product p SET p.nameProduct=:nameProduct , p.idStyle=:idStyle, p.idMaterial =:idMaterial , p.idBrand =:idBrand , p.idCategory =:idCategory,p.idSupplier =:idSupplier,"
 			+"p.status =:status , p.description=:description WHERE p.idProduct =:idProduct")
 	int UpdateProduct (@Param("idProduct") String idProduct,@Param("nameProduct") String nameProduct,@Param("idStyle") String idType,
 			@Param("idMaterial") String idMaterial,@Param("idBrand") String idBrand,@Param("idCategory") String idCategory,@Param("status") boolean status,
-			@Param("description") String description);
+			@Param("description") String description,@Param("idSupplier") String idSupplier);
 	@Modifying
 	@Query("UPDATE Product p SET p.status =:status WHERE p.idProduct =:idProduct")
 	int UpdateSaleStatus (@Param("idProduct") String idProduct,@Param("status") boolean status);

@@ -118,7 +118,7 @@ class ModalProduct extends Component {
       .catch((error) => console.error("Lỗi POST:", error));
   };
   getListProduct = () => {
-    fetch(urlapi + "/api/product/sellectAll/all/all/")
+    fetch(urlapi + "/api/product/sellectAll/all/all?role_level="+this.props.state_data?.user_info?.role_level)
       .then((response) => response.json())
       .then((data) =>
         this.setState({

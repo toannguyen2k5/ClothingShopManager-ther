@@ -62,6 +62,17 @@ public class BrandService {
             return null;
         }
     }
+    @Transactional(readOnly = true)
+    public Brand SellectBrandById(String id) {
+        try {
+        	Optional<Brand> brand = brandRepository.findById(id);
+        	if(!brand.isEmpty()) return brand.get();
+        	else return null;
+        } catch (Exception e) {
+            System.out.print("SellectBrand, Error : " + e.getMessage());
+            return null;
+        }
+    }
     @Transactional
     public boolean InsertBrand(Brand brand) {
         try {

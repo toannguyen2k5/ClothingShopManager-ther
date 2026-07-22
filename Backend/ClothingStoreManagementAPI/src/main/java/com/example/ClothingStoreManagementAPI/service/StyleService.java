@@ -10,6 +10,7 @@ import jakarta.persistence.Query;
 
 import com.example.ClothingStoreManagementAPI.model.Entity.ProductCategory;
 import com.example.ClothingStoreManagementAPI.model.Entity.Shop;
+import com.example.ClothingStoreManagementAPI.model.Entity.Size;
 import com.example.ClothingStoreManagementAPI.model.Entity.Style;
 import java.util.*;
 
@@ -62,7 +63,17 @@ public class StyleService {
             return null;
         }
     }
-
+    @Transactional(readOnly = true)
+    public Style SellectSizeById(String id) {
+        try {
+        	Optional<Style> Style = StyleRepository.findById(id);
+        	if(!Style.isEmpty()) return Style.get();
+        	else return null;
+        } catch (Exception e) {
+            System.out.print("SellectBrand, Error : " + e.getMessage());
+            return null;
+        }
+    }
     public boolean InsertStyle(Style Style) {
         try {
             if (SelectIdStyle(Style.getNameStyle())!= null) {

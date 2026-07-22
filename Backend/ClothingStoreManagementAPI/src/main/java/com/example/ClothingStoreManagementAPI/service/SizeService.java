@@ -6,6 +6,8 @@ import com.example.ClothingStoreManagementAPI.repository.SizeRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+
+import com.example.ClothingStoreManagementAPI.model.Entity.ProductMaterial;
 import com.example.ClothingStoreManagementAPI.model.Entity.Size;
 import java.util.*;
 @Service
@@ -58,6 +60,17 @@ public class SizeService {
 			return null;
 		}
 	}
+    @Transactional(readOnly = true)
+    public Size SellectSizeById(String id) {
+        try {
+        	Optional<Size> Size = SizeRepository.findById(id);
+        	if(!Size.isEmpty()) return Size.get();
+        	else return null;
+        } catch (Exception e) {
+            System.out.print("SellectBrand, Error : " + e.getMessage());
+            return null;
+        }
+    }
 	public boolean InsertSize(Size Size){
 		try {
 				if(SelectIdSize(Size.getNameSize()) != null) {
