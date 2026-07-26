@@ -57,6 +57,17 @@ public class ShopService {
 			return null;
 		}
 	}
+	
+	public Shop SellectShopById(String id) {
+		try {
+			Optional<Shop> shop = shopRepository.findById(id);
+			if(shop.isEmpty()) return null;
+			else return shop.get();
+		} catch (Exception e) {
+			System.out.print("UpdateColor, Error : " + e.getMessage());
+			return null;
+		} 
+	}
 
 	public boolean InsertShop(Shop Shop) {
 		try {
@@ -71,12 +82,22 @@ public class ShopService {
 			return false;
 		}
 	}
-
+	
 	@Transactional
-	public boolean UpdateShop(Shop Shop) {
+	public boolean UpdateStatusShop(String id ,boolean status) {
+		try {
+			return shopRepository.UpdateShop(id,status) > 0;
+		} catch (Exception e) {
+			System.out.print("UpdateColor, Error : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	@Transactional
+	public boolean UpdateInforShop(Shop Shop) {
 		try {
 			return shopRepository.UpdateShop(Shop.getIdShop(), Shop.getNameShop(), Shop.getAddress(),
-					Shop.getOpeningTime(), Shop.getClosingTime(), Shop.isStatus()) > 0;
+					Shop.getOpeningTime(), Shop.getClosingTime()) > 0;
 		} catch (Exception e) {
 			System.out.print("UpdateColor, Error : " + e.getMessage());
 			return false;

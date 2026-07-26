@@ -144,6 +144,20 @@ h2 {
     border: 1px solid #d2d6da;
     border-radius: 10px;
   }
+  /* Fix: textarea.form-control (ô Địa Chỉ) bị mất viền do bị CSS/Bootstrap
+     nơi khác ghi đè với độ ưu tiên cao hơn. Chỉ định rõ thẻ + class để
+     đảm bảo luôn thắng, đồng thời set thêm các thuộc tính cơ bản
+     (padding, resize, box-sizing) vì trang không load Bootstrap CSS đầy đủ. */
+  textarea.form-control{
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border: 1px solid #d2d6da !important;
+    border-radius: 10px;
+    resize: vertical;
+    background-color: #fff;
+  }
   select.form-control{
     width: 200px;
     float: left;
@@ -217,4 +231,122 @@ h2 {
 .img-container input[type="button"]:hover {
   background-color: #e6e6e6;
   color: #24282b;
+}
+.context-menu{
+    position: fixed;
+    background:white;
+    border:1px solid #ddd;
+    border-radius:8px;
+    box-shadow:0 2px 10px rgba(0,0,0,.2);
+    z-index:99999;
+    min-width:180px;
+}
+
+.context-menu div{
+    padding:10px 15px;
+    cursor:pointer;
+}
+
+.context-menu div:hover{
+    background:#f5f5f5;
+}
+.container-detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.container-hafl {
+  display: flex;
+  flex-direction: column;
+  width : 100%;
+  height : 100%;
+}
+.container-hafl h2 {
+  text-align: center;
+}
+.block-input {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-right: 5px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.block-input label {
+  width: 200px;
+  font-weight: bold;
+  text-align: end;
+  margin-right : 10px
+}
+.block-input input{
+  width: 100%;
+  border-radius: 10px;
+  text-align: center;
+}
+.image-main {
+  display: flex;
+  width : 100%;
+  height : auto;
+  padding : 5px;
+  justify-content: center;
+  align-items: center;
+}
+.image-second {
+  display: flex;
+  flex-direction: row;
+  width : auto;
+  height : auto;
+  justify-content: center;
+  align-items: center;
+}
+.psl-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* đảm bảo nổi lên trên tất cả */
+}
+
+.psl-modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px 30px;
+  position: relative;
+  max-width: 800px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.psl-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.psl-modal-close:hover {
+  color: red;
+}
+.bt_close {
+  font-family: 'Times New Roman', Times, serif;
+  width: 150px;
+  height: 45px;
+  background-color: #3498db;
+  color: #ddd;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.bt_close:hover{
+  background-color: #ddd;
+  color: #3498db;
 }

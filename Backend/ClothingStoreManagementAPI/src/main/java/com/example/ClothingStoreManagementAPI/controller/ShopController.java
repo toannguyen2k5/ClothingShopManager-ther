@@ -35,15 +35,26 @@ public class ShopController {
         List<Shop> Shops = ShopService.SellectShop(query,limit,offset);
         return ResponseEntity.ok(common.ReturnReponse(Shops, "Select", "Shop"));
     }
+    
+    @GetMapping("/byId")
+    public ResponseEntity<?> SellectShopById(@RequestParam String id) {
+    	Shop Shops = ShopService.SellectShopById(id);
+        return ResponseEntity.ok(common.ReturnReponse(Shops, "Select", "Shop"));
+    }
 
     @PostMapping("/insertShop")
     public ResponseEntity<?> InsertShop(@RequestBody Shop Shop) {
         return ResponseEntity.ok(common.ReturnReponse(ShopService.InsertShop(Shop), "Insert", "Shop"));
     }
-
-    @PostMapping("/updateshop")
-    public ResponseEntity<?> UpdateShop(@RequestBody Shop Shop) {
-        return ResponseEntity.ok(common.ReturnReponse(ShopService.UpdateShop(Shop), "Update", "Shop"));
+    
+    @PostMapping("/update/status")
+    public ResponseEntity<?> UpdateStatus(@RequestParam String id,@RequestParam boolean status) {
+        return ResponseEntity.ok(common.ReturnReponse(ShopService.UpdateStatusShop(id,status), "Update status ", "Shop"));
+    }
+    
+    @PostMapping("/update/infor")
+    public ResponseEntity<?> UpdateInfor(@RequestBody Shop Shop) {
+        return ResponseEntity.ok(common.ReturnReponse(ShopService.UpdateInforShop(Shop), "Update infor ", "Shop"));
     }
 
     @PostMapping("/deleteShop")

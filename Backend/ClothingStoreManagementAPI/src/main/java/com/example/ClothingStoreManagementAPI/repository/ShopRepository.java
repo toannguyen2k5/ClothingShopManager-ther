@@ -18,9 +18,13 @@ public interface ShopRepository extends JpaRepository<Shop,String>{
 	// tìm kiếm nhà cung cấp dựa trên tên nhà cung cấp
 	@Query("SELECT s.idShop FROM Shop s WHERE s.nameShop = :nameShop")
 	String SelectIdShop(@Param("nameShop") String nameShop);
-
+	
+	@Modifying
+	@Query("UPDATE Shop SET status=:status WHERE idShop = :idShop")
+	int UpdateShop(@Param("idShop") String idShop ,@Param("status") boolean status);
+	
 	// chỉnh sửa nhà cung cấp
 	@Modifying
-	@Query("UPDATE Shop SET nameShop = :nameShop,address = :address,openingTime=:openingTime, closingTime = :closingTime,status=:status WHERE idShop = :idShop")
-	int UpdateShop(@Param("idShop") String idShop ,@Param("nameShop") String nameShop ,@Param("address") String address,@Param("openingTime") LocalTime openingTime ,@Param("closingTime") LocalTime closingTime ,@Param("status") boolean status);
+	@Query("UPDATE Shop SET nameShop = :nameShop,address = :address,openingTime=:openingTime, closingTime = :closingTime WHERE idShop = :idShop")
+	int UpdateShop(@Param("idShop") String idShop ,@Param("nameShop") String nameShop ,@Param("address") String address,@Param("openingTime") LocalTime openingTime ,@Param("closingTime") LocalTime closingTime);
 }

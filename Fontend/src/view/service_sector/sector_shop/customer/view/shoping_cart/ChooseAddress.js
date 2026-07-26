@@ -72,7 +72,7 @@ class ChooseAddress extends Component {
         {/* Tiêu đề */}
         <div style={styles.header}>
           <span style={styles.headerIcon}>📍</span>
-          <span style={styles.headerText}>Địa chỉ giao hàng</span>
+          <span style={styles.headerText}>Địa chỉ</span>
         </div>
 
         <div style={styles.body}>
