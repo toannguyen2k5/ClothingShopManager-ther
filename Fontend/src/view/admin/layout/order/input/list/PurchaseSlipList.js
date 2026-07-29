@@ -347,7 +347,7 @@ export default class PurchaseSlipList extends Component {
                         </select>
                         <button
                           className="btn btn-sm btn-success ml-2"
-                          onClick={this.handleUpdateStatus}
+                          onClick={()=>this.handleUpdateStatus()}
                         >
                           Update Trạng Thái
                         </button>
