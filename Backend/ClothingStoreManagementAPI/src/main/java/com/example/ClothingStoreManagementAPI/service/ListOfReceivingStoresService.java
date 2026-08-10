@@ -23,18 +23,21 @@ public class ListOfReceivingStoresService {
 		}
 	}
 	@Transactional
-	public boolean InsertListOfReceivingStores(ListOfReceivingStores ListOfReceivingStores) {
+	public HashMap<Boolean,String> InsertListOfReceivingStores(ListOfReceivingStores ListOfReceivingStores) {
+		HashMap<Boolean,String> result = new HashMap<>();
 		try {
 			String idcurrent = ListOfReceivingStoresRepository.SelectMaxId();
 			String newId = idcurrent!=null ? common.FindNextId(idcurrent) : common.GetFirstId(ListOfReceivingStores.class);
 			ListOfReceivingStores.setIdList(newId);
 			ListOfReceivingStoresRepository.save(ListOfReceivingStores); // thêm brand vào csdl
 			ListOfReceivingStoresRepository.flush();
-			return ListOfReceivingStoresRepository.existsById(newId); // trạng thái tồn tại của object mới
+			result.put(ListOfReceivingStoresRepository.existsById(newId),newId);
+			return result; // trạng thái tồn tại của object mới
 		}
 		catch(Exception e) {
 			System.out.print("InsertListOfReceivingStores, Error : " + e.getMessage());
-			return false;
+			result.put(false,null);
+			return null;
 		}
 	}
 	@Transactional

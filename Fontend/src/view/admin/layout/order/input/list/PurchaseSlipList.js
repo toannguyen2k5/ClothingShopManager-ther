@@ -39,7 +39,7 @@ export default class PurchaseSlipList extends Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {
-          console.log("data : ", data);
+          console.log("data purcharsplit: ", data);
           this.setState({ slips: data.data, loading: false });
         }
         console.log(data);
@@ -61,7 +61,7 @@ export default class PurchaseSlipList extends Component {
           .then((response) => response.json())
           .then((data) => {
             if (data.status && data.status === "200") {
-              console.log("data : ", data);
+              console.log("data detail PurchaseSlip: ", data);
               this.setState({ slipItems: data.data, itemsLoading: false });
             }
             console.log(data);

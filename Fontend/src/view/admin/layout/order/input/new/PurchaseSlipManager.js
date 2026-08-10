@@ -174,7 +174,8 @@ export default class PurchaseSlipManager extends Component {
     this.setState({ ...this.state, isOpenModalShop: true });
   };
   handleOpenModalProduct = () => {
-    this.setState({ ...this.state, isOpenModalProduct: true });
+    if(this.state.data_supplier_selected.idSupplier == "") alert("chưa chọn nhà cung cấp !")
+    else this.setState({ ...this.state, isOpenModalProduct: true });
   };
 
   handleSlipChange = (e) => {
@@ -291,7 +292,7 @@ export default class PurchaseSlipManager extends Component {
           idSupplier: this.state.data_supplier_selected.idSupplier,
           dayCreate: this.state.currentDate,
           totalBill: this.state.total,
-          approveStatus: true,
+          approveStatus: 1,
           statusUpdateDate: null,
           idStatusEditor: null,
           statusReceive: false,
@@ -516,6 +517,7 @@ export default class PurchaseSlipManager extends Component {
                       onClose={() =>
                         this.setState({ isOpenModalProduct: false })
                       }
+                      idSupplier = {this.state.data_supplier_selected.idSupplier}
                       updateProduct={(data) => this.updateProduct(data)}
                     />
                   </div>

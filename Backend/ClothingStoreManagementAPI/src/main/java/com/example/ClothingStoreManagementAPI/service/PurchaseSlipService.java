@@ -172,10 +172,14 @@ public class PurchaseSlipService {
 			if (!statusCreate.contains(false)) {
 				// tạo phiếu thành công
 				for (ShopReceiveData ShopReceiveData : ShopReceiveDatas) {
-					statusCreate.add(ListOfReceivingStoresService.InsertListOfReceivingStores(
-							new ListOfReceivingStores(null, newIdPurchaseSlip, ShopReceiveData.getIdShop(), false)));
+					
+					HashMap<Boolean,String> resultList = ListOfReceivingStoresService.InsertListOfReceivingStores(
+							new ListOfReceivingStores(null, newIdPurchaseSlip, ShopReceiveData.getIdShop(), false));
+					if(resultList.containsKey(true)) {
+						statusCreate.add(true);
+						idListShops.push(resultList.get(true));
+					} else statusCreate.add(false);
 					if (!statusCreate.contains(false)) {
-						idListShops.push(ShopReceiveData.getIdShop());
 						for (ShoppingCartData ShoppingCartData : ShopReceiveData.getShoppingCartDatas()) {
 							String idDetai = DetailProductRepository.SelectIdDetailProduct(
 									ShoppingCartData.getIdProduct(), ShoppingCartData.getNameColor(),
@@ -273,9 +277,13 @@ public class PurchaseSlipService {
 				if (!statusCreate.contains(false)) {
 					// tạo phiếu thành công
 					for (ShopReceiveData ShopReceiveData : ShopReceiveDatas) {
-						statusCreate.add(
-								ListOfReceivingStoresService.InsertListOfReceivingStores(new ListOfReceivingStores(null,
-										PurchaseSlip.getIdPurchaseSlip(), ShopReceiveData.getIdShop(), false)));
+						HashMap<Boolean,String> resultList = ListOfReceivingStoresService.InsertListOfReceivingStores(new ListOfReceivingStores(null,
+								PurchaseSlip.getIdPurchaseSlip(), ShopReceiveData.getIdShop(), false));
+						if(resultList.containsKey(true)) {
+							statusCreate.add(true);
+							idListShops.push(resultList.get(true));
+						} else statusCreate.add(false);
+						
 						if (!statusCreate.contains(false)) {
 							idListShops.push(ShopReceiveData.getIdShop());
 							for (ShoppingCartData ShoppingCartData : ShopReceiveData.getShoppingCartDatas()) {

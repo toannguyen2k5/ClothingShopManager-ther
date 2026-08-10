@@ -118,19 +118,32 @@ class ModalProduct extends Component {
       .catch((error) => console.error("Lỗi POST:", error));
   };
   getListProduct = () => {
-    fetch(urlapi + "/api/product/sellectAll/all/all?role_level="+this.props.state_data?.user_info?.role_level)
+    fetch(`${urlapi}/api/product/sellectBySupplier/all/all/?idSupplier=${this.props.idSupplier}`)
       .then((response) => response.json())
       .then((data) =>
         this.setState({
           show: this.props.isOpen,
           list_shop: data.data,
           data: data.data,
-        })
+        },()=>console.log("Data get list product : ",data))
       )
       .catch((error) => console.error(error));
   };
+  componentDidUpdate(prevProps) {
+    // Khi mở modal
+    if (!prevProps.isOpen && this.props.isOpen) {
+        this.setState({
+            show: true
+        });
+
+        console.log("idSupplier:", this.props.idSupplier);
+
+        if (this.props.idSupplier) {
+            this.getListProduct();
+        }
+    }
+}
   componentDidMount() {
-    this.getListProduct();
     fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
       .then((response) => response.json())
       .then((data) => this.setState({ data_category: data.data }))
@@ -222,7 +235,6 @@ class ModalProduct extends Component {
     console.log("data modal product : ", this.state);
     console.log("data props modal product : ", this.props);
     if (!show) return null;
-
     return (
       <div
         className="modal fade show d-block"

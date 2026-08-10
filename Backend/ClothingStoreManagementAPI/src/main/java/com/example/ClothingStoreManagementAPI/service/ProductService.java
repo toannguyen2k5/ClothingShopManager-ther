@@ -72,6 +72,44 @@ public class ProductService {
 		}
 	}
 	@Transactional(readOnly = true)
+	public List<ShowProductDTO> SellectAllBySupplier(int limit , int offset , String idSupplier){
+		try {
+			Query query = entityManager.createQuery(
+				    "SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ShowProductDTO(" +
+				    "p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
+				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status, SUM(is.quantity), p.description) "+
+				    "FROM Product p " +
+				    "LEFT JOIN Brand b ON p.idBrand = b.idBrand " +
+				    "LEFT JOIN Supplier sup ON sup.idSupplier = p.idSupplier " +
+				    "LEFT JOIN ProductCategory pc ON pc.idCategory = p.idCategory " +
+				    "LEFT JOIN Style s ON s.idStyle = p.idStyle " +
+				    "LEFT JOIN ProductMaterial pm ON pm.idMaterial = p.idMaterial " +
+				    "LEFT JOIN DetailProduct dp ON dp.idProduct = p.idProduct " +
+				    "LEFT JOIN InventoryShop is ON is.idDetail = dp.idDetail " +
+				    "LEFT JOIN Price pe ON pe.idProduct = p.idProduct AND pe.status = true " +
+				    "LEFT JOIN DiscountEvent d ON d.idProduct = p.idProduct AND (d.eventDeadline IS NULL OR d.eventDeadline >= :today) " +
+				    "LEFT JOIN ProductImage pi ON pi.idProduct = p.idProduct AND pi.isMain = true " +
+				    "WHERE p.status = true AND p.idSupplier = :idSupplier " +
+				    "GROUP BY p.idProduct, p.nameProduct, b.nameBrand, pc.nameCategory, sup.nameSupplier, " +
+				    "s.nameStyle, pm.nameMaterial, pe.price, d.decrease, pi.path, p.status",
+				    ShowProductDTO.class
+				);
+			query.setParameter("today", LocalDate.now()); // 👈 thiếu dòng này
+			query.setParameter("idSupplier", idSupplier);
+			if (offset > 0) {
+                query.setFirstResult(offset);
+                }
+            if (limit > 0) {
+                query.setMaxResults(limit);
+                }
+			return query.getResultList();
+		}
+		catch(Exception e) {
+			System.out.print("SellectProduct, Error : " + e.getMessage());
+			return null;
+		}
+	}
+	@Transactional(readOnly = true)
 	public List<ShowProductDTO> SellectInfor(String select,int limit , int offset){
 		try {
 			Query query = entityManager.createQuery(

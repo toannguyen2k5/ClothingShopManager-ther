@@ -104,42 +104,19 @@ class ProductInventory extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nameShop: this.state.shopName,
-        address: this.state.adress,
-        openingTime: this.state.openingTime,
-        closingTime: this.state.closeTime,
-        status: true,
+        idShop: null,
+        nameShop: this.state.dataEdit.nameShop,
+        address: this.state.dataEdit.address,
+        openingTime: this.state.dataEdit.openingTime,
+        closingTime: this.state.dataEdit.closingTime,
+        status: false,
       }),
     };
     fetch(urlapi + "/api/Shop/insertShop", req)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "200") alert("Thêm Cửa Hàng Thành Công!");
-        console.log("Response từ server:", data);
-        this.getListShop();
-      })
-      .catch((error) => console.error("Lỗi POST:", error));
-  };
-  deleteShop = (data) => {
-    const req = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // dữ liệu gửi lên server
-        idShop: data.idShop,
-        nameShop: data.nameShop,
-        address: data.address,
-        openingTime: data.openingTime,
-        closingTime: data.closingTime,
-        status: true,
-      }),
-    };
-    fetch(urlapi + "/api/Shop/deleteShop", req)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "200") alert("Xóa Cửa Hàng Thành Công!");
+        else alert("Thêm Cửa Hàng Thất Bại!");
         console.log("Response từ server:", data);
         this.getListShop();
       })
@@ -202,10 +179,10 @@ class ProductInventory extends React.Component {
   }
 
   closeShowModel = () => {
-    this.setState({ showModelDetail: false })
+    this.setState({ showModelDetail: false , selectedRow : null , dataEdit : null})
   }
   CloseEditModal = () => {
-    this.setState({ showEditModal: false })
+    this.setState({ showEditModal: false , selectedRow : null , dataEdit : null})
   }
 
   render() {
@@ -282,7 +259,7 @@ class ProductInventory extends React.Component {
                 }, console.log("selectedRow : ", this.state.selectedRow));
               }}
               pagination
-              paginationPerPage={5} // 👈 Số dòng mỗi trang
+              paginationPerPage={10} // 👈 Số dòng mỗi trang
               paginationRowsPerPageOptions={[5]} // 👈 Ẩn tùy chọn khác
               highlightOnHover
               striped
@@ -313,7 +290,7 @@ class ProductInventory extends React.Component {
                 </button>
                 <div className="container-detail">
                   <div className="container-hafl">
-                    <h2>Thông tin sản cửa hàng</h2>
+                    <h2>Thông tin cửa hàng</h2>
                     <div className="block-input">
                       <label>mã cửa hàng</label>
                       <input

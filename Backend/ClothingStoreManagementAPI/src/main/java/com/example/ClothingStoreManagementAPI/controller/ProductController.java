@@ -40,6 +40,14 @@ public class ProductController {
 		List<ShowProductDTO> ProductDTOs = ProductService.SellectAll(limit, offset,role_level);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
     }
+	@GetMapping("sellectBySupplier/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SellectAll(@PathVariable String param_limit, @PathVariable String param_offset , @RequestParam String idSupplier) {
+    	int limit, offset;
+    	limit = CommonUtil.tryParseInt(param_limit);
+    	offset = CommonUtil.tryParseInt(param_offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectAllBySupplier(limit, offset,idSupplier);
+		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
+    }
 	// khi người dùng tìm kiếm thông tin hàng hóa
 	@GetMapping("sellectByProperty/{param_offset}/{param_limit}/")
 	public ResponseEntity<?> SellectByProperty(@RequestParam String select,@PathVariable String param_limit, @PathVariable String param_offset){
