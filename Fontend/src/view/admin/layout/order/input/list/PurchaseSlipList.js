@@ -118,8 +118,11 @@ export default class PurchaseSlipList extends Component {
     }));
   };
   handleUpdateStatus = () => {
+    const approveStatus_code = this.state.statusOptions.map((key,value)=>{
+      if(value == this.state.approveStatus) return key
+    })
     const data = {
-      approveStatus: this.state.approveStatus,
+      approveStatus: this.state.approveStatus_code,
       statusUpdateDate: new Date(),
       idStatusEditor: this.props.state_data.user_info.id_user,
       idPurchaseSlip: this.state.selectedSlipId,
