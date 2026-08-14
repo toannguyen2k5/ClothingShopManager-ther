@@ -125,24 +125,19 @@ class ModalProduct extends Component {
           show: this.props.isOpen,
           list_shop: data.data,
           data: data.data,
-        },()=>console.log("Data get list product : ",data))
+        }, () => console.log("Data get list product : ", data))
       )
       .catch((error) => console.error(error));
   };
   componentDidUpdate(prevProps) {
-    // Khi mở modal
-    if (!prevProps.isOpen && this.props.isOpen) {
-        this.setState({
-            show: true
-        });
+    if (prevProps.isOpen !== this.props.isOpen) {
+      this.setState({ show: this.props.isOpen });
 
-        console.log("idSupplier:", this.props.idSupplier);
-
-        if (this.props.idSupplier) {
-            this.getListProduct();
-        }
+      if (this.props.isOpen && this.props.idSupplier) {
+        this.getListProduct();
+      }
     }
-}
+  }
   componentDidMount() {
     fetch(urlapi + "/api/ProductCategory/sellectAll/all/all/")
       .then((response) => response.json())
@@ -210,12 +205,6 @@ class ModalProduct extends Component {
         width: "200px",
       },
     ];
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.isOpen !== this.props.isOpen) {
-      this.setState({ show: this.props.isOpen });
-    }
   }
   onRowClick = (state, rowInfo, column, instance) => {
     alert("aaa");

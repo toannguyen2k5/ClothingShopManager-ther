@@ -21,7 +21,11 @@ public interface DetailProductRepository extends JpaRepository<DetailProduct, St
     // tìm kiếm id chi tiết sản phẩm dựa trên idProduct , idColor , idSize
     @Query("SELECT d.idDetail from  DetailProduct d WHERE d.idProduct = :idProduct AND d.idColor = :idColor AND d.idSize = :idSize ")
     String SelectIdDetailProduct(@Param("idProduct") String idProduct, @Param("idColor") String idColor, @Param("idSize") String idSize);
-
+    
+    // tìm kiếm id chi tiết sản phẩm dựa trên idProduct , idColor , idSize
+    @Query("SELECT d.numberSeri from  DetailProduct d WHERE d.idProduct = :idProduct AND d.idColor = :idColor AND d.idSize = :idSize ")
+    String SelectSeriNumber(@Param("idProduct") String idProduct, @Param("idColor") String idColor, @Param("idSize") String idSize);
+    
     @Query("SELECT d.idProduct from  DetailProduct d WHERE d.idDetail = :idDetail ")
     String SelectIdDetailByIdPro(@Param("idDetail") String idDetail);
     

@@ -49,6 +49,17 @@ public class DetailProductService {
 			return "";
 		}
 	}
+	// tìm kiếm mã detai
+	@Transactional(readOnly = true)
+	public String SelectSeriNumber (String idProduct, String idColor , String idSize) {
+		try {
+			return detailProductRepository.SelectSeriNumber(idProduct, idColor, idSize);
+		}
+		catch(Exception e) {
+			System.out.println("SelectDetail, Error : " + e.getMessage());
+			return "";
+		}
+	}
 	@Transactional(readOnly = true)
 	public List<DetailProductv2DTO> GetDetailProductv2DTO(String GetDetaiById){
 		List<DetailProductv2DTO> result = new ArrayList<>();

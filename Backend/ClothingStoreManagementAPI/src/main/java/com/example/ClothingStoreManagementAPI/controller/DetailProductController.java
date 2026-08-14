@@ -27,6 +27,11 @@ public class DetailProductController {
 	public ResponseEntity<?> SellectAllDetaiProduct(@RequestParam String idProduct){
 	return ResponseEntity.ok(common.ReturnReponse(detailProductService.GetDetailProductv2DTO(idProduct), "Sellect all", "DetaiProduct by id"));
 	}
+	@GetMapping("sellect/seriNumber")
+	public ResponseEntity<?> SellectSeriNumber(@RequestParam String idProduct,@RequestParam String idColor , @RequestParam String idSize){
+	String seriNumber = detailProductService.SelectSeriNumber(idProduct,idColor,idSize);
+	return ResponseEntity.ok(common.ReturnReponse(seriNumber, "Sellect", "DetaiProduct"));
+	}
 	@GetMapping("sellect/invenofshop")
 	public ResponseEntity<?> invenofshop(@RequestParam String idDetail){
 	return ResponseEntity.ok(common.ReturnReponse(detailProductService.GetInventoryDTO(idDetail), "Sellect all", "DetaiProduct by id"));

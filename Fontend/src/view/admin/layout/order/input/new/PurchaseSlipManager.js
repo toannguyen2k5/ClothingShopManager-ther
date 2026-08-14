@@ -45,7 +45,7 @@ export default class PurchaseSlipManager extends Component {
         color: "",
         idColor: "",
         size: "",
-        quantity: "",
+        quantity: 1,
         unitPrice: "",
         seri: "",
       },
@@ -66,6 +66,7 @@ export default class PurchaseSlipManager extends Component {
       productFilter: "",
       showProductPopup: false,
       responseMessage: "",
+      isSeriLocked: false, // State to control the disabled status of the seri input
     };
     this.columns = [
       { name: "STT", selector: (row, index) => index + 1 },
@@ -101,15 +102,20 @@ export default class PurchaseSlipManager extends Component {
       },
     ];
   }
-  
+
   updateSize = (data) => {
-    this.setState((prev) => ({
-      data_product_selected: {
-        ...prev.data_product_selected,
-        idSize: data.idSize,
-        size: data.nameSize,
-      },
-    }));
+    this.setState(
+      (prev) => ({
+        data_product_selected: {
+          ...prev.data_product_selected,
+          idSize: data.idSize,
+          size: data.nameSize,
+        },
+      }),
+      () => {
+        this.checkNumberSeri();
+      }
+    );
   };
   handleOpenModalSize = () => {
     this.setState({ ...this.state, isOpenModalSize: true });
@@ -141,14 +147,34 @@ export default class PurchaseSlipManager extends Component {
     }));
   };
 
+  checkNumberSeri = () => {
+    const { idProduct, idColor, idSize } = this.state.data_product_selected;
+    if (!idProduct || !idColor || !idSize) {
+      return;
+    }
+    fetch(urlapi + `/api/detailproduct/sellect/seriNumber?idProduct=${idProduct}&idColor=${idColor}&idSize=${idSize}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "200") {
+          this.setState({ ...this.state, isSeriLocked: true, data_product_selected: { ...this.state.data_product_selected, seri: data.data } });
+        }
+        else this.setState({ ...this.state, isSeriLocked: false, data_product_selected: { ...this.state.data_product_selected, seri: "" } });
+      })
+      .catch((error) => console.error("Lỗi khi kiểm tra seri:", error));
+  }
   updateColor = (data) => {
-    this.setState((prev) => ({
-      data_product_selected: {
-        ...prev.data_product_selected,
-        idColor: data.idColor,
-        color: data.nameColor,
-      },
-    }));
+    this.setState(
+      (prev) => ({
+        data_product_selected: {
+          ...prev.data_product_selected,
+          idColor: data.idColor,
+          color: data.nameColor,
+        },
+      }),
+      () => {
+        this.checkNumberSeri();
+      }
+    );
   };
   handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -174,7 +200,7 @@ export default class PurchaseSlipManager extends Component {
     this.setState({ ...this.state, isOpenModalShop: true });
   };
   handleOpenModalProduct = () => {
-    if(this.state.data_supplier_selected.idSupplier == "") alert("chưa chọn nhà cung cấp !")
+    if (this.state.data_supplier_selected.idSupplier == "") alert("chưa chọn nhà cung cấp !")
     else this.setState({ ...this.state, isOpenModalProduct: true });
   };
 
@@ -207,6 +233,14 @@ export default class PurchaseSlipManager extends Component {
     const { items, data_shop_selected, data_product_selected } = this.state;
     if (!data_shop_selected.idShop || !data_product_selected.idProduct) {
       alert("Chọn cửa hàng và sản phẩm trước khi thêm");
+      return;
+    }
+    if (!data_product_selected.idColor || !data_product_selected.idSize || !data_product_selected.seri) {
+      alert("Chọn màu, size và số seri trước khi thêm");
+      return;
+    }
+    if (!data_product_selected.quantity || !data_product_selected.unitPrice) {
+      alert("Nhập số lượng và giá nhập trước khi thêm");
       return;
     }
     const newItem = {
@@ -292,7 +326,7 @@ export default class PurchaseSlipManager extends Component {
           idSupplier: this.state.data_supplier_selected.idSupplier,
           dayCreate: this.state.currentDate,
           totalBill: this.state.total,
-          approveStatus: 1,
+          approveStatus: 0,
           statusUpdateDate: null,
           idStatusEditor: null,
           statusReceive: false,
@@ -517,7 +551,7 @@ export default class PurchaseSlipManager extends Component {
                       onClose={() =>
                         this.setState({ isOpenModalProduct: false })
                       }
-                      idSupplier = {this.state.data_supplier_selected.idSupplier}
+                      idSupplier={this.state.data_supplier_selected.idSupplier}
                       updateProduct={(data) => this.updateProduct(data)}
                     />
                   </div>
@@ -598,6 +632,80 @@ export default class PurchaseSlipManager extends Component {
             </div>
           </div>
           <div className="row mb-3">
+            <div className="form-group col-5 form-group-input">
+              <div className="row">
+                <label for="color" className="col-sm-2 col-form-label">
+                  Màu
+                </label>
+                <div className="col-sm-8">
+                  <div className="row form-inline">
+                    <div className="col-10">
+                      <input
+                        type="text"
+                        className="form-control form-control-sm"
+                        name="color"
+                        id="color"
+                        value={this.state.data_product_selected.color}
+                        readOnly
+                        disabled
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-outline-info col-2"
+                      onClick={this.handleOpenModalColor}
+                    >
+                      <i className="bi bi-search"></i>
+                    </button>
+                    <ModalColor
+                      isOpen={this.state.isOpenModalColor}
+                      onClose={() =>
+                        this.setState({ isOpenModalColor: false })
+                      }
+                      updateColor={(data) => this.updateColor(data)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="form-group col-5 form-group-input">
+              <div className="row">
+                <label for="size" class="col-sm-2 col-form-label">
+                  Size
+                </label>
+                <div class="col-sm-8">
+                  <div className="row form-inline">
+                    <div className="col-10">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        name="color"
+                        id="color"
+                        value={this.state.data_product_selected.size}
+                        readOnly
+                        disabled
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-outline-info col-2"
+                      onClick={this.handleOpenModalSize}
+                    >
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <ModalSize
+                      isOpen={this.state.isOpenModalSize}
+                      onClose={() =>
+                        this.setState({ isOpenModalSize: false })
+                      }
+                      updateColor={(data) => this.updateSize(data)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3">
             <div className="row col-6 form-group-input">
               <div className="form-group col-6 form-group-input">
                 <div className="row">
@@ -612,7 +720,19 @@ export default class PurchaseSlipManager extends Component {
                       name="quantity"
                       onChange={this.handleItemChange}
                       value={this.state.data_product_selected.quantity}
-                      min={0}
+                      min={1}
+                      onKeyDown={(e) => {
+                        // Không cho nhập số, e, +, -
+                        if (
+                          /^[0-9]$/.test(e.key) ||
+                          e.key === "e" ||
+                          e.key === "E" ||
+                          e.key === "+" ||
+                          e.key === "-"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -624,88 +744,25 @@ export default class PurchaseSlipManager extends Component {
                   </label>
                   <div className="col-sm-7">
                     <input
-                      type="money"
+                      type="number"
                       className="form-control form-control-sm"
                       id="Price"
                       name="unitPrice"
                       onChange={this.handleItemChange}
                       value={this.state.data_product_selected.unitPrice}
                       min={0}
+                      placeholder="vnđ"
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === "e" ||
+                          e.key === "E" ||
+                          e.key === "+" ||
+                          e.key === "-"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                     />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row col-6 form-group-input">
-              <div className="form-group col-6 form-group-input">
-                <div className="row">
-                  <label for="color" className="col-sm-2 col-form-label">
-                    Màu
-                  </label>
-                  <div className="col-sm-8">
-                    <div className="row form-inline">
-                      <div className="col-10">
-                        <input
-                          type="text"
-                          className="form-control form-control-sm"
-                          name="color"
-                          id="color"
-                          value={this.state.data_product_selected.color}
-                          readOnly
-                          disabled
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        className="btn btn-outline-info col-2"
-                        onClick={this.handleOpenModalColor}
-                      >
-                        <i className="bi bi-search"></i>
-                      </button>
-                      <ModalColor
-                        isOpen={this.state.isOpenModalColor}
-                        onClose={() =>
-                          this.setState({ isOpenModalColor: false })
-                        }
-                        updateColor={(data) => this.updateColor(data)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="form-group col-6 form-group-input">
-                <div className="row">
-                <label for="size" class="col-sm-2 col-form-label">
-                    Size
-                  </label>
-                  <div class="col-sm-8">
-                    <div className="row form-inline">
-                      <div className="col-10">
-                        <input
-                          type="text"
-                          class="form-control form-control-sm"
-                          name="color"
-                          id="color"
-                          value={this.state.data_product_selected.size}
-                          readOnly
-                          disabled
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        class="btn btn-outline-info col-2"
-                        onClick={this.handleOpenModalSize}
-                      >
-                        <i class="bi bi-search"></i>
-                      </button>
-                      <ModalSize
-                        isOpen={this.state.isOpenModalSize}
-                        onClose={() =>
-                          this.setState({ isOpenModalSize: false })
-                        }
-                        updateColor={(data) => this.updateSize(data)}
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -725,6 +782,8 @@ export default class PurchaseSlipManager extends Component {
                     name="seri"
                     onChange={this.handleItemChange}
                     value={this.state.data_product_selected.seri}
+                    disabled={this.state.isSeriLocked}
+                    placeholder={(!this.state.isSeriLocked && this.state.data_product_selected.idColor && this.state.data_product_selected.idSize) ? "không tồn tại số seri, cần nhập mới" : ""}
                   />
                 </div>
               </div>
