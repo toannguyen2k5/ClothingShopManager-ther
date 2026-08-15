@@ -326,10 +326,10 @@ export default class PurchaseSlipManager extends Component {
           idSupplier: this.state.data_supplier_selected.idSupplier,
           dayCreate: this.state.currentDate,
           totalBill: this.state.total,
-          approveStatus: 0,
+          approveStatus: null,
           statusUpdateDate: null,
           idStatusEditor: null,
-          statusReceive: false,
+          statusReceive: null,
         },
         shopReceiveData: groupedData,
       }),
@@ -467,29 +467,6 @@ export default class PurchaseSlipManager extends Component {
           <div className="row mb-3">
             <div className="form-group col-5 form-group-input">
               <div className="row">
-                <label for="totalBill" className="col-sm-3 col-form-label">
-                  Tổng Tiền
-                </label>
-                <div className="col-sm-7">
-                  <input
-                    type="text"
-                    readonly
-                    className="form-control form-control-sm"
-                    id="totalBill"
-                    value={this.state.total.toLocaleString() + " đ"}
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/** thông tin sản phẩm */}
-        <div className="row">
-          <h2>Thông Tin Sản Phẩm</h2>
-          <div className="row mb-3">
-            <div className="form-group col-5 form-group-input">
-              <div className="row">
                 <label for="idShop" className="col-sm-3 col-form-label">
                   Cửa Hàng
                 </label>
@@ -521,6 +498,31 @@ export default class PurchaseSlipManager extends Component {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="row mb-3">
+            <div className="form-group col-5 form-group-input">
+              <div className="row">
+                <label for="totalBill" className="col-sm-3 col-form-label">
+                  Tổng Tiền
+                </label>
+                <div className="col-sm-7">
+                  <input
+                    type="text"
+                    readonly
+                    className="form-control form-control-sm"
+                    id="totalBill"
+                    value={this.state.total.toLocaleString() + " đ"}
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/** thông tin sản phẩm */}
+        <div className="row">
+          <h2>Thông Tin Sản Phẩm</h2>
+          <div className="row mb-3">
             <div className="form-group col-5 form-group-input">
               <div className="row">
                 <label for="idProduct" className="col-sm-3 col-form-label">

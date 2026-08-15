@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { role_manager, urlapi } from "../../../../../../setting/store/const";
+import { role_manager, role_admin, urlapi } from "../../../../../../setting/store/const";
+import { FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 import "./PurchaseSlipList.css";
 
 export default class PurchaseSlipList extends Component {
@@ -29,9 +30,34 @@ export default class PurchaseSlipList extends Component {
   componentDidMount() {
     this.fetchSlips();
   }
-  getStatusText = (code) => {
-    const status = this.state.statusOptions.find((opt) => opt.value === code);
-    return status ? status.text : "Không rõ";
+  getStatusIcon = (code) => {
+    if (code === "SCd001") {
+      return (
+        <FaCheckCircle
+          color="green"
+          size={20}
+          title="Đã xác nhận"
+        />
+      );
+    }
+
+    if (code === "SCd002") {
+      return (
+        <FaTimesCircle
+          color="red"
+          size={20}
+          title="Từ chối"
+        />
+      );
+    }
+
+    return (
+      <FaClock
+        color="orange"
+        size={20}
+        title="Chưa duyệt"
+      />
+    );
   };
 
   fetchSlips = async () => {
@@ -118,8 +144,8 @@ export default class PurchaseSlipList extends Component {
     }));
   };
   handleUpdateStatus = () => {
-    const approveStatus_code = this.state.statusOptions.map((key,value)=>{
-      if(value == this.state.approveStatus) return key
+    const approveStatus_code = this.state.statusOptions.map((key, value) => {
+      if (value == this.state.approveStatus) return key
     })
     const data = {
       approveStatus: this.state.approveStatus_code,
@@ -195,27 +221,44 @@ export default class PurchaseSlipList extends Component {
       },
       {
         name: "Trạng thái duyệt",
-        selector: (row) => this.getStatusText(row.approveStatus),
+        selector: (row) => this.getStatusIcon
+          (row.approveStatus),
         sortable: true,
       },
       {
         name: "Trạng thái nhận hàng",
-        selector: (row) => (row.statusReceive ? "Đã nhận" : "Đang nhận hàng"),
+        selector: (row) => row.approveStatus === "SCd001" ? (row.statusReceive ? "Đã nhận hàng" : "Đang nhận hàng") : "",
         sortable: true,
       },
       {
         name: "Actions",
         cell: (row) =>
-          !row.approveStatus && (
+          row.approveStatus === "SCd003" && (
             <>
+              <button
+                className="btn btn-sm btn-outline-primary"
+                onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
+              >
+                accept
+              </button>
               <button
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
               >
-                Xóa
+                refuse
               </button>
             </>
-          ),
+          ) ||
+          row.approveStatus === "SCd002" && (
+            <>
+              <button
+                className="btn btn-sm btn-outline-primary"
+                onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
+              >
+                Restore
+              </button>
+            </>
+          )
       },
     ];
 
@@ -327,33 +370,23 @@ export default class PurchaseSlipList extends Component {
                     </p>
                   </div>
                   <div className="psl-slip-row">
-                    <strong>Trạng thái:</strong>
-                    {selectedSlip.approveStatus === "SCd004" &&
-                    this.state.approveStatus !== selectedSlip.approveStatus &&
-                    this.props.state_data.user_info.role_level >=
-                      role_manager ? (
-                      <span>
-                        {this.getStatusText(selectedSlip.approveStatus)}
-                      </span>
-                    ) : (
+                    {selectedSlip.approveStatus === "SCd001" && (
                       <>
-                        <select
-                          className="form-control form-control-sm  select-slip"
-                          value={selectedSlip.approveStatus}
-                          onChange={this.handleStatusChange}
-                        >
-                          {statusOptions.map((status) => (
-                            <option key={status} value={status.value}>
-                              {status.text}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          className="btn btn-sm btn-success ml-2"
-                          onClick={()=>this.handleUpdateStatus()}
-                        >
-                          Update Trạng Thái
-                        </button>
+                        <strong>Trạng thái nhận hàng</strong>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm ml-2"
+                          value={this.state.statusReceive ? "Đã nhận hàng" : "Đang nhận hàng"}
+                          readOnly
+                        />
+                        {this.props.state_data.user_info.role_level < role_admin && (
+                          <button
+                            className="btn btn-sm btn-success ml-2"
+                            onClick={() => this.handleUpdateStatus()}
+                          >
+                            Đã nhận hàng
+                          </button>
+                        )}
                       </>
                     )}
                   </div>

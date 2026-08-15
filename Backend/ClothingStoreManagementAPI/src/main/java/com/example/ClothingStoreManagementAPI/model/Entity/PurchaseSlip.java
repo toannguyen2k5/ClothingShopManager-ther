@@ -27,8 +27,8 @@ public class PurchaseSlip {
     @Column(name = "totalBill",columnDefinition = "INT UNSIGNED",nullable = false)
     private int totalBill;
 
-    @Column(name = "approveStatus", nullable = false)
-    private boolean approveStatus;
+    @Column(name = "approveStatus", nullable = true)
+    private String approveStatus;
 
     @Column(name = "statusUpdateDate")
     private LocalDate statusUpdateDate;
@@ -36,6 +36,6 @@ public class PurchaseSlip {
     @Column(name = "idStatusEditor", length = 45)
     private String idStatusEditor;
     
-    @Column(name = "statusReceive",nullable = false)
+    @Column(name = "statusReceive",nullable = true)
     private boolean statusReceive;
 }
