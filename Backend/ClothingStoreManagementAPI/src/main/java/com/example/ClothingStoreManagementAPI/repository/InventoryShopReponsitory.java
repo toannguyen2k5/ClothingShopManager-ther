@@ -18,7 +18,7 @@ public interface InventoryShopReponsitory extends JpaRepository<InventoryShop, S
 	// tìm kiếm tổng số lượng hàng tồn kho theo mã sản phẩm
 	@Query("SELECT SUM(u.quantity) FROM InventoryShop u WHERE u.idDetail = :idDetail")
 	Long SelectInventoryShop(@Param("idDetail") String idDetail);
-
+	
 	// tìm kiếm số lượng tồn kho
 	@Query("SELECT u FROM InventoryShop u WHERE u.idShop = :idShop AND u.idDetail = :idDetail")
 	InventoryShop SelectInventoryShop(@Param("idShop") String idShop, @Param("idDetail") String idDetail);

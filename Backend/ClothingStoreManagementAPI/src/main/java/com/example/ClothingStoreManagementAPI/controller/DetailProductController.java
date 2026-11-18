@@ -1,10 +1,13 @@
 package com.example.ClothingStoreManagementAPI.controller;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.ClothingStoreManagementAPI.service.Common;
 import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.model.DTO.DetailProductDTO;
+import com.example.ClothingStoreManagementAPI.model.DTO.DetailProductv2DTO;
 import com.example.ClothingStoreManagementAPI.model.Entity.DetailProduct;
 	
 @CrossOrigin(origins = "http://localhost:3000") // Cho phép React truy cập
@@ -21,6 +24,11 @@ public class DetailProductController {
 	@GetMapping("sellect/detailProperty")
 	public ResponseEntity<?> SellectDetaiProduct(@RequestParam String idProduct){
 	DetailProductDTO detailProductDTO = detailProductService.SelectDetail(idProduct);
+	return ResponseEntity.ok(common.ReturnReponse(detailProductDTO, "Sellect", "DetaiProduct"));
+	}
+	@GetMapping("sellect/detailPropertyByShop")
+	public ResponseEntity<?> SellectDetaiProduct(@RequestParam String idProduct,@RequestParam String idShop){
+	List<DetailProductv2DTO> detailProductDTO = detailProductService.SelectDetail(idProduct,idShop);
 	return ResponseEntity.ok(common.ReturnReponse(detailProductDTO, "Sellect", "DetaiProduct"));
 	}
 	@GetMapping("sellect/alldetail")

@@ -326,7 +326,7 @@ export default class PurchaseSlipManager extends Component {
           idSupplier: this.state.data_supplier_selected.idSupplier,
           dayCreate: this.state.currentDate,
           totalBill: this.state.total,
-          approveStatus: null,
+          approveStatus: "SCd003",
           statusUpdateDate: null,
           idStatusEditor: null,
           statusReceive: null,

@@ -50,6 +50,15 @@ public interface ProductRepository extends JpaRepository<Product, String>{
             + "INNER JOIN InventoryShop i On i.idDetail = d.idDetail "
             + "WHERE d.idProduct = :idProduct")
 	List<ColorSizeDTO> SelectColorSizeByIdProduct(@Param("idProduct") String idProduct);
+	
+	//tìm kiếm chi tiết sản phẩm dựa trên mã sản phẩm và mã shop
+	@Query("SELECT new com.example.ClothingStoreManagementAPI.model.DTO.ColorSizeDTO(c.nameColor, s.nameSize , i.quantity) "
+            + "FROM DetailProduct d "
+            + "INNER JOIN Color c On d.idColor = c.idColor "
+            + "INNER JOIN Size s On  d.idSize = s.idSize "
+            + "INNER JOIN InventoryShop i On i.idDetail = d.idDetail AND idShop = :idShop "
+            + "WHERE d.idProduct = :idProduct")
+	List<ColorSizeDTO> SelectPathsByIdProductAndIdShop(@Param("idProduct") String idProduct,@Param("idShop") String idShop);
 	// updtae sản phẩm
 	@Modifying
 	@Query("UPDATE Product p SET p.nameProduct=:nameProduct , p.idStyle=:idStyle, p.idMaterial =:idMaterial , p.idBrand =:idBrand , p.idCategory =:idCategory,p.idSupplier =:idSupplier,"

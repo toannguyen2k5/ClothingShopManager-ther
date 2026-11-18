@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { role_manager, urlapi } from "../../../../../../setting/store/const";
-import "../../input/list/PurchaseSlipList.css";
+import { role_manager, urlapi } from "../../../../../../../setting/store/const";
+import "../../../input/list/PurchaseSlipList.css";
 
 export default class SalesSlipList extends Component {
   constructor(props) {
@@ -35,7 +35,7 @@ export default class SalesSlipList extends Component {
     return status ? status.text : "Không rõ";
   };
   fetchSlips = async () => {
-    fetch(urlapi + "/api/SalesSlip/SelectAll/all/all/")
+    fetch(urlapi + "/api/SalesSlip/SelectAll/offline/all/all/")
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status === "200") {

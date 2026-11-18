@@ -57,6 +57,11 @@ public class SupplierService {
             return null;
         }
     }
+    
+    public Supplier SellectSupplier(String id) {
+            Optional<Supplier> Supplier =  SupplierRepository.findById(id);
+            if(Supplier != null)  return Supplier.get(); else return null;
+    }
 
     public boolean InsertSupplier(Supplier Supplier) {
         try {

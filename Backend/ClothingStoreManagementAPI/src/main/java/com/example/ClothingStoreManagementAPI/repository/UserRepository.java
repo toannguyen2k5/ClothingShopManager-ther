@@ -17,8 +17,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, String> {
-
-	List<Users> findByRoleNot(Role role);
+	
+	@Query("SELECT u FROM Users u WHERE u.role != :role AND u.role != 'admin'")
+	List<Users> findByRoleNot(@Param("role")Role role);
 
 	// trả về id người dùng lớn nhất
 	@Query("SELECT MAX(idUser) FROM Users")

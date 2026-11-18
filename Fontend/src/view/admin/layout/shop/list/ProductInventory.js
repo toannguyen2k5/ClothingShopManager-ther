@@ -1,8 +1,8 @@
 import React from "react";
 import DataTable from "react-data-table-component";
 import "./ProductInventory.css";
-import { define_nav, urlapi, role_customer, role_manager, role_admin } from "../../../../setting/store/const";
-import ChooseAddress from "../../../service_sector/sector_shop/customer/view/shoping_cart/ChooseAddress";
+import { define_nav, urlapi, role_customer, role_manager, role_admin } from "../../../../../setting/store/const";
+import ChooseAddress from "../../../../service_sector/sector_shop/customer/view/shoping_cart/ChooseAddress";
 class ProductInventory extends React.Component {
   constructor(props) {
     super(props);

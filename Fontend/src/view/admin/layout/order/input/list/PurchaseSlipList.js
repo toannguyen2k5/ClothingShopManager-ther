@@ -17,12 +17,6 @@ export default class PurchaseSlipList extends Component {
       itemsLoading: false,
       showModal: false,
       itemSearchText: "",
-      statusOptions: [
-        { value: "SCd001", text: "Chưa duyệt" },
-        { value: "SCd002", text: "Đã duyệt" },
-        { value: "SCd003", text: "Đang giao hàng" },
-        { value: "SCd004", text: "hoàn thành" },
-      ],
       selectedStatus: "",
     };
   }
@@ -131,24 +125,9 @@ export default class PurchaseSlipList extends Component {
       slipItems: prev.slipItems.filter((_, i) => i !== index),
     }));
   };
-
-  handleStatusChange = (e) => {
-    const updatedStatus = e.target.value;
-    this.setState((prev) => ({
-      slips: prev.slips.map((slip) =>
-        slip.idPurchaseSlip === prev.selectedSlipId
-          ? { ...slip, approveStatus: updatedStatus }
-          : slip
-      ),
-      approveStatus: updatedStatus,
-    }));
-  };
-  handleUpdateStatus = () => {
-    const approveStatus_code = this.state.statusOptions.map((key, value) => {
-      if (value == this.state.approveStatus) return key
-    })
+  handleUpdateStatus = (approveStatus_code) => {
     const data = {
-      approveStatus: this.state.approveStatus_code,
+      approveStatus: approveStatus_code,
       statusUpdateDate: new Date(),
       idStatusEditor: this.props.state_data.user_info.id_user,
       idPurchaseSlip: this.state.selectedSlipId,
@@ -167,9 +146,7 @@ export default class PurchaseSlipList extends Component {
       .then((data) => {
         if (data.status === "200") {
           alert("Cập nhật trạng thái đơn nhập hàng thành công!!!");
-          this.setState({
-            approveStatus: "",
-          });
+          this.fetchSlips();
         }
         console.log("Response từ server:", data);
         // cập nhật state nếu cần
@@ -188,7 +165,6 @@ export default class PurchaseSlipList extends Component {
       slipItems,
       itemsLoading,
       itemSearchText,
-      statusOptions,
     } = this.state;
 
     const filteredSlips = slips.filter(
@@ -237,13 +213,17 @@ export default class PurchaseSlipList extends Component {
             <>
               <button
                 className="btn btn-sm btn-outline-primary"
-                onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
+                onClick={
+                  ()=>this.setState({ selectedSlipId: row.idPurchaseSlip },()=>{this.handleUpdateStatus("SCd001")})
+                }
               >
                 accept
               </button>
               <button
                 className="btn btn-sm btn-outline-danger"
-                onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
+                onClick={
+                  ()=>this.setState({ selectedSlipId: row.idPurchaseSlip },()=>{this.handleUpdateStatus("SCd002")})
+                }
               >
                 refuse
               </button>
@@ -253,7 +233,9 @@ export default class PurchaseSlipList extends Component {
             <>
               <button
                 className="btn btn-sm btn-outline-primary"
-                onClick={() => this.handleDeleteSlip(row.idPurchaseSlip)}
+                onClick={
+                  ()=>this.setState({ selectedSlipId: row.idPurchaseSlip },()=>{this.handleUpdateStatus("SCd003")})
+                }
               >
                 Restore
               </button>
@@ -382,7 +364,7 @@ export default class PurchaseSlipList extends Component {
                         {this.props.state_data.user_info.role_level < role_admin && (
                           <button
                             className="btn btn-sm btn-success ml-2"
-                            onClick={() => this.handleUpdateStatus()}
+                            onClick={() => this.handleUpdateStatus("SCd003")}
                           >
                             Đã nhận hàng
                           </button>

@@ -36,6 +36,12 @@ public class SupplierController {
         List<Supplier> Suppliers = SupplierService.SellectSupplier(query, limit, offset);
         return ResponseEntity.ok(common.ReturnReponse(Suppliers, "Sellect", "Supplier"));
     }
+    
+    @GetMapping("/sellect/byID")
+    public ResponseEntity<?> SellectSupplier(@RequestParam String id) {
+        Supplier Suppliers = SupplierService.SellectSupplier(id);
+        return ResponseEntity.ok(common.ReturnReponse(Suppliers, "Sellect", "Supplier"));
+    }
 
     @PostMapping("/insertSupplier")
     public ResponseEntity<?> InsertSupplier(@RequestBody Supplier Supplier) {

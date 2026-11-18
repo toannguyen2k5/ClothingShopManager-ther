@@ -48,6 +48,14 @@ public class ProductController {
 		List<ShowProductDTO> ProductDTOs = ProductService.SellectAllBySupplier(limit, offset,idSupplier);
 		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
     }
+	@GetMapping("inventory/select/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SellectInventoryShop(@PathVariable String param_limit, @PathVariable String param_offset , @RequestParam String idShop) {
+    	int limit, offset;
+    	limit = CommonUtil.tryParseInt(param_limit);
+    	offset = CommonUtil.tryParseInt(param_offset);
+		List<ShowProductDTO> ProductDTOs = ProductService.SellectInventoryShop(limit, offset,idShop);
+		return ResponseEntity.ok(common.ReturnReponse(ProductDTOs, "Sellect all", "product"));
+    }
 	// khi người dùng tìm kiếm thông tin hàng hóa
 	@GetMapping("sellectByProperty/{param_offset}/{param_limit}/")
 	public ResponseEntity<?> SellectByProperty(@RequestParam String select,@PathVariable String param_limit, @PathVariable String param_offset){

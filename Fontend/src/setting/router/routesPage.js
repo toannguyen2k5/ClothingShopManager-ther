@@ -26,8 +26,11 @@ const PropertyManager = React.lazy(() =>
 const PurchaseSlipManager = React.lazy(() =>
   import("../../view/admin/layout/order/input/new/PurchaseSlipManager")
 );
-const SalesSlipList = React.lazy(() =>
-  import("../../view/admin/layout/order/export/list/SalesSlipList")
+const SalesSlipOnlineList = React.lazy(() =>
+  import("../../view/admin/layout/order/export/list/online/SalesSlipList")
+);
+const SalesSlipOfflineList = React.lazy(() =>
+  import("../../view/admin/layout/order/export/list/offline/SalesSlipList")
 );
 const CreateSalesSlip = React.lazy(() =>
   import("../../view/admin/layout/order/export/new/CreateSalesSlip")
@@ -57,7 +60,10 @@ const CommentManager = React.lazy(() =>
   import("../../view/admin/layout/comment/CommentManager")
 );
 const ProductInventory = React.lazy(() =>
-  import("../../view/admin/layout/inventory/ProductInventory")
+  import("../../view/admin/layout/shop/list/ProductInventory")
+);
+const InventoryList = React.lazy(() =>
+  import("../../view/admin/layout/shop/inventory/InventoryList")
 );
 const AdminManager = React.lazy(() =>
   import("../../view/admin/layout/admin_manager/AdminManager")
@@ -65,6 +71,10 @@ const AdminManager = React.lazy(() =>
 const Admin_Billing = React.lazy(() =>
   import("../../view/admin/layout/billing/Billing")
 );
+const supplierManager = React.lazy(() =>
+  import("../../view/admin/layout/supplier/supplier")
+);
+
 export const routes_admin = [
   {
     path: "/admin/home",
@@ -144,7 +154,14 @@ export const routes_admin = [
     role_level: 5,
   },
   {
-    path: "/admin/manager/account/list/",
+    path: "/admin/manager/shop/inventory",
+    exact: true,
+    name: "Form Search",
+    component: InventoryList,
+    role_level: 5,
+  },
+  {
+    path: "/admin/manager/employee/list/",
     exact: true,
     name: "Form Search",
     component: AdminManager,
@@ -173,10 +190,17 @@ export const routes_admin = [
     role_level: 5,
   },
   {
-    path: "/admin/manager/order/export/list/",
+    path: "/admin/manager/order/export/list/online/",
     exact: true,
     name: "Form Search",
-    component: SalesSlipList,
+    component: SalesSlipOnlineList,
+    role_level: 5,
+  },
+  {
+    path: "/admin/manager/order/export/list/offline/",
+    exact: true,
+    name: "Form Search",
+    component: SalesSlipOfflineList,
     role_level: 5,
   },
   {
@@ -191,6 +215,13 @@ export const routes_admin = [
     exact: true,
     name: "Form Search",
     component: UpdatePurchaseSlip,
+    role_level: 5,
+  },
+  {
+    path: "/admin/manager/supplier/",
+    exact: true,
+    name: "Form Search",
+    component: supplierManager,
     role_level: 5,
   },
   {

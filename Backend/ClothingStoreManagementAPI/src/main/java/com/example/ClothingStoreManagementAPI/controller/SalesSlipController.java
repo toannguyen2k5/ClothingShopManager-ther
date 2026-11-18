@@ -31,12 +31,21 @@ public class SalesSlipController {
 		return ResponseEntity.ok(common.ReturnReponse(idDetail, "Select", "SalesSlip"));
 	}
 
-	@GetMapping("/SelectAll/{param_offset}/{param_limit}/")
-	public ResponseEntity<?> SelectAll(@PathVariable String param_limit, @PathVariable String param_offset) {
+	@GetMapping("/SelectAll/offline/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SelectAllOffline(@PathVariable String param_limit, @PathVariable String param_offset) {
 		int limit, offset;
 		limit = CommonUtil.tryParseInt(param_limit);
 		offset = CommonUtil.tryParseInt(param_offset);
-		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectAll(offset, limit);
+		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectAll("SELECT c FROM SalesSlip c WHERE c.shippingFee == 0",offset, limit);
+		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Sellect", "PurchaseSlip"));
+	}
+	
+	@GetMapping("/SelectAll/online/{param_offset}/{param_limit}/")
+	public ResponseEntity<?> SelectAllOnline(@PathVariable String param_limit, @PathVariable String param_offset) {
+		int limit, offset;
+		limit = CommonUtil.tryParseInt(param_limit);
+		offset = CommonUtil.tryParseInt(param_offset);
+		List<SalesSlipDTO> SalesSlipDTOs = SalesSlipService.SellectAll("SELECT c FROM SalesSlip c WHERE c.shippingFee != 0",offset, limit);
 		return ResponseEntity.ok(common.ReturnReponse(SalesSlipDTOs, "Sellect", "PurchaseSlip"));
 	}
 

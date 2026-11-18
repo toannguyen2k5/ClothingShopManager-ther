@@ -7,7 +7,7 @@ import com.example.ClothingStoreManagementAPI.service.*;
 import com.example.ClothingStoreManagementAPI.model.Entity.ListWarehouseInCharge;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/ListWarehouseInCharge")
+@RequestMapping("/api/ListShopInCharge")
 public class ListWarehouseInChargeController {
 	@Autowired
 	private ListWarehouseInChargeService ListWarehouseInChargeService;
@@ -17,7 +17,7 @@ public class ListWarehouseInChargeController {
 	public ResponseEntity<?> sellect(@RequestParam String idStaff){
 		return ResponseEntity.ok(common.ReturnReponse(ListWarehouseInChargeService.SellectListWarehouseInCharge(idStaff), "Insert", "ListWarehouseInCharge"));
 	}
-	@PostMapping("/insertListWarehouseInCharge")
+	@PostMapping("/insert")
 	public ResponseEntity<?> InsertListWarehouseInCharge(@RequestBody ListWarehouseInCharge ListWarehouseInCharge){
 		return ResponseEntity.ok(common.ReturnReponse(ListWarehouseInChargeService.InsertListWarehouseInCharge(ListWarehouseInCharge), "Insert", "ListWarehouseInCharge"));
 	}

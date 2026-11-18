@@ -53,10 +53,10 @@ public class SalesSlipService {
 	@Autowired
 	private InventoryShopService InventoryShopService;
 	@Transactional(readOnly = true)
-	public List<SalesSlipDTO> SellectAll(int offset, int limit) {
+	public List<SalesSlipDTO> SellectAll(String query_sql,int offset, int limit) {
 		try {
 			List<SalesSlipDTO> result = new ArrayList<>();
-			Query query = entityManager.createQuery("SELECT c FROM SalesSlip c", SalesSlip.class);
+			Query query = entityManager.createQuery(query_sql, SalesSlip.class);
 			if (offset > 0) {
 				query.setFirstResult(offset); // OFFSET
 

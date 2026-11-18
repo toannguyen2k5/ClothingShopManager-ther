@@ -109,6 +109,22 @@ public class DetailProductService {
 			return null;
 		}
 	}
+	public List<DetailProductv2DTO> SelectDetail(String idProduct,String idShop) {
+		long inven_normal = 0;
+		List<DetailProductv2DTO> result = new ArrayList<>();
+		List<DetailProduct> DetailProducts = detailProductRepository.GetDetaiById(idProduct);
+		for(DetailProduct DetailProduct :DetailProducts) {
+			Optional<Size> Size = SizeRepository.findById(DetailProduct.getIdSize());
+			Optional<Color> Color = ColorRepository.findById(DetailProduct.getIdColor());
+			InventoryShop InventoryShop = InventoryShopReponsitory.SelectInventoryShop(idShop,DetailProduct.getIdDetail());
+			if(InventoryShop == null) result.add(new DetailProductv2DTO (DetailProduct.getIdDetail(),DetailProduct.getNumberSeri(),Size.get().getNameSize(),DetailProduct.getDayImport(),DetailProduct.isStatus(),
+					DetailProduct.isSellStatus(),Color.get().getNameColor(),inven_normal));
+			else result.add(new DetailProductv2DTO (DetailProduct.getIdDetail(),DetailProduct.getNumberSeri(),Size.get().getNameSize(),DetailProduct.getDayImport(),DetailProduct.isStatus(),
+					DetailProduct.isSellStatus(),Color.get().getNameColor(),InventoryShop.getQuantity().longValue()));
+			
+		}
+		return result;
+	}
 	// thêm chi tiết hoặc cập nhật sản phẩm 
 	@Transactional
 	public String InsertDetailProduct(DetailProduct DetailProduct) {

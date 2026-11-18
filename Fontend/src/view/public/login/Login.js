@@ -85,6 +85,7 @@ export default class Login extends Component {
             requestHome: true,
           });
         } else {
+          alert("đăng nhập thất bại !")
           actions.log_out();
           //--------------------------------------------------------
           console.log("Logout 92", this.props.state_data);
