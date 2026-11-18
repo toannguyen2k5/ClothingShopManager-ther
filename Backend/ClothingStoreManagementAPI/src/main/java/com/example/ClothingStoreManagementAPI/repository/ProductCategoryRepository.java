@@ -15,11 +15,13 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 	@Query("SELECT MAX(idCategory) FROM ProductCategory")
 	String SelectMaxId();
 	
-	// tìm kiếm màu sắc dựa trên tên màu sắc
+
 	@Query("SELECT p.idCategory FROM ProductCategory p WHERE p.nameCategory = :nameCategory")
 	String SelectIdProductCategory(@Param("nameCategory") String nameCategory);
-
-	// chỉnh sửa màu sắc
+	
+	@Query("SELECT p.idCategory FROM ProductCategory p WHERE p.idParentCategory = :idCategory or p.idCategory = :idCategory")
+	List<String> SelectIdChildCategory(@Param("idCategory") String idCategory);
+	
 	@Modifying
 	@Query("UPDATE ProductCategory p SET p.nameCategory = :nameCategory,p.description=:description , p.idParentCategory =:idParentCategory WHERE p.idCategory = :idCategory")
 	int UpdateProductCategory(@Param("idCategory") String idCategory ,@Param("nameCategory") String nameCategory ,@Param("description") String description, @Param("idParentCategory") String idParentCategory);

@@ -60,7 +60,7 @@ class DiscountUser extends Component {
       {
         name: "Giảm",
         selector: (row) =>
-          row.discountOrPrice > 1
+          (row.type === "VALUE")
             ? row.discountOrPrice.toLocaleString() + "VND"
             : row.discountOrPrice * 100 + "%",
         sortable: true,
@@ -68,6 +68,11 @@ class DiscountUser extends Component {
       {
         name: "Đơn hàng tối thiểu",
         selector: (row) => row.minimumOrderValue.toLocaleString() + "VND",
+        sortable: true,
+      },
+      {
+        name: "Giảm tối đa",
+        selector: (row) => row.maxDiscountValue.toLocaleString() + "VND",
         sortable: true,
       },
       { name: "Hạn", selector: (row) => row.expiry },
