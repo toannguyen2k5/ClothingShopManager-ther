@@ -27,27 +27,19 @@ class Information extends Component {
   saveInforUser = (e) => {
     e.preventDefault();
     const { user } = this.state;
-    const req = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idUser: user.idUser,
-        username: user.username,
-        password: user.password,
-        status: user.status,
-        role: user.role,
-        fullName: user.fullName,
-        address: user.address,
-        birthDay: user.birthDay,
-        gender: user.gender,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        pathAvatar: user.pathAvatar,
-      }),
-    };
-    fetch(urlapi + "/api/Users/UpdateUser", req)
+
+    const formData = new FormData();
+
+    formData.append(
+      "Users",
+      new Blob([JSON.stringify(user)], {
+        type: "application/json",
+      })
+    );
+    fetch(urlapi + "/api/Users/Update",{
+      method : "POST",
+      body : formData
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "200") {
@@ -111,6 +103,14 @@ class Information extends Component {
   render() {
     const { user, isEditing } = this.state;
     const isActive = user?.status === 1 || user?.status === "1" || user?.status === true;
+    const displayName = user?.fullName || "Người dùng";
+    const initials = displayName
+      .split(" ")
+      .filter(Boolean)
+      .slice(-2)
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase();
 
     return (
       <div className="accounts-right">
@@ -123,18 +123,21 @@ class Information extends Component {
           <div className="accounts_main">
             <div className="profile-summary">
               <div className="profile-avatar">
-                <img
-                  src={
-                    user?.pathAvatar ||
-                    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  }
-                  alt="avatar"
-                />
+                {user?.pathAvatar ? (
+                  <img src={user.pathAvatar} alt={displayName} />
+                ) : (
+                  <span className="profile-avatar-fallback">{initials || "ND"}</span>
+                )}
               </div>
               <div className="profile-info">
-                <h3>{user?.fullName || "Người dùng"}</h3>
-                <p>Sinh nhật: {user?.birthDay || "Chưa cập nhật"} </p>
-                <p>địa chỉ : {user?.address || "Chưa có địa chỉ"}</p>
+                <div className="profile-name-row">
+                  <h3>{displayName}</h3>
+                  <span className={isActive ? "profile-status active" : "profile-status"}>
+                    {isActive ? "Đang hoạt động" : "Tài khoản"}
+                  </span>
+                </div>
+                <p><i className="fas fa-envelope"></i>{user?.email || "Chưa có email"}</p>
+                <p><i className="fas fa-phone"></i>{user?.phoneNumber || "Chưa có số điện thoại"}</p>
               </div>
             </div>
 
@@ -142,33 +145,12 @@ class Information extends Component {
               {!isEditing ? (
                 // ================= CHẾ ĐỘ XEM (VIEW MODE) =================
                 <div className="account_view">
-                  <div className="account_col">
-                    <div className="account_main">
-                      <label>Họ và tên</label>
-                      <p className="view_value">{user?.fullName || "Chưa cập nhật"}</p>
-                    </div>
-                  </div>
-
-                  <div className="account_col">
-                    <div className="account_main">
-                      <label>Số điện thoại</label>
-                      <p className="view_value">{user?.phoneNumber || "Chưa cập nhật"}</p>
-                    </div>
-                  </div>
-
-                  <div className="account_col">
-                    <div className="account_main">
-                      <label>Email</label>
-                      <p className="view_value">{user?.email || "Chưa cập nhật"}</p>
-                    </div>
-                  </div>
-
-                  <div className="account_col account_col_seeq">
-                    <div className="account_main">
-                      <label>Giới tính</label>
-                      <p className="view_value">{this.renderGenderText(user?.gender)}</p>
-                    </div>
-                  </div>
+                  <div className="account_col"><div className="account_main"><label>Họ và tên</label><p className="view_value">{displayName}</p></div></div>
+                  <div className="account_col"><div className="account_main"><label>Số điện thoại</label><p className="view_value">{user?.phoneNumber || "Chưa cập nhật"}</p></div></div>
+                  <div className="account_col"><div className="account_main"><label>Email</label><p className="view_value">{user?.email || "Chưa cập nhật"}</p></div></div>
+                  <div className="account_col"><div className="account_main"><label>Giới tính</label><p className="view_value">{this.renderGenderText(user?.gender)}</p></div></div>
+                  <div className="account_col"><div className="account_main"><label>Ngày sinh</label><p className="view_value">{user?.birthDay || "Chưa cập nhật"}</p></div></div>
+                  <div className="account_col account_col_address"><div className="account_main"><label>Địa chỉ</label><p className="view_value">{user?.address || "Chưa cập nhật"}</p></div></div>
 
                   <div className="account_col">
                     <div className="account_main col_main_submit">
@@ -278,6 +260,20 @@ class Information extends Component {
                             <span className="sp_lable">Nữ</span>
                           </label>
                         </div>
+                      </div>
+                    </div>
+
+                    <div className="account_col">
+                      <div className="account_main">
+                        <label htmlFor="birthDay">Ngày sinh</label>
+                        <input
+                          type="date"
+                          id="birthDay"
+                          name="birthDay"
+                          className="text"
+                          value={user?.birthDay || ""}
+                          onChange={this.handleChangeValue}
+                        />
                       </div>
                     </div>
                   </div>

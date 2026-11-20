@@ -3,7 +3,7 @@ import { urlapi } from "../../../../../../setting/store/const";
 class ViewInfoBuyProduct extends Component {
   constructor(props) {
     super(props);
-    const item_first = this.props.ColorSize.find(
+    const item_first = (this.props.ColorSize || []).find(
       (item) => item?.nameSize != null  && item?.nameColor != null);
     this.state = {
       quantity_selected: 1,
@@ -12,16 +12,38 @@ class ViewInfoBuyProduct extends Component {
       quantity: item_first?.quantity || null
     };
   }
+  getVariant = (nameSize, nameColor) =>
+    (this.props.ColorSize || []).find(
+      (item) =>
+        item.nameSize === nameSize && item.nameColor === nameColor
+    );
+
   handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "nameColor") {
-      this.props.ColorSize.map((item) => {
-        if (item.nameColor === value && item.nameSize === this.state.nameSize) {
-          this.setState({ nameColor: value ,  quantity: item.quantity });
-        }
-      });
+    const variants = this.props.ColorSize || [];
+    if (name === "nameSize") {
+      const variantsForSize = variants.filter((item) => item.nameSize === value);
+      const matchingVariant =
+        variantsForSize.find((item) => item.nameColor === this.state.nameColor) ||
+        variantsForSize[0];
+      this.setState((prevState) => ({
+        nameSize: value,
+        nameColor: matchingVariant ? matchingVariant.nameColor : "",
+        quantity: matchingVariant ? matchingVariant.quantity : 0,
+        quantity_selected: matchingVariant
+          ? Math.min(prevState.quantity_selected, matchingVariant.quantity || 1)
+          : 1,
+      }));
+      return;
     }
-    this.setState({ [name]: value });
+    const matchingVariant = this.getVariant(this.state.nameSize, value);
+    this.setState((prevState) => ({
+      nameColor: value,
+      quantity: matchingVariant ? matchingVariant.quantity : 0,
+      quantity_selected: matchingVariant
+        ? Math.min(prevState.quantity_selected, matchingVariant.quantity || 1)
+        : 1,
+    }));
   };
   increase = () => {
     if(this.state?.quantity === null){
@@ -30,6 +52,10 @@ class ViewInfoBuyProduct extends Component {
     }
     if(!this.state.nameSize || !this.state.nameColor){
       alert("bạn chưa chọn màu sắc hoặc kích thước");
+      return;
+    }
+    if (!this.state.quantity || this.state.quantity_selected > this.state.quantity) {
+      alert("Sản phẩm với kích thước và màu sắc này hiện không đủ hàng");
       return;
     }
     if(this.state.quantity_selected < this.state.quantity){
@@ -48,6 +74,11 @@ class ViewInfoBuyProduct extends Component {
     if (this.props.state_data.user_info.id_user) {
       if (!this.state.nameColor || !this.state.nameSize)
         alert("bạn chưa chọn màu sắc hoặc kích thước");
+      else if (
+        !this.state.quantity ||
+        this.state.quantity_selected > this.state.quantity
+      )
+        alert("Sản phẩm với kích thước và màu sắc này hiện không đủ hàng");
       else {
         const req = {
           method: "POST",
@@ -78,6 +109,14 @@ class ViewInfoBuyProduct extends Component {
   };
   buyNow = () => {
     if (this.props.state_data.user_info.id_user) {
+      if (!this.state.nameColor || !this.state.nameSize) {
+        alert("bạn chưa chọn màu sắc hoặc kích thước");
+        return;
+      }
+      if (!this.state.quantity) {
+        alert("Sản phẩm với kích thước và màu sắc này hiện không đủ hàng");
+        return;
+      }
       const req = "?idUser=" + this.props.state_data.user_info.id_user +
             "&idProduct=" + this.props.idProduct +
             "&nameSize=" + this.state.nameSize +
@@ -140,9 +179,9 @@ class ViewInfoBuyProduct extends Component {
                           textAlign: "center",
                         }}
                       >
-                        {this.props.ColorSize.map((item, index) => (
-                          <option key={index} value={item.nameSize}>
-                            {item.nameSize}
+                        {[...new Set((this.props.ColorSize || []).map((item) => item.nameSize))].map((size, index) => (
+                          <option key={`${size}-${index}`} value={size}>
+                            {size}
                           </option>
                         ))}
                       </select>
@@ -177,14 +216,17 @@ class ViewInfoBuyProduct extends Component {
                         }}
                       >
                         {this.state.nameSize &&
-                          this.props.ColorSize.map(
-                            (item, index) =>
-                              item.nameSize === this.state.nameSize && (
-                                <option key={index} value={item.nameColor}>
-                                  {item.nameColor}
-                                </option>
-                              )
-                          )}
+                          [
+                            ...new Set(
+                              (this.props.ColorSize || [])
+                                .filter((item) => item.nameSize === this.state.nameSize)
+                                .map((item) => item.nameColor)
+                            ),
+                          ].map((color) => (
+                            <option key={color} value={color}>
+                              {color}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>

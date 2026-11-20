@@ -10,7 +10,7 @@ export default class StorePromoManager extends Component {
       promos: [], // list of promotions
       filterText: "",
       showModal: false,
-      editingIndex: null,
+      editingDiscountCode: null,
       isOpenModalClient: false,
       form: {
         discountCode: "",
@@ -19,6 +19,8 @@ export default class StorePromoManager extends Component {
         idUser: "",
         nameUser: "",
         discountOrPrice: "",
+        type: "PERCENT",
+        maxDiscountValue: "",
         minimumOrderValue: "",
         expiry: "",
       },
@@ -37,44 +39,49 @@ export default class StorePromoManager extends Component {
     this.setState({ ...this.state, isOpenModalClient: true });
   };
   componentDidMount() {
-    // lấy dữ liệu product
+    this.loadPromos();
+  }
+
+  loadPromos = () => {
     fetch(`${urlapi}/api/UserDiscountCode/sellectAll`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status && data.status == "200") {
           this.setState({ promos: data.data });
         }
-        console.log(data);
       })
       .catch((error) => {
         console.error("Lỗi khi fetch:", error);
       });
-  }
+  };
 
-  openModal = (idx = null) => {
-    if (idx != null) {
+  openModal = (discountCode = null) => {
+    if (discountCode != null) {
+      const promo = this.state.promos.find(
+        (item) => item.discountCode === discountCode
+      );
+      if (!promo) return;
       this.setState(
         {
-          editingIndex: idx,
+          editingDiscountCode: discountCode,
           form: {
-            discountCode: this.state.promos[idx].discountCode,
-            code: this.state.promos[idx].code,
-            nameCreater: this.state.promos[idx].nameCreater,
-            idUser: this.state.promos[idx].idUser,
-            nameUser: this.state.promos[idx].nameUser,
-            discountOrPrice: this.state.promos[idx].discountOrPrice,
-            minimumOrderValue: this.state.promos[idx].minimumOrderValue,
-            expiry: this.state.promos[idx].expiry,
+            discountCode: promo.discountCode,
+            code: promo.code,
+            nameCreater: promo.nameCreater,
+            idUser: promo.idUser,
+            nameUser: promo.nameUser,
+            discountOrPrice: promo.discountOrPrice,
+            type: promo.type || "VALUE",
+            maxDiscountValue: promo.maxDiscountValue || "",
+            minimumOrderValue: promo.minimumOrderValue,
+            expiry: promo.expiry,
           },
           showModal: true,
-        },
-        () => {
-          console.log("data form : ", this.state.form);
         }
       );
     } else {
       this.setState({
-        editingIndex: null,
+        editingDiscountCode: null,
         form: {
           discountCode: "",
           code: "",
@@ -82,6 +89,8 @@ export default class StorePromoManager extends Component {
           idUser: "",
           nameUser: "",
           discountOrPrice: "",
+          type: "PERCENT",
+          maxDiscountValue: "",
           minimumOrderValue: "",
           expiry: "",
         },
@@ -98,85 +107,88 @@ export default class StorePromoManager extends Component {
   };
 
   saveAssignment = () => {
-    const { editingIndex, form, promos } = this.state;
-    console.log("form ", form);
-    if (editingIndex == null) {
+    const { editingDiscountCode, form } = this.state;
+    const discount = Number(form.discountOrPrice);
+    const minimumOrderValue = Number(form.minimumOrderValue);
+    const maxDiscountValue = Number(form.maxDiscountValue || 0);
+    if (
+      !form.code.trim() ||
+      !form.idUser ||
+      !form.expiry ||
+      !Number.isInteger(discount) ||
+      discount < 0 ||
+      (form.type === "PERCENT" && discount > 100) ||
+      !Number.isInteger(minimumOrderValue) ||
+      minimumOrderValue < 0 ||
+      !Number.isInteger(maxDiscountValue) ||
+      maxDiscountValue < 0
+    ) {
+      alert("Vui lòng kiểm tra mã, loại giảm giá và các giá trị đã nhập.");
+      return;
+    }
+
+    const payload = {
+      discountCode: editingDiscountCode,
+      code: form.code.trim(),
+      idUser: form.idUser,
+      idCreater: this.props.state_data.user_info.id_user,
+      discount,
+      type: form.type,
+      maxDiscountValue: form.type === "PERCENT" ? maxDiscountValue : 0,
+      minimumOrderValue,
+      expiry: form.expiry,
+    };
+
+    if (editingDiscountCode == null) {
       const req = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          discountCode: null,
-          code: form.code,
-          idUser: form.idUser,
-          idCreater: this.props.state_data.user_info.id_user,
-          discountOrPrice: form.discountOrPrice,
-          minimumOrderValue: form.minimumOrderValue,
-          expiry: form.expiry,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       };
       fetch(urlapi + "/api/UserDiscountCode/insertUserDiscountCode", req)
         .then((response) => response.json())
         .then((data) => {
           if (data.status && data.status === "200") {
-            this.setState({ promos: [...promos, form], showModal: false });
+            this.setState({ showModal: false }, this.loadPromos);
             alert("Tạo mã giảm giá cho người dùng thành công !");
           } else alert("Tạo mã giảm giá cho người dùng thất bại !");
-          console.log("Response tạo phiếu từ server:", data);
-          // cập nhật state nếu cần
         })
         .catch((error) => console.error("Lỗi POST:", error));
     } else {
       const req = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          discountCode: form.discountCode,
-          code: form.code,
-          idUser: form.idUser,
-          idCreater: this.props.state_data.user_info.id_user,
-          discountOrPrice: form.discountOrPrice,
-          minimumOrderValue: form.minimumOrderValue,
-          expiry: form.expiry,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       };
       fetch(urlapi + "/api/UserDiscountCode/updateUserDiscountCode", req)
         .then((response) => response.json())
         .then((data) => {
           if (data.status && data.status === "200") {
-            const arr = [...promos];
-            arr[editingIndex] = form;
-            this.setState({ promos: arr, showModal: false });
+            this.setState({ showModal: false }, this.loadPromos);
             alert("Sửa mã giảm giá cho người dùng thành công !");
           } else alert("Sửa mã giảm giá cho người dùng thất bại !");
-          console.log("Response tạo phiếu từ server:", data);
-          // cập nhật state nếu cần
         })
         .catch((error) => console.error("Lỗi POST:", error));
     }
   };
 
-  deleteAssignment = (idx) => {
-    const { promos } = this.state;
+  deleteAssignment = (discountCode) => {
     if (window.confirm("Xóa cấu hình khuyến mãi này?")) {
       fetch(
         urlapi +
           "/api/UserDiscountCode/deleteUserDiscountCode?discountCode=" +
-          promos[idx].discountCode
+          encodeURIComponent(discountCode)
       )
         .then((response) => response.json())
         .then((data) => {
           if (data.status && data.status === "200") {
             this.setState((prev) => ({
-              promos: prev.promos.filter((_, i) => i !== idx),
+              promos: prev.promos.filter(
+                (promo) => promo.discountCode !== discountCode
+              ),
             }));
             alert("Xóa mã giảm giá cho người dùng thành công !");
           } else alert("Xóa mã giảm giá cho người dùng thất bại !");
-          console.log("Response tạo phiếu từ server:", data);
-          // cập nhật state nếu cần
         })
         .catch((error) => console.error("Lỗi POST:", error));
     }
@@ -188,9 +200,9 @@ export default class StorePromoManager extends Component {
     const { promos, filterText, showModal, form } = this.state;
     const filtered = promos.filter(
       (a) =>
-        a.nameUser.includes(filterText) ||
-        a.code.includes(filterText) ||
-        a.nameCreater.includes(filterText)
+        (a.nameUser || "").includes(filterText) ||
+        (a.code || "").includes(filterText) ||
+        (a.nameCreater || "").includes(filterText)
     );
 
     const columns = [
@@ -211,9 +223,23 @@ export default class StorePromoManager extends Component {
       },
       { name: "nameUser", selector: (row) => row.nameUser, sortable: true },
       {
-        name: "discountOrPrice",
-        selector: (row) => row.discountOrPrice,
+        name: "Loại giảm giá",
+        selector: (row) => row.type || "VALUE",
+      },
+      {
+        name: "Giá trị giảm",
+        selector: (row) =>
+          row.type === "PERCENT"
+            ? `${row.discountOrPrice}%`
+            : `${Number(row.discountOrPrice).toLocaleString()}đ`,
         sortable: true,
+      },
+      {
+        name: "Giảm tối đa",
+        selector: (row) =>
+          row.maxDiscountValue
+            ? `${Number(row.maxDiscountValue).toLocaleString()}đ`
+            : "Không giới hạn",
       },
       {
         name: "minimumOrderValue",
@@ -223,13 +249,16 @@ export default class StorePromoManager extends Component {
       { name: "expiry", selector: (row) => row.expiry },
       {
         name: "Actions",
-        cell: (row, i) => (
+        cell: (row) => (
           <>
-            <button onClick={() => this.openModal(i)} className="btn-edit">
+            <button
+              onClick={() => this.openModal(row.discountCode)}
+              className="btn-edit"
+            >
               Sửa
             </button>
             <button
-              onClick={() => this.deleteAssignment(i)}
+              onClick={() => this.deleteAssignment(row.discountCode)}
               className="btn-delete"
             >
               Xóa
@@ -271,7 +300,7 @@ export default class StorePromoManager extends Component {
               onClick={(e) => e.stopPropagation()}
             >
               <h3>
-                {this.state.editingIndex == null ? "Thêm" : "Sửa"} Khuyến mãi
+                {this.state.editingDiscountCode == null ? "Thêm" : "Sửa"} Khuyến mãi
               </h3>
               <div class="form-group col-5">
                 <div className="row">
@@ -339,17 +368,47 @@ export default class StorePromoManager extends Component {
                 />
               </label>
               <label>
-                Giảm giá(% or VNĐ):
+                Loại giảm giá:
+                <select
+                  className="form-control form-control-sm"
+                  name="type"
+                  value={form.type}
+                  onChange={this.handleFormChange}
+                >
+                  <option value="PERCENT">Phần trăm</option>
+                  <option value="VALUE">Số tiền cố định</option>
+                </select>
+              </label>
+              <label>
+                Giá trị giảm {form.type === "PERCENT" ? "(%)" : "(VNĐ)"}:
                 <input
                   type="number"
                   class="form-control form-control-sm"
                   id="idProduct"
                   name="discountOrPrice"
                   value={form.discountOrPrice}
+                  min="0"
+                  max={form.type === "PERCENT" ? "100" : undefined}
+                  step="1"
                   style={{ width: "763px" }}
                   onChange={this.handleFormChange}
                 />
               </label>
+              {form.type === "PERCENT" && (
+                <label>
+                  Giảm tối đa (VNĐ, 0 = không giới hạn):
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    name="maxDiscountValue"
+                    value={form.maxDiscountValue}
+                    min="0"
+                    step="1"
+                    style={{ width: "763px" }}
+                    onChange={this.handleFormChange}
+                  />
+                </label>
+              )}
               <label>
                 Giá trị đơn hàng tối thiểu(VNĐ):
                 <input

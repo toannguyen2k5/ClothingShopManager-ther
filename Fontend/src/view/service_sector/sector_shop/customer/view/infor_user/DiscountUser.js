@@ -25,24 +25,23 @@ class DiscountUser extends Component {
         console.error("Lỗi khi fetch:", error);
       });
   }
-  deleteAssignment = (idx) => {
-    const { promos } = this.state;
+  deleteAssignment = (discountCode) => {
     if (window.confirm("Xóa cấu hình khuyến mãi này?")) {
       fetch(
         urlapi +
           "/api/UserDiscountCode/deleteUserDiscountCode?discountCode=" +
-          promos[idx].discountCode
+          encodeURIComponent(discountCode)
       )
         .then((response) => response.json())
         .then((data) => {
           if (data.status && data.status === "200") {
             this.setState((prev) => ({
-              promos: prev.promos.filter((_, i) => i !== idx),
+              promos: prev.promos.filter(
+                (promo) => promo.discountCode !== discountCode
+              ),
             }));
             alert("Xóa mã giảm giá cho người dùng thành công !");
           } else alert("Xóa mã giảm giá cho người dùng thất bại !");
-          console.log("Response tạo phiếu từ server:", data);
-          // cập nhật state nếu cần
         })
         .catch((error) => console.error("Lỗi POST:", error));
     }
@@ -50,7 +49,9 @@ class DiscountUser extends Component {
   handleFilter = (e) => this.setState({ filterText: e.target.value });
   render() {
     const { promos, filterText } = this.state;
-    const filtered = promos.filter((a) => a.code.includes(filterText));
+    const filtered = promos.filter((a) =>
+      (a.code || "").toLowerCase().includes(filterText.toLowerCase())
+    );
     const columns = [
       {
         name: "Mã giảm giá",
@@ -60,9 +61,9 @@ class DiscountUser extends Component {
       {
         name: "Giảm",
         selector: (row) =>
-          (row.type === "VALUE")
-            ? row.discountOrPrice.toLocaleString() + "VND"
-            : row.discountOrPrice * 100 + "%",
+          row.type === "PERCENT"
+            ? `${row.discount}%`
+            : `${Number(row.discount).toLocaleString()}VND`,
         sortable: true,
       },
       {
@@ -72,16 +73,19 @@ class DiscountUser extends Component {
       },
       {
         name: "Giảm tối đa",
-        selector: (row) => row.maxDiscountValue.toLocaleString() + "VND",
+        selector: (row) =>
+          row.maxDiscountValue > 0
+            ? row.maxDiscountValue.toLocaleString() + "VND"
+            : "Không giới hạn",
         sortable: true,
       },
       { name: "Hạn", selector: (row) => row.expiry },
       {
         name: "Actions",
-        cell: (row, i) => (
+        cell: (row) => (
           <>
             <button
-              onClick={() => this.deleteAssignment(i)}
+              onClick={() => this.deleteAssignment(row.discountCode)}
               className="btn-delete"
             >
               Xóa

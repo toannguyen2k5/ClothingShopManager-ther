@@ -1,0 +1,585 @@
+{
+  "data": [
+    {
+      "idProduct": "PR001",
+      "nameProduct": "Áo len nữ",
+      "description": "Mô tả chi tiết cho Áo len nữ",
+      "idBrand": "BR007",
+      "idCategory": "CA001",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV001",
+          "idProduct": "PR001",
+          "size": "L",
+          "idColor": "CO003",
+          "idStyle": "ST003",
+          "serialNumber": "SN00001",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0001",
+              "purchasePrice": 10100.0,
+              "salePrice": 12100.0,
+              "updatedAt": null,
+              "note": "Note PR0001",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV001"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV002",
+          "idProduct": "PR001",
+          "size": "M",
+          "idColor": "CO009",
+          "idStyle": "ST002",
+          "serialNumber": "SN00002",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0006",
+              "purchasePrice": 10600.0,
+              "salePrice": 12600.0,
+              "updatedAt": null,
+              "note": "Note PR0006",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV002"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR002",
+      "nameProduct": "Quần jean nam",
+      "description": "Mô tả chi tiết cho Quần jean nam",
+      "idBrand": "BR004",
+      "idCategory": "CA006",
+      "status": false,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV003",
+          "idProduct": "PR002",
+          "size": "XL",
+          "idColor": "CO005",
+          "idStyle": "ST001",
+          "serialNumber": "SN00003",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0011",
+              "purchasePrice": 11100.0,
+              "salePrice": 13100.0,
+              "updatedAt": null,
+              "note": "Note PR0011",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV003"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV004",
+          "idProduct": "PR002",
+          "size": "S",
+          "idColor": "CO001",
+          "idStyle": "ST010",
+          "serialNumber": "SN00004",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0016",
+              "purchasePrice": 11600.0,
+              "salePrice": 13600.0,
+              "updatedAt": null,
+              "note": "Note PR0016",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV004"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR003",
+      "nameProduct": "Váy maxi",
+      "description": "Mô tả chi tiết cho Váy maxi",
+      "idBrand": "BR002",
+      "idCategory": "CA003",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV005",
+          "idProduct": "PR003",
+          "size": "M",
+          "idColor": "CO006",
+          "idStyle": "ST005",
+          "serialNumber": "SN00005",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0021",
+              "purchasePrice": 12100.0,
+              "salePrice": 14100.0,
+              "updatedAt": null,
+              "note": "Note PR0021",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV005"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV006",
+          "idProduct": "PR003",
+          "size": "L",
+          "idColor": "CO010",
+          "idStyle": "ST006",
+          "serialNumber": "SN00006",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0026",
+              "purchasePrice": 12600.0,
+              "salePrice": 14600.0,
+              "updatedAt": null,
+              "note": "Note PR0026",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV006"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR004",
+      "nameProduct": "Áo khoác bomber",
+      "description": "Mô tả chi tiết cho Áo khoác bomber",
+      "idBrand": "BR001",
+      "idCategory": "CA010",
+      "status": false,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV007",
+          "idProduct": "PR004",
+          "size": "XL",
+          "idColor": "CO002",
+          "idStyle": "ST002",
+          "serialNumber": "SN00007",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0031",
+              "purchasePrice": 13100.0,
+              "salePrice": 15100.0,
+              "updatedAt": null,
+              "note": "Note PR0031",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV007"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV008",
+          "idProduct": "PR004",
+          "size": "M",
+          "idColor": "CO007",
+          "idStyle": "ST004",
+          "serialNumber": "SN00008",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0036",
+              "purchasePrice": 13600.0,
+              "salePrice": 15600.0,
+              "updatedAt": null,
+              "note": "Note PR0036",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV008"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR005",
+      "nameProduct": "Quần short",
+      "description": "Mô tả chi tiết cho Quần short",
+      "idBrand": "BR010",
+      "idCategory": "CA002",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV009",
+          "idProduct": "PR005",
+          "size": "S",
+          "idColor": "CO008",
+          "idStyle": "ST003",
+          "serialNumber": "SN00009",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0041",
+              "purchasePrice": 14100.0,
+              "salePrice": 16100.0,
+              "updatedAt": null,
+              "note": "Note PR0041",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV009"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV010",
+          "idProduct": "PR005",
+          "size": "L",
+          "idColor": "CO004",
+          "idStyle": "ST004",
+          "serialNumber": "SN00010",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0046",
+              "purchasePrice": 14600.0,
+              "salePrice": 16600.0,
+              "updatedAt": null,
+              "note": "Note PR0046",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV010"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR006",
+      "nameProduct": "Đầm công sở",
+      "description": "Mô tả chi tiết cho Đầm công sở",
+      "idBrand": "BR009",
+      "idCategory": "CA003",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV011",
+          "idProduct": "PR006",
+          "size": "M",
+          "idColor": "CO001",
+          "idStyle": "ST008",
+          "serialNumber": "SN00011",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0051",
+              "purchasePrice": 15100.0,
+              "salePrice": 17100.0,
+              "updatedAt": null,
+              "note": "Note PR0051",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV011"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV012",
+          "idProduct": "PR006",
+          "size": "XL",
+          "idColor": "CO005",
+          "idStyle": "ST009",
+          "serialNumber": "SN00012",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0056",
+              "purchasePrice": 15600.0,
+              "salePrice": 17600.0,
+              "updatedAt": null,
+              "note": "Note PR0056",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV012"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR007",
+      "nameProduct": "Áo thun in hình",
+      "description": "Mô tả chi tiết cho Áo thun in hình",
+      "idBrand": "BR008",
+      "idCategory": "CA005",
+      "status": false,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV013",
+          "idProduct": "PR007",
+          "size": "S",
+          "idColor": "CO002",
+          "idStyle": "ST006",
+          "serialNumber": "SN00013",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0061",
+              "purchasePrice": 16100.0,
+              "salePrice": 18100.0,
+              "updatedAt": null,
+              "note": "Note PR0061",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV013"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV014",
+          "idProduct": "PR007",
+          "size": "L",
+          "idColor": "CO009",
+          "idStyle": "ST001",
+          "serialNumber": "SN00014",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0066",
+              "purchasePrice": 16600.0,
+              "salePrice": 18600.0,
+              "updatedAt": null,
+              "note": "Note PR0066",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV014"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR008",
+      "nameProduct": "Quần âu nữ",
+      "description": "Mô tả chi tiết cho Quần âu nữ",
+      "idBrand": "BR005",
+      "idCategory": "CA007",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV015",
+          "idProduct": "PR008",
+          "size": "M",
+          "idColor": "CO003",
+          "idStyle": "ST010",
+          "serialNumber": "SN00015",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0071",
+              "purchasePrice": 17100.0,
+              "salePrice": 19100.0,
+              "updatedAt": null,
+              "note": "Note PR0071",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV015"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV016",
+          "idProduct": "PR008",
+          "size": "S",
+          "idColor": "CO010",
+          "idStyle": "ST004",
+          "serialNumber": "SN00016",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0076",
+              "purchasePrice": 17600.0,
+              "salePrice": 19600.0,
+              "updatedAt": null,
+              "note": "Note PR0076",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV016"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR009",
+      "nameProduct": "Váy hai dây",
+      "description": "Mô tả chi tiết cho Váy hai dây",
+      "idBrand": "BR003",
+      "idCategory": "CA008",
+      "status": true,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV017",
+          "idProduct": "PR009",
+          "size": "L",
+          "idColor": "CO006",
+          "idStyle": "ST002",
+          "serialNumber": "SN00017",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0081",
+              "purchasePrice": 18100.0,
+              "salePrice": 20100.0,
+              "updatedAt": null,
+              "note": "Note PR0081",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV017"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV018",
+          "idProduct": "PR009",
+          "size": "XL",
+          "idColor": "CO007",
+          "idStyle": "ST008",
+          "serialNumber": "SN00018",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0086",
+              "purchasePrice": 18600.0,
+              "salePrice": 20600.0,
+              "updatedAt": null,
+              "note": "Note PR0086",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV018"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "idProduct": "PR010",
+      "nameProduct": "Áo hoodie",
+      "description": "Mô tả chi tiết cho Áo hoodie",
+      "idBrand": "BR006",
+      "idCategory": "CA001",
+      "status": false,
+      "idMaterial": null,
+      "brand": null,
+      "category": null,
+      "material": null,
+      "productVariants": [
+        {
+          "idVariant": "PV019",
+          "idProduct": "PR010",
+          "size": "S",
+          "idColor": "CO001",
+          "idStyle": "ST009",
+          "serialNumber": "SN00019",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0091",
+              "purchasePrice": 19100.0,
+              "salePrice": 21100.0,
+              "updatedAt": null,
+              "note": "Note PR0091",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV019"
+            }
+          ]
+        },
+        {
+          "idVariant": "PV020",
+          "idProduct": "PR010",
+          "size": "M",
+          "idColor": "CO007",
+          "idStyle": "ST010",
+          "serialNumber": "SN00020",
+          "color": null,
+          "style": null,
+          "prices": [
+            {
+              "idPrice": "PR0096",
+              "purchasePrice": 19600.0,
+              "salePrice": 21600.0,
+              "updatedAt": null,
+              "note": "Note PR0096",
+              "updatedBy": "admin",
+              "status": true,
+              "idVariant": "PV020"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "status": "200"
+}

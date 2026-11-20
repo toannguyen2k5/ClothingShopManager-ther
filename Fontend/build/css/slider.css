@@ -1,0 +1,43 @@
+/* Định dạng slider */
+.slider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Container chứa các slides */
+  .slides {
+    width: 100%;
+    display: flex;
+    animation: slide-3img 20s infinite linear; /* Tự động chạy */
+  }
+  
+  /* Mỗi slide */
+  .slide {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+  
+  /* Định dạng ảnh */
+  .slide img {
+    max-height: 400px;
+    width: 100%;
+    object-fit: contain; /* Hiển thị toàn bộ ảnh mà không bị cắt */
+    height: auto;
+  }
+  
+  /* Animation */
+/* @keyframes slide-3img {
+    0%, 30%   { transform: translateX(0%); }  
+    33%, 63%  { transform: translateX(-100%); }
+    66%, 100%  { transform: translateX(-200%); } 
+  } */
+  
+  /* Reset vị trí về img1 ngay lập tức khi hết animation */
+  .slides {
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes reset {
+    100% { transform: translateX(0%); }
+  }

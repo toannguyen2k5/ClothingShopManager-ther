@@ -2,9 +2,29 @@ import React, { Component } from "react";
 import "./Checkout.css";
 import { urlapi } from "../../../../../../setting/store/const";
 
+export const calculateMerchandiseSubtotal = (items) =>
+  items.reduce((total, item) => {
+    const quantity = Number(item.quantity) || 0;
+    const price = Number(item.price) || 0;
+    const quantityLimit = Number(item.quantityLimit) || 0;
+    const decrease = Number(item.decrease) || 0;
+    const discountedQuantity =
+      decrease > 0 && decrease <= 1 && quantityLimit > 0
+        ? Math.min(quantity, quantityLimit)
+        : 0;
+    const regularQuantity = quantity - discountedQuantity;
+    return (
+      total +
+      regularQuantity * price +
+      discountedQuantity * price * (1 - decrease)
+    );
+  }, 0);
+
 export default class Checkout extends Component {
   constructor(props) {
     super(props);
+    const cartItems = this.props.state_data.data_page?.cartItems || [];
+    const subTotal = calculateMerchandiseSubtotal(cartItems);
     this.state = {
       fullName: this.props.state_data.user_info.full_name || "",
       phone: this.props.state_data.user_info.phone_number || "",
@@ -15,17 +35,20 @@ export default class Checkout extends Component {
       address: "",
       provinceList: [],
       districtList: [],
-      cartItems: this.props.state_data.data_page?.cartItems || [],
+      cartItems,
       // Kết quả từ API GetShopByInventory
       checkoutShopResult: null,
       loadingShop: false,
       vouchers: [],
       selectedVoucher: "",
-      subTotal: this.props.state_data.data_page?.subTotal || 0,
+      subTotal,
       discount: 0,
-      totalPrice: 0,
+      totalPrice: Math.round(subTotal),
       shippingFee: 0,
+      isSubmitting: false,
+      orderSubmitted: false,
     };
+    this.orderSubmissionInProgress = false;
   }
 
   componentDidMount() {
@@ -70,7 +93,7 @@ export default class Checkout extends Component {
         "/api/UserDiscountCode/sellectForOrder?idUser=" +
         this.props.state_data.user_info.id_user +
         "&minimumOrderValue=" +
-        this.state.subTotal
+        Math.floor(this.state.subTotal)
     )
       .then((res) => res.json())
       .then((data) => {
@@ -156,8 +179,7 @@ export default class Checkout extends Component {
   };
 
   calculateTotal(items, voucherId, voucherList) {
-    let subTotal = 0;
-    items.forEach((item) => { subTotal += item.price * item.quantity; });
+    const subTotal = calculateMerchandiseSubtotal(items);
 
     let discount = 0;
     const list = voucherList || this.state.vouchers;
@@ -171,8 +193,12 @@ export default class Checkout extends Component {
         discount = voucher.discount;
       }
     }
+    discount = Math.min(Math.max(discount, 0), subTotal);
 
-    const totalPrice = Math.max(subTotal - discount + this.state.shippingFee, 0);
+    const totalPrice = Math.max(
+      Math.round(subTotal - discount) + this.state.shippingFee,
+      0
+    );
     this.setState({ subTotal, discount, totalPrice });
   }
 
@@ -183,6 +209,7 @@ export default class Checkout extends Component {
     });
   };
 async createOrder() {
+  if (this.orderSubmissionInProgress || this.state.orderSubmitted) return;
   const {
     fullName, phone, province, district, address,
     cartItems, checkoutShopResult, selectedVoucher,
@@ -198,6 +225,9 @@ async createOrder() {
     alert("Không tìm được cửa hàng giao hàng, vui lòng thử lại");
     return;
   }
+
+  this.orderSubmissionInProgress = true;
+  this.setState({ isSubmitting: true });
 
   const userId = this.props.state_data.user_info.id_user;
   const deliveryAddress = `${address}, ${district}, ${province}`;
@@ -246,6 +276,7 @@ async createOrder() {
     console.log("Order result:", data);
 
     if (data.status === "200") {
+      this.setState({ orderSubmitted: true });
       alert("Đặt hàng thành công!");
       // Có thể redirect về trang chủ hoặc trang đơn hàng
       // this.props.navigate("/orders");
@@ -255,6 +286,9 @@ async createOrder() {
   } catch (err) {
     console.error("Lỗi đặt hàng:", err);
     alert("Có lỗi xảy ra khi đặt hàng");
+  } finally {
+    this.orderSubmissionInProgress = false;
+    this.setState({ isSubmitting: false });
   }
 }
 
@@ -291,6 +325,9 @@ async createOrder() {
             )}
             <div className="shop-name">
               <i className="bi bi-shop"></i> {group.nameShop}
+            </div>
+            <div className="shop-address text-muted" style={{ fontSize: 13 }}>
+              Địa chỉ: {group.address}
             </div>
             <div className="shop-meta text-muted" style={{ fontSize: 13 }}>
               <span>Khoảng cách: {group.distanceKm.toFixed(1)} km</span>
@@ -426,10 +463,14 @@ async createOrder() {
                       checked={selectedVoucher === v.discountCode}
                       onChange={this.handleSelectVoucher} />
                     <div className="voucher-content">
-                      <div className="voucher-title">{v.name}</div>
+                      <div className="voucher-title">{v.code}</div>
                       <div className="voucher-desc">
                         {v.type === "PERCENT"
-                          ? `Giảm ${v.discount * 100}%`
+                          ? `Giảm ${v.discount}%${
+                              v.maxDiscountValue > 0
+                                ? ` (tối đa ${v.maxDiscountValue.toLocaleString()}đ)`
+                                : ""
+                            }`
                           : `Giảm ${v.discount.toLocaleString()}đ`}
                       </div>
                     </div>
@@ -456,8 +497,16 @@ async createOrder() {
                 <div className="summary-row"><span>Phí vận chuyển</span><span>{shippingFee.toLocaleString()}đ</span></div>
                 <hr />
                 <div className="summary-row total-row"><span>Tổng đơn</span><span>{totalPrice.toLocaleString()}đ</span></div>
-                <button className="btn btn-dark w-100 mt-3" onClick={() => this.createOrder()}>
-                  ĐẶT HÀNG
+                <button
+                  className="btn btn-dark w-100 mt-3"
+                  onClick={() => this.createOrder()}
+                  disabled={this.state.isSubmitting || this.state.orderSubmitted}
+                >
+                  {this.state.isSubmitting
+                    ? "ĐANG ĐẶT HÀNG..."
+                    : this.state.orderSubmitted
+                      ? "ĐÃ ĐẶT HÀNG"
+                      : "ĐẶT HÀNG"}
                 </button>
               </div>
             </div>

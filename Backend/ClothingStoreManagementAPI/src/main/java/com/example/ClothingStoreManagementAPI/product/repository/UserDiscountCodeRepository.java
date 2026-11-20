@@ -1,0 +1,36 @@
+package com.example.ClothingStoreManagementAPI.product.repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
+import java.time.LocalDate;
+import java.util.Optional;
+import com.example.ClothingStoreManagementAPI.product.model.Entity.UserDiscountCode;
+
+import org.springframework.stereotype.Repository;
+@Repository
+public interface UserDiscountCodeRepository extends JpaRepository<UserDiscountCode,String>{
+	@Query("SELECT MAX(discountCode) FROM UserDiscountCode")
+	String SelectMaxId();
+	// chỉnh sửa nhà cung cấp
+	@Query("SELECT u FROM UserDiscountCode u WHERE u.idUser = :idUser ")
+	List<UserDiscountCode> SellectUserDiscountCode (@Param("idUser") String idUser);
+	@Query("SELECT u FROM UserDiscountCode u WHERE u.idUser = :idUser "
+			+ "AND u.minimumOrderValue <= :minimumOrderValue "
+			+ "AND NOT EXISTS (SELECT s.idSalesSlip FROM SalesSlip s "
+			+ "WHERE s.discountCode = u.discountCode AND s.deliveryStatus <> 'SCd005')")
+	List<UserDiscountCode> SellectUserDiscountCode (@Param("idUser") String idUser,@Param("minimumOrderValue") int minimumOrderValue);
+	Optional<UserDiscountCode> findByDiscountCodeAndIdUser(String discountCode, String idUser);
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT u FROM UserDiscountCode u WHERE u.discountCode = :discountCode AND u.idUser = :idUser")
+	Optional<UserDiscountCode> FindByDiscountCodeAndIdUserForUpdate(
+			@Param("discountCode") String discountCode, @Param("idUser") String idUser);
+	@Modifying
+	@Query("UPDATE UserDiscountCode u SET u.code=:code,u.idUser=:idUser, u.discount = :discount,u.type=:type,u.maxDiscountValue=:maxDiscountValue,u.minimumOrderValue = :minimumOrderValue,u.expiry=:expiry WHERE u.discountCode = :discountCode")
+	int UpdateUserDiscountCode(@Param("discountCode") String discountCode,@Param("code") String code ,@Param("idUser") String idUser,
+			@Param("discount") int discount,@Param("type") String type,@Param("maxDiscountValue") int maxDiscountValue,
+			@Param("minimumOrderValue") int minimumOrderValue,@Param("expiry") LocalDate expiry);
+}

@@ -1,0 +1,2 @@
+(this.webpackJsonpwebsite_blog=this.webpackJsonpwebsite_blog||[]).push([[40],{178:function(e,t,n){"use strict";n.r(t);var a=n(0),s=n.n(a),i=n(10);class p extends a.Component{render(){return this.props.state_data.current_page.name!==i.d.admin.setting.name&&this.props.actions.current_page({name_new:i.d.admin.setting.name,path_new:i.d.admin.setting.path,old_page:this.props.state_data.current_page}),s.a.createElement("div",null,"Setting")}}t.default=p}}]);
+//# sourceMappingURL=40.15a1ada1.chunk.js.map

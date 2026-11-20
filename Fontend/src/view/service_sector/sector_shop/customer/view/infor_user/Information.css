@@ -3,8 +3,8 @@
    ============================================================ */
 
 :root {
-  --info-primary: #2f6fed;
-  --info-primary-hover: #2559c7;
+  --info-primary: #2563eb;
+  --info-primary-hover: #1d4ed8;
   --info-danger: #e5484d;
   --info-danger-hover: #c93f43;
   --info-text: #1f2430;
@@ -24,32 +24,38 @@
 .accounts-right {
   flex: 1;
   min-width: 0;
-  padding: 24px;
-  background: var(--info-bg-page);
+  padding: 0 0 24px 24px;
+  background: transparent;
   box-sizing: border-box;
 }
 
-.accounts.style-bg {
-  background: var(--info-bg-card);
-  border: 1px solid var(--info-border);
-  border-radius: var(--info-radius);
-  padding: 28px 32px;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+.accounts.style-bg.accounts.style-bg {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
 }
 
 .accounts_title h2 {
-  margin: 0 0 4px;
-  font-size: 22px;
-  font-weight: 700;
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 800;
   color: var(--info-text);
-  text-align: center;
+  text-align: left;
+  text-transform: none;
 }
 
 .accounts_title p {
-  margin: 0 0 24px;
+  margin: 0;
   font-size: 14px;
   color: var(--info-text-muted);
-  text-align: center;
+  text-align: left;
+}
+
+.accounts .accounts_title {
+  padding-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .accounts_main {
@@ -62,30 +68,82 @@
 .profile-summary {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--info-border);
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid #e8edf5;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef4ff 100%);
+}
+
+.profile-avatar,
+.profile-avatar-fallback,
+.profile-avatar img {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+}
+
+.profile-avatar-fallback,
+.profile-avatar img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .profile-avatar img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--info-border);
+  border: 3px solid #fff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18);
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
 }
 
 .profile-info h3 {
-  margin: 0 0 4px;
-  font-size: 17px;
-  font-weight: 600;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--info-text);
 }
 
 .profile-info p {
-  margin: 0 0 4px;
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0 0;
+  font-size: 14px;
   color: var(--info-text-muted);
+}
+
+.profile-info p i {
+  width: 16px;
+  color: #2563eb;
+}
+
+.profile-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-status.active {
+  background: #dcfce7;
+  color: #15803d;
 }
 
 /* ---------- Layout grid ---------- */
@@ -96,7 +154,7 @@
 .account_view,
 #update_customer {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px 32px;
 }
 
@@ -104,26 +162,29 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding: 0;
 }
 
-/* Email + Giới tính + Nút chiếm full width */
-.account_col_seeq,
-.account_col:has(.col_main_submit) {
+.account_col_address,
+.account_col:has(.col_main_submit),
+#update_customer > .account_col:last-child {
   grid-column: 1 / -1;
 }
 
 /* ---------- Label ---------- */
-.account_main {
+.accounts .account .account_col .account_main {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-left: 400px;
+  width: 100%;
+  margin: 0;
 }
 
 .account_main label {
+  margin: 0;
   font-size: 13px;
-  font-weight: 600;
-  color: var(--info-text-muted);
+  font-weight: 700;
+  color: #475569;
 }
 .account_main input[type="text"],
 .account_main input[type="date"] {
@@ -135,18 +196,17 @@
 /* ---------- Chế độ xem (view mode) ---------- */
 .view_value {
   margin: 0;
-  padding: 10px 14px;
-  border-radius: var(--info-radius-sm);
-  background: var(--info-bg-page);
-  border: 1px solid var(--info-border);
-  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #edf0f5;
+  font-size: 15px;
   color: var(--info-text);
-  min-height: 42px;
+  min-height: 46px;
   display: flex;
   align-items: center;
-  width: 300px;
+  width: 100%;
   box-sizing: border-box;
-  margin-left: 50px;
 }
 
 /* ---------- Chế độ chỉnh sửa (form inputs) ---------- */
@@ -182,12 +242,12 @@
   display: flex;
   gap: 20px;
   padding: 10px 14px;
-  background: var(--info-bg-page);
-  border: 1px solid var(--info-border);
-  border-radius: var(--info-radius-sm);
-  min-height: 42px;
+  background: #f8fafc;
+  border: 1px solid #edf0f5;
+  border-radius: 10px;
+  min-height: 46px;
   align-items: center;
-  width: fit-content;
+  width: 100%;
 }
 
 .gender {
@@ -239,34 +299,38 @@
 
 /* ---------- Khu vực nút bấm ---------- */
 .col_main_submit {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .form_actions {
   display: flex;
   gap: 12px;
+  align-items: flex-end;
 }
 
 .updateAccount,
 .cancelAccount {
-  padding: 10px 28px;
+  padding: 12px 28px;
   border: none;
-  border-radius: var(--info-radius-sm);
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.05s ease;
-  white-space: nowrap;   /* ← fix bị vỡ chữ */
-  min-width: 100px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  min-width: 110px;
 }
 
 .updateAccount {
-  background: var(--info-primary);
+  background: var(--info-primary) !important;
+  border: 1px solid var(--info-primary) !important;
   color: #ffffff;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
 }
 
 .updateAccount:hover {
-  background: var(--info-primary-hover);
+  background: var(--info-primary-hover) !important;
+  color: #ffffff !important;
 }
 
 .cancelAccount {
@@ -286,21 +350,51 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 720px) {
-  .accounts.style-bg {
-    padding: 20px;
+  .accounts-right {
+    padding: 0;
+  }
+
+  .accounts.style-bg.accounts.style-bg {
+    padding: 18px;
+    border-radius: 14px;
   }
 
   .account_view,
   #update_customer {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .account_col_seeq,
+  .account_col_address,
   .account_col:has(.col_main_submit) {
     grid-column: 1;
   }
 
   .profile-summary {
-    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .profile-avatar,
+  .profile-avatar-fallback,
+  .profile-avatar img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .profile-info h3 {
+    font-size: 17px;
+  }
+
+  .profile-info p {
+    font-size: 13px;
+  }
+
+  .form_actions {
+    flex-direction: column;
+  }
+
+  .updateAccount,
+  .cancelAccount {
+    width: 100%;
   }
 }

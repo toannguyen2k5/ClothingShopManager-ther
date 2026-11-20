@@ -1,0 +1,49 @@
+package com.example.ClothingStoreManagementAPI.product.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
+import com.example.ClothingStoreManagementAPI.product.model.Entity.*;
+import com.example.ClothingStoreManagementAPI.product.model.DTO.*;
+import java.util.*;
+
+@Repository
+public interface InventoryShopReponsitory extends JpaRepository<InventoryShop, String> {
+	@Query("SELECT MAX(idList) FROM InventoryShop")
+	String SelectMaxId();
+
+	// tìm kiếm tổng số lượng hàng tồn kho theo mã sản phẩm
+	@Query("SELECT SUM(u.quantity) FROM InventoryShop u WHERE u.idDetail = :idDetail")
+	Long SelectInventoryShop(@Param("idDetail") String idDetail);
+	
+	// tìm kiếm số lượng tồn kho
+	@Query("SELECT u FROM InventoryShop u WHERE u.idShop = :idShop AND u.idDetail = :idDetail")
+	InventoryShop SelectInventoryShop(@Param("idShop") String idShop, @Param("idDetail") String idDetail);
+
+	@Query(value = "SELECT s.idShop, s.nameShop, i.quantity, s.address " + "FROM inventoryshop i "
+			+ "JOIN shop s ON i.idShop = s.idShop "
+			+ "WHERE i.idDetail = :idDetail AND i.quantity > 0", nativeQuery = true)
+	List<Object[]> SelecShopByIdDetail(@Param("idDetail") String idDetail);
+
+	@Query(value = "SELECT s.idShop, s.nameShop, SUM(i.quantity), s.address "
+			+ "FROM inventoryshop i JOIN shop s ON i.idShop = s.idShop "
+			+ "WHERE i.idDetail = :idDetail AND i.quantity > 0 "
+			+ "GROUP BY s.idShop, s.nameShop, s.address", nativeQuery = true)
+	List<Object[]> SelectShopInventoryTotalsByIdDetail(@Param("idDetail") String idDetail);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("SELECT i FROM InventoryShop i WHERE i.idShop = :idShop AND i.idDetail = :idDetail ORDER BY i.idList")
+	List<InventoryShop> FindInventoryRowsForUpdate(@Param("idShop") String idShop,
+			@Param("idDetail") String idDetail);
+
+	// update số lượng tồn kho
+	@Modifying
+	@Query("UPDATE InventoryShop u SET u.quantity = :quantity WHERE u.idShop = :idShop AND u.idDetail = :idDetail")
+	long UpdateInventoryShop(@Param("quantity") long quantity, @Param("idShop") String idShop,
+			@Param("idDetail") String idDetail);
+}

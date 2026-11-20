@@ -1,2 +1,5 @@
-Backend\ClothingStoreManagementAPI\src\main\resources\application.properties
-Backend\ClothingStoreManagementAPI\upload\
+Backend/ClothingStoreManagementAPI/src/main/resources/application.properties
+venv/
+__pycache__/
+*.pyc
+Backend/ClothingStoreManagementAPI/upload/
